@@ -1,0 +1,57 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                 String   @id @default(uuid())
+  email              String?  @unique
+  phone              String?  @unique
+  password_hash      String
+  verification_status String  @default("unverified")
+  role               String   @default("consumer")
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+  
+  creatorProfile     CreatorProfile?
+}
+
+model CreatorProfile {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  niche          String[]
+  bio            String?
+  country        String?
+  audience_size  Int      @default(0)
+  display_name   String
+  payout_network String?
+  payout_account String?
+  profile_status String   @default("active")
+}
+
+model Campaign {
+  id                 String   @id @default(uuid())
+  title              String
+  budget             Int
+  payout_per_creator Int
+  max_creators       Int
+  deadline_at        DateTime
+  status             String   @default("draft")
+  niche_filter       String[]
+  min_audience_size  Int      @default(0)
+  ownerId            String
+}
+
+model PaymentTransaction {
+  id                String   @id @default(uuid())
+  idempotency_key   String?  @unique
+  amount            Int
+  type              String
+  status            String   @default("pending")
+  userId            String
+  created_at        DateTime @default(now())
+}
