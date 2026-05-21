@@ -1,4 +1,4 @@
-import {getUsers} from "../../controllers/users.controllers";
+import {getUsers} from "../../controllers/users.controllers.js";
 import express from "express";
 import {Router} from "express";
 

@@ -1,5 +1,5 @@
-import prisma from "../config/prisma";
-import {Request, Response} from "express";
+import prisma from "../config/prisma.js";
+import type { Request, Response } from "express";
 
 export async function getUsers(req: Request, res: Response) {
     try{
