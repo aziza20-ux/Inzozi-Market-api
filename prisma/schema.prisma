@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
@@ -7,11 +7,193 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  CREATOR
+  BUSINESS
+  CONSUMER
+  ADMIN
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REMOVED
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentType {
+  SUBSCRIPTION
+  PRODUCT_PURCHASE
+  CAMPAIGN_PAYMENT
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  username  String   @unique
-  bio       String?
+  id                 String             @id @default(uuid())
+  name               String
+  email              String             @unique
+  password           String
+  profileImage       String?
+  role               Role
+  verificationStatus VerificationStatus @default(PENDING)
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  creatorProfile      CreatorProfile?
+  contents            Content[]
+  campaigns           Campaign[]
+  sentMessages        Message[]            @relation("SenderMessages")
+  receivedMessages    Message[]            @relation("ReceiverMessages")
+  paymentTransactions PaymentTransaction[]
+}
+
+//
+// CREATOR PROFILE
+//
+
+model CreatorProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  bio            String?
+  specialization String?
+  socialLinks    String?
+  earnings       Float   @default(0)
+  followers      Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  contents Content[]
+}
+
+//
+// CONTENT MODEL
+//
+
+model Content {
+  id        String @id @default(uuid())
+  creatorId String
+
+  title            String
+  description      String?
+  contentType      String
+  mediaUrl         String
+  moderationStatus ModerationStatus @default(PENDING)
+  visibility       Boolean          @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  creator          User            @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorProfile   CreatorProfile? @relation(fields: [creatorProfileId], references: [id])
+  creatorProfileId String?
+}
+
+//
+// CAMPAIGN MODEL
+//
+
+model Campaign {
+  id         String @id @default(uuid())
+  businessId String
+
+  title       String
+  description String?
+  budget      Float
+  status      CampaignStatus @default(DRAFT)
+
+  startDate DateTime
+  endDate   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  business User @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+//
+// PAYMENT TRANSACTION MODEL
+//
+
+model PaymentTransaction {
+  id     String @id @default(uuid())
+  userId String
+
+  amount        Float
+  paymentType   PaymentType
+  paymentStatus PaymentStatus @default(PENDING)
+
+  transactionRef String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+//
+// MESSAGE MODEL
+//
+
+model Message {
+  id String @id @default(uuid())
+
+  senderId   String
+  receiverId String
+
+  message String
+  isRead  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  sender User @relation("SenderMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  receiver User @relation("ReceiverMessages", fields: [receiverId], references: [id], onDelete: Cascade)
 }

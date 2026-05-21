@@ -10,3 +10,4 @@ export async function getUsers(req: Request, res: Response) {
     }
 
 }
+//hi
