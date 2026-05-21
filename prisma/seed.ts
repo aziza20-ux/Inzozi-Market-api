@@ -23,8 +23,8 @@ async function main() {
     data: {
       name: "alice",
       email: "admin@airbnb.com",
-      username: "admin",
-      bio:"i'm a software engineer" 
+      password: "adminpassword",
+      role: "ADMIN",
     
     },
   });
