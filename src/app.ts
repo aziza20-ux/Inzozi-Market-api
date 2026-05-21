@@ -19,11 +19,15 @@ import authRoutes from './routes/auth.routes';
 import creatorProfileRoutes from './routes/creator-profile.routes';
 import campaignRoutes from './routes/campaign.routes';
 import paymentRoutes from './routes/payment.routes';
+import { setupSwagger } from './swagger';
 
 // v1 Routes will be registered here
 app.use('/v1/auth', authRoutes);
 app.use('/v1/creator-profiles', creatorProfileRoutes);
 app.use('/v1/campaigns', campaignRoutes);
 app.use('/v1/payments', paymentRoutes);
+
+// Setup Swagger UI
+setupSwagger(app);
 
 export default app;
