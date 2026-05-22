@@ -2,7 +2,7 @@
   "name": "inzozi-market-api",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "jest --runInBand",
     "dev": "nodemon --exec tsx src/index.ts",
