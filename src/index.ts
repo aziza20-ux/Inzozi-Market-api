@@ -1,7 +1,7 @@
 
 import express from "express";
 import dotenv from "dotenv";
-import v1Routes from "./routes/v1/index";
+import v1Routes from "./routes/v1/index.js";
 
 
 
