@@ -23,6 +23,7 @@ enum VerificationStatus {
 enum ModerationStatus {
   PENDING
   APPROVED
+  REJECTED
   REMOVED
 }
 
@@ -31,6 +32,18 @@ enum CampaignStatus {
   ACTIVE
   COMPLETED
   CANCELLED
+}
+
+enum ContentType {
+  video
+  image
+  article
+  audio
+}
+
+enum ContentVisibility {
+  public
+  paid
 }
 
 enum PaymentType {
@@ -68,6 +81,7 @@ model User {
   sentMessages        Message[]            @relation("SenderMessages")
   receivedMessages    Message[]            @relation("ReceiverMessages")
   paymentTransactions PaymentTransaction[]
+  premiumPurchases    PremiumPurchase[]
 }
 
 //
@@ -91,8 +105,7 @@ model CreatorProfile {
   // RELATIONS
   //
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   contents Content[]
 }
 
@@ -101,15 +114,25 @@ model CreatorProfile {
 //
 
 model Content {
-  id        String @id @default(uuid())
-  creatorId String
+  id           String  @id @default(uuid())
+  title        String
+  description  String?
+  contentUrl   String
+  thumbnailUrl String?
 
-  title            String
-  description      String?
-  contentType      String
-  mediaUrl         String
+  type       ContentType
+  visibility ContentVisibility
+
+  price    Float?
+  currency String?
+
   moderationStatus ModerationStatus @default(PENDING)
-  visibility       Boolean          @default(true)
+  rejectionReason  String?
+
+  deletedAt DateTime?
+
+  creatorId String
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -118,9 +141,9 @@ model Content {
   // RELATIONS
   //
 
-  creator          User            @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  creatorProfile   CreatorProfile? @relation(fields: [creatorProfileId], references: [id])
+  creatorProfile   CreatorProfile?   @relation(fields: [creatorProfileId], references: [id])
   creatorProfileId String?
+  premiumPurchases PremiumPurchase[]
 }
 
 //
@@ -196,4 +219,19 @@ model Message {
   sender User @relation("SenderMessages", fields: [senderId], references: [id], onDelete: Cascade)
 
   receiver User @relation("ReceiverMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+model PremiumPurchase {
+  id String @id @default(uuid())
+
+  userId    String
+  contentId String
+
+  status String
+
+  // RELATIONS
+  user    User    @relation(fields: [userId], references: [id])
+  content Content @relation(fields: [contentId], references: [id])
+
+  createdAt DateTime @default(now())
 }

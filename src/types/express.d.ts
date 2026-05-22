@@ -6,11 +6,15 @@ export interface AuthUser {
   role: "ADMIN" | "SELLER" | "BUYER";
   verification_status: "verified" | "pending";
 }
-
 declare global {
-  namespace Express {
+    namespace Express {
     interface Request {
       user?: AuthUser;
     }
   }
 }
+
+
+
+
+

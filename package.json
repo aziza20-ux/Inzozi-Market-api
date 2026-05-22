@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --runInBand",
     "dev": "nodemon --exec tsx src/index.ts",
     "build": "tsc",
     "start": "tsx src/index.ts"
