@@ -18,3 +18,5 @@ app.use("/api/v1", v1Routes);
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);
 });
+
+//index
