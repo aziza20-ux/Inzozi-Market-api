@@ -3,11 +3,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.validators = exports.messageSchema = exports.paymentTransactionSchema = exports.campaignSchema = exports.contentSchema = exports.creatorProfileSchema = exports.userCreateSchema = exports.paymentStatusEnum = exports.paymentTypeEnum = exports.campaignStatusEnum = exports.moderationStatusEnum = exports.verificationStatusEnum = exports.roleEnum = void 0;
 const zod_1 = require("zod");
 exports.roleEnum = zod_1.z.enum(["CREATOR", "BUSINESS", "CONSUMER", "ADMIN"]);
-exports.verificationStatusEnum = zod_1.z.enum(["PENDING", "VERIFIED", "REJECTED"]);
+exports.verificationStatusEnum = zod_1.z.enum([
+    "PENDING",
+    "VERIFIED",
+    "REJECTED",
+]);
 exports.moderationStatusEnum = zod_1.z.enum(["PENDING", "APPROVED", "REMOVED"]);
-exports.campaignStatusEnum = zod_1.z.enum(["DRAFT", "ACTIVE", "COMPLETED", "CANCELLED"]);
-exports.paymentTypeEnum = zod_1.z.enum(["SUBSCRIPTION", "PRODUCT_PURCHASE", "CAMPAIGN_PAYMENT"]);
-exports.paymentStatusEnum = zod_1.z.enum(["PENDING", "SUCCESS", "FAILED", "REFUNDED"]);
+exports.campaignStatusEnum = zod_1.z.enum([
+    "DRAFT",
+    "ACTIVE",
+    "IN_PROGRESS",
+    "COMPLETED",
+    "CANCELLED",
+]);
+exports.paymentTypeEnum = zod_1.z.enum([
+    "SUBSCRIPTION",
+    "PRODUCT_PURCHASE",
+    "CAMPAIGN_PAYMENT",
+    "WITHDRAWAL",
+    "CAMPAIGN_DISBURSEMENT",
+]);
+exports.paymentStatusEnum = zod_1.z.enum([
+    "PENDING",
+    "SUCCESS",
+    "FAILED",
+    "REFUNDED",
+    "COMPLETED",
+]);
 const uuidString = () => zod_1.z.uuid();
 const dateStringToDate = zod_1.z.preprocess((arg) => {
     if (typeof arg === "string" || arg instanceof Date)
@@ -27,6 +49,7 @@ exports.creatorProfileSchema = zod_1.z.object({
     bio: zod_1.z.string().optional(),
     specialization: zod_1.z.string().optional(),
     socialLinks: zod_1.z.string().optional(),
+    payout_account: zod_1.z.string().optional(),
     earnings: zod_1.z.number().optional(),
     followers: zod_1.z.number().int().optional(),
 });
@@ -46,6 +69,9 @@ exports.campaignSchema = zod_1.z.object({
     description: zod_1.z.string().optional(),
     budget: zod_1.z.number().nonnegative("Budget must be >= 0"),
     status: exports.campaignStatusEnum.optional(),
+    niche_filter: zod_1.z.string(),
+    min_audience_size: zod_1.z.number().int().nonnegative(),
+    max_creators: zod_1.z.number().int().positive(),
     startDate: dateStringToDate,
     endDate: dateStringToDate,
 });
@@ -55,6 +81,9 @@ exports.paymentTransactionSchema = zod_1.z.object({
     paymentType: exports.paymentTypeEnum,
     paymentStatus: exports.paymentStatusEnum.optional(),
     transactionRef: zod_1.z.string().min(1, "transactionRef is required"),
+    providerRef: zod_1.z.string().optional(),
+    idempotencyKey: zod_1.z.string().optional(),
+    campaignId: uuidString().optional(),
 });
 exports.messageSchema = zod_1.z.object({
     senderId: uuidString(),

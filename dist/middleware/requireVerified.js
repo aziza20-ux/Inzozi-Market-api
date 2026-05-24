@@ -7,7 +7,9 @@ const requireVerified = (req, res, next) => {
             message: "Unauthorized",
         });
     }
-    if (req.user.verification_status !== "verified") {
+    const isVerified = req.user.verification_status === "verified" ||
+        req.user.verificationStatus === "VERIFIED";
+    if (!isVerified) {
         return res.status(403).json({
             error: "USER_NOT_VERIFIED",
         });

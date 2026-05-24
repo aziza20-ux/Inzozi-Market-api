@@ -5,9 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const users_routes_js_1 = __importDefault(require("./users.routes.js"));
 const content_routes_js_1 = __importDefault(require("./content.routes.js"));
+const campaign_routes_js_1 = __importDefault(require("./campaign.routes.js"));
+const payment_routes_js_1 = __importDefault(require("./payment.routes.js"));
 const express_1 = require("express");
 const v1Routes = (0, express_1.Router)();
 v1Routes.use("/users", users_routes_js_1.default);
 v1Routes.use("/content", content_routes_js_1.default);
+v1Routes.use("/campaigns", campaign_routes_js_1.default);
+v1Routes.use("/payments", payment_routes_js_1.default);
 exports.default = v1Routes;
 //# sourceMappingURL=index.js.map

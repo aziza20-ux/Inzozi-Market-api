@@ -1,0 +1,1 @@
+{"version":3,"file":"mockMobileMoneyProvider.js","sourceRoot":"","sources":["../../src/services/mockMobileMoneyProvider.ts"],"names":[],"mappings":";;AAYA,gEAOC;AAPM,KAAK,UAAU,0BAA0B,CAC9C,KAA4B;IAE5B,OAAO;QACL,WAAW,EAAE,aAAa,KAAK,CAAC,cAAc,EAAE;QAChD,MAAM,EAAE,SAAS;KAClB,CAAC;AACJ,CAAC;AAED,kBAAe;IACb,0BAA0B;CAC3B,CAAC"}

@@ -3,8 +3,9 @@ import { Request } from "express";
 export interface AuthUser {
   id: string;
   email: string;
-  role: "ADMIN" | "SELLER" | "BUYER";
-  verification_status: "verified" | "pending";
+  role: "ADMIN" | "CREATOR" | "BUSINESS" | "CONSUMER" | "SYSTEM";
+  verification_status?: "verified" | "pending";
+  verificationStatus?: "VERIFIED" | "PENDING" | "REJECTED";
 }
 declare global {
     namespace Express {

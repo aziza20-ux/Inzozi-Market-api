@@ -18,6 +18,7 @@ export declare const moderationStatusEnum: z.ZodEnum<{
 export declare const campaignStatusEnum: z.ZodEnum<{
     DRAFT: "DRAFT";
     ACTIVE: "ACTIVE";
+    IN_PROGRESS: "IN_PROGRESS";
     COMPLETED: "COMPLETED";
     CANCELLED: "CANCELLED";
 }>;
@@ -25,9 +26,12 @@ export declare const paymentTypeEnum: z.ZodEnum<{
     SUBSCRIPTION: "SUBSCRIPTION";
     PRODUCT_PURCHASE: "PRODUCT_PURCHASE";
     CAMPAIGN_PAYMENT: "CAMPAIGN_PAYMENT";
+    WITHDRAWAL: "WITHDRAWAL";
+    CAMPAIGN_DISBURSEMENT: "CAMPAIGN_DISBURSEMENT";
 }>;
 export declare const paymentStatusEnum: z.ZodEnum<{
     PENDING: "PENDING";
+    COMPLETED: "COMPLETED";
     SUCCESS: "SUCCESS";
     FAILED: "FAILED";
     REFUNDED: "REFUNDED";
@@ -54,6 +58,7 @@ export declare const creatorProfileSchema: z.ZodObject<{
     bio: z.ZodOptional<z.ZodString>;
     specialization: z.ZodOptional<z.ZodString>;
     socialLinks: z.ZodOptional<z.ZodString>;
+    payout_account: z.ZodOptional<z.ZodString>;
     earnings: z.ZodOptional<z.ZodNumber>;
     followers: z.ZodOptional<z.ZodNumber>;
 }, z.core.$strip>;
@@ -79,9 +84,13 @@ export declare const campaignSchema: z.ZodObject<{
     status: z.ZodOptional<z.ZodEnum<{
         DRAFT: "DRAFT";
         ACTIVE: "ACTIVE";
+        IN_PROGRESS: "IN_PROGRESS";
         COMPLETED: "COMPLETED";
         CANCELLED: "CANCELLED";
     }>>;
+    niche_filter: z.ZodString;
+    min_audience_size: z.ZodNumber;
+    max_creators: z.ZodNumber;
     startDate: z.ZodPreprocess<z.ZodDate>;
     endDate: z.ZodPreprocess<z.ZodDate>;
 }, z.core.$strip>;
@@ -92,14 +101,20 @@ export declare const paymentTransactionSchema: z.ZodObject<{
         SUBSCRIPTION: "SUBSCRIPTION";
         PRODUCT_PURCHASE: "PRODUCT_PURCHASE";
         CAMPAIGN_PAYMENT: "CAMPAIGN_PAYMENT";
+        WITHDRAWAL: "WITHDRAWAL";
+        CAMPAIGN_DISBURSEMENT: "CAMPAIGN_DISBURSEMENT";
     }>;
     paymentStatus: z.ZodOptional<z.ZodEnum<{
         PENDING: "PENDING";
+        COMPLETED: "COMPLETED";
         SUCCESS: "SUCCESS";
         FAILED: "FAILED";
         REFUNDED: "REFUNDED";
     }>>;
     transactionRef: z.ZodString;
+    providerRef: z.ZodOptional<z.ZodString>;
+    idempotencyKey: z.ZodOptional<z.ZodString>;
+    campaignId: z.ZodOptional<z.ZodUUID>;
 }, z.core.$strip>;
 export declare const messageSchema: z.ZodObject<{
     senderId: z.ZodUUID;
@@ -136,6 +151,7 @@ export declare const validators: {
         bio: z.ZodOptional<z.ZodString>;
         specialization: z.ZodOptional<z.ZodString>;
         socialLinks: z.ZodOptional<z.ZodString>;
+        payout_account: z.ZodOptional<z.ZodString>;
         earnings: z.ZodOptional<z.ZodNumber>;
         followers: z.ZodOptional<z.ZodNumber>;
     }, z.core.$strip>;
@@ -161,9 +177,13 @@ export declare const validators: {
         status: z.ZodOptional<z.ZodEnum<{
             DRAFT: "DRAFT";
             ACTIVE: "ACTIVE";
+            IN_PROGRESS: "IN_PROGRESS";
             COMPLETED: "COMPLETED";
             CANCELLED: "CANCELLED";
         }>>;
+        niche_filter: z.ZodString;
+        min_audience_size: z.ZodNumber;
+        max_creators: z.ZodNumber;
         startDate: z.ZodPreprocess<z.ZodDate>;
         endDate: z.ZodPreprocess<z.ZodDate>;
     }, z.core.$strip>;
@@ -174,14 +194,20 @@ export declare const validators: {
             SUBSCRIPTION: "SUBSCRIPTION";
             PRODUCT_PURCHASE: "PRODUCT_PURCHASE";
             CAMPAIGN_PAYMENT: "CAMPAIGN_PAYMENT";
+            WITHDRAWAL: "WITHDRAWAL";
+            CAMPAIGN_DISBURSEMENT: "CAMPAIGN_DISBURSEMENT";
         }>;
         paymentStatus: z.ZodOptional<z.ZodEnum<{
             PENDING: "PENDING";
+            COMPLETED: "COMPLETED";
             SUCCESS: "SUCCESS";
             FAILED: "FAILED";
             REFUNDED: "REFUNDED";
         }>>;
         transactionRef: z.ZodString;
+        providerRef: z.ZodOptional<z.ZodString>;
+        idempotencyKey: z.ZodOptional<z.ZodString>;
+        campaignId: z.ZodOptional<z.ZodUUID>;
     }, z.core.$strip>;
     messageSchema: z.ZodObject<{
         senderId: z.ZodUUID;

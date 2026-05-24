@@ -11,6 +11,10 @@ const transformIgnorePatterns = [
 /** @type {import("jest").Config} **/
 module.exports = {
   testMatch: ["**/src/tests/**/*.test.ts"],
+  moduleNameMapper: {
+    "^\\.\\./(middleware|controllers|config|services|routes|validators)/(.*)\\.js$":
+      "<rootDir>/src/$1/$2.ts",
+  },
   transformIgnorePatterns,
   testEnvironment: "node",
   transform: {
