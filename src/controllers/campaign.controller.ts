@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
-import { prisma } from '../prisma';
+import prisma from '../config/prisma';
+import {AuthRequest} from "../middleware/auth";
 import { campaignCreateSchema, campaignUpdateSchema, campaignStatusUpdateSchema, campaignStatusEnum } from '../validators/schema.validators';
 
-export const createCampaign = async (req: Request, res: Response): Promise<void> => {
+export const createCampaign = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const user = (req as any).user;
-    if (user.role !== 'BUSINESS') {
+    
+    if (req.role !== 'BUSINESS') {
       res.status(403).json({ error: 'Business role required' });
       return;
     }
@@ -14,18 +15,19 @@ export const createCampaign = async (req: Request, res: Response): Promise<void>
       title: req.body.title,
       description: req.body.description,
       budget: req.body.budget,
-      endDate: req.body.deadline_at,
+      startDate: req.body.startDate ?? new Date(),
+      endDate: req.body.endDate ?? req.body.deadline_at,
     });
 
     const campaign = await prisma.campaign.create({
       data: {
-        title: data.title,
+        title: data.title!,
         description: data.description,
-        budget: data.budget,
-        status: 'DRAFT',
-        startDate: new Date(),
-        endDate: data.endDate,
-        businessId: user.userId
+        budget: data.budget!,
+        // status: 'DRAFT',
+        startDate: new Date()!,
+        endDate: data.endDate!,
+        businessId: req.userId!
       }
     });
 
@@ -72,10 +74,10 @@ export const getCampaignById = async (req: Request, res: Response): Promise<void
   }
 };
 
-export const updateCampaign = async (req: Request, res: Response): Promise<void> => {
+export const updateCampaign = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const user = (req as any).user;
+  
     
     const campaign = await prisma.campaign.findUnique({ where: { id: String(id) } });
     if (!campaign) {
@@ -83,7 +85,7 @@ export const updateCampaign = async (req: Request, res: Response): Promise<void>
       return;
     }
 
-    if (campaign.businessId !== user.userId) {
+    if (campaign.businessId !== req.userId) {
       res.status(403).json({ error: 'Forbidden' });
       return;
     }
@@ -97,7 +99,7 @@ export const updateCampaign = async (req: Request, res: Response): Promise<void>
       title: req.body.title,
       description: req.body.description,
       budget: req.body.budget,
-      endDate: req.body.deadline_at,
+      endDate: req.body.endDate ?? req.body.deadline_at,
     });
 
     const updated = await prisma.campaign.update({
@@ -158,6 +160,34 @@ export const updateCampaignStatus = async (req: Request, res: Response): Promise
     });
 
     res.status(200).json(updated);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message || err.errors });
+  }
+};
+
+export const deleteCampaign = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const campaign = await prisma.campaign.findUnique({ where: { id: String(id) } });
+    if (!campaign) {
+      res.status(404).json({ error: 'Campaign not found' });
+      return;
+    }
+
+    if (campaign.businessId !== req.userId && req.role !== 'ADMIN') {
+      res.status(403).json({ error: 'Forbidden' });
+      return;
+    }
+
+    if (campaign.status === 'ACTIVE') {
+      res.status(400).json({ error: 'Active campaigns cannot be deleted' });
+      return;
+    }
+
+    await prisma.campaign.delete({ where: { id: String(id) } });
+
+    res.status(200).json({ message: 'Campaign deleted successfully' });
   } catch (err: any) {
     res.status(400).json({ error: err.message || err.errors });
   }

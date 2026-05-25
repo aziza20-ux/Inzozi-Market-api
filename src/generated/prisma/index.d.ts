@@ -2796,6 +2796,10 @@ export namespace Prisma {
     socialLinks: string | null
     earnings: number | null
     followers: number | null
+    avatar: string | null
+    location: string | null
+    payout_account: string | null
+    payout_network: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2808,6 +2812,10 @@ export namespace Prisma {
     socialLinks: string | null
     earnings: number | null
     followers: number | null
+    avatar: string | null
+    location: string | null
+    payout_account: string | null
+    payout_network: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2820,6 +2828,10 @@ export namespace Prisma {
     socialLinks: number
     earnings: number
     followers: number
+    avatar: number
+    location: number
+    payout_account: number
+    payout_network: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2844,6 +2856,10 @@ export namespace Prisma {
     socialLinks?: true
     earnings?: true
     followers?: true
+    avatar?: true
+    location?: true
+    payout_account?: true
+    payout_network?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2856,6 +2872,10 @@ export namespace Prisma {
     socialLinks?: true
     earnings?: true
     followers?: true
+    avatar?: true
+    location?: true
+    payout_account?: true
+    payout_network?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2868,6 +2888,10 @@ export namespace Prisma {
     socialLinks?: true
     earnings?: true
     followers?: true
+    avatar?: true
+    location?: true
+    payout_account?: true
+    payout_network?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2967,6 +2991,10 @@ export namespace Prisma {
     socialLinks: string | null
     earnings: number
     followers: number
+    avatar: string | null
+    location: string | null
+    payout_account: string | null
+    payout_network: string | null
     createdAt: Date
     updatedAt: Date
     _count: CreatorProfileCountAggregateOutputType | null
@@ -2998,6 +3026,10 @@ export namespace Prisma {
     socialLinks?: boolean
     earnings?: boolean
     followers?: boolean
+    avatar?: boolean
+    location?: boolean
+    payout_account?: boolean
+    payout_network?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3013,6 +3045,10 @@ export namespace Prisma {
     socialLinks?: boolean
     earnings?: boolean
     followers?: boolean
+    avatar?: boolean
+    location?: boolean
+    payout_account?: boolean
+    payout_network?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3026,6 +3062,10 @@ export namespace Prisma {
     socialLinks?: boolean
     earnings?: boolean
     followers?: boolean
+    avatar?: boolean
+    location?: boolean
+    payout_account?: boolean
+    payout_network?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3039,11 +3079,15 @@ export namespace Prisma {
     socialLinks?: boolean
     earnings?: boolean
     followers?: boolean
+    avatar?: boolean
+    location?: boolean
+    payout_account?: boolean
+    payout_network?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CreatorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "bio" | "specialization" | "socialLinks" | "earnings" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["creatorProfile"]>
+  export type CreatorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "bio" | "specialization" | "socialLinks" | "earnings" | "followers" | "avatar" | "location" | "payout_account" | "payout_network" | "createdAt" | "updatedAt", ExtArgs["result"]["creatorProfile"]>
   export type CreatorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     contents?: boolean | CreatorProfile$contentsArgs<ExtArgs>
@@ -3070,6 +3114,10 @@ export namespace Prisma {
       socialLinks: string | null
       earnings: number
       followers: number
+      avatar: string | null
+      location: string | null
+      payout_account: string | null
+      payout_network: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["creatorProfile"]>
@@ -3504,6 +3552,10 @@ export namespace Prisma {
     readonly socialLinks: FieldRef<"CreatorProfile", 'String'>
     readonly earnings: FieldRef<"CreatorProfile", 'Float'>
     readonly followers: FieldRef<"CreatorProfile", 'Int'>
+    readonly avatar: FieldRef<"CreatorProfile", 'String'>
+    readonly location: FieldRef<"CreatorProfile", 'String'>
+    readonly payout_account: FieldRef<"CreatorProfile", 'String'>
+    readonly payout_network: FieldRef<"CreatorProfile", 'String'>
     readonly createdAt: FieldRef<"CreatorProfile", 'DateTime'>
     readonly updatedAt: FieldRef<"CreatorProfile", 'DateTime'>
   }
@@ -5854,7 +5906,7 @@ export namespace Prisma {
     readonly businessId: FieldRef<"Campaign", 'String'>
     readonly title: FieldRef<"Campaign", 'String'>
     readonly description: FieldRef<"Campaign", 'String'>
-    readonly budget: FieldRef<"Campaign", 'Float'>
+    readonly budget: FieldRef<"Campaign", 'Int'>
     readonly status: FieldRef<"Campaign", 'CampaignStatus'>
     readonly startDate: FieldRef<"Campaign", 'DateTime'>
     readonly endDate: FieldRef<"Campaign", 'DateTime'>
@@ -8549,6 +8601,10 @@ export namespace Prisma {
     socialLinks: 'socialLinks',
     earnings: 'earnings',
     followers: 'followers',
+    avatar: 'avatar',
+    location: 'location',
+    payout_account: 'payout_account',
+    payout_network: 'payout_network',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -8896,6 +8952,10 @@ export namespace Prisma {
     socialLinks?: StringNullableFilter<"CreatorProfile"> | string | null
     earnings?: FloatFilter<"CreatorProfile"> | number
     followers?: IntFilter<"CreatorProfile"> | number
+    avatar?: StringNullableFilter<"CreatorProfile"> | string | null
+    location?: StringNullableFilter<"CreatorProfile"> | string | null
+    payout_account?: StringNullableFilter<"CreatorProfile"> | string | null
+    payout_network?: StringNullableFilter<"CreatorProfile"> | string | null
     createdAt?: DateTimeFilter<"CreatorProfile"> | Date | string
     updatedAt?: DateTimeFilter<"CreatorProfile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -8910,6 +8970,10 @@ export namespace Prisma {
     socialLinks?: SortOrderInput | SortOrder
     earnings?: SortOrder
     followers?: SortOrder
+    avatar?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    payout_account?: SortOrderInput | SortOrder
+    payout_network?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -8927,6 +8991,10 @@ export namespace Prisma {
     socialLinks?: StringNullableFilter<"CreatorProfile"> | string | null
     earnings?: FloatFilter<"CreatorProfile"> | number
     followers?: IntFilter<"CreatorProfile"> | number
+    avatar?: StringNullableFilter<"CreatorProfile"> | string | null
+    location?: StringNullableFilter<"CreatorProfile"> | string | null
+    payout_account?: StringNullableFilter<"CreatorProfile"> | string | null
+    payout_network?: StringNullableFilter<"CreatorProfile"> | string | null
     createdAt?: DateTimeFilter<"CreatorProfile"> | Date | string
     updatedAt?: DateTimeFilter<"CreatorProfile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -8941,6 +9009,10 @@ export namespace Prisma {
     socialLinks?: SortOrderInput | SortOrder
     earnings?: SortOrder
     followers?: SortOrder
+    avatar?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    payout_account?: SortOrderInput | SortOrder
+    payout_network?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CreatorProfileCountOrderByAggregateInput
@@ -8961,6 +9033,10 @@ export namespace Prisma {
     socialLinks?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
     earnings?: FloatWithAggregatesFilter<"CreatorProfile"> | number
     followers?: IntWithAggregatesFilter<"CreatorProfile"> | number
+    avatar?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
+    location?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
+    payout_account?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
+    payout_network?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CreatorProfile"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CreatorProfile"> | Date | string
   }
@@ -9061,7 +9137,7 @@ export namespace Prisma {
     businessId?: StringFilter<"Campaign"> | string
     title?: StringFilter<"Campaign"> | string
     description?: StringNullableFilter<"Campaign"> | string | null
-    budget?: FloatFilter<"Campaign"> | number
+    budget?: IntFilter<"Campaign"> | number
     status?: EnumCampaignStatusFilter<"Campaign"> | $Enums.CampaignStatus
     startDate?: DateTimeFilter<"Campaign"> | Date | string
     endDate?: DateTimeFilter<"Campaign"> | Date | string
@@ -9092,7 +9168,7 @@ export namespace Prisma {
     businessId?: StringFilter<"Campaign"> | string
     title?: StringFilter<"Campaign"> | string
     description?: StringNullableFilter<"Campaign"> | string | null
-    budget?: FloatFilter<"Campaign"> | number
+    budget?: IntFilter<"Campaign"> | number
     status?: EnumCampaignStatusFilter<"Campaign"> | $Enums.CampaignStatus
     startDate?: DateTimeFilter<"Campaign"> | Date | string
     endDate?: DateTimeFilter<"Campaign"> | Date | string
@@ -9127,7 +9203,7 @@ export namespace Prisma {
     businessId?: StringWithAggregatesFilter<"Campaign"> | string
     title?: StringWithAggregatesFilter<"Campaign"> | string
     description?: StringNullableWithAggregatesFilter<"Campaign"> | string | null
-    budget?: FloatWithAggregatesFilter<"Campaign"> | number
+    budget?: IntWithAggregatesFilter<"Campaign"> | number
     status?: EnumCampaignStatusWithAggregatesFilter<"Campaign"> | $Enums.CampaignStatus
     startDate?: DateTimeWithAggregatesFilter<"Campaign"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"Campaign"> | Date | string
@@ -9281,7 +9357,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9299,7 +9375,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9353,7 +9429,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9390,6 +9466,10 @@ export namespace Prisma {
     socialLinks?: string | null
     earnings?: number
     followers?: number
+    avatar?: string | null
+    location?: string | null
+    payout_account?: string | null
+    payout_network?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutCreatorProfileInput
@@ -9404,6 +9484,10 @@ export namespace Prisma {
     socialLinks?: string | null
     earnings?: number
     followers?: number
+    avatar?: string | null
+    location?: string | null
+    payout_account?: string | null
+    payout_network?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     contents?: ContentUncheckedCreateNestedManyWithoutCreatorProfileInput
@@ -9416,6 +9500,10 @@ export namespace Prisma {
     socialLinks?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_account?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
@@ -9430,6 +9518,10 @@ export namespace Prisma {
     socialLinks?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_account?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contents?: ContentUncheckedUpdateManyWithoutCreatorProfileNestedInput
@@ -9443,6 +9535,10 @@ export namespace Prisma {
     socialLinks?: string | null
     earnings?: number
     followers?: number
+    avatar?: string | null
+    location?: string | null
+    payout_account?: string | null
+    payout_network?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9454,6 +9550,10 @@ export namespace Prisma {
     socialLinks?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_account?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9466,6 +9566,10 @@ export namespace Prisma {
     socialLinks?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_account?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9596,7 +9700,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    budget?: FloatFieldUpdateOperationsInput | number
+    budget?: IntFieldUpdateOperationsInput | number
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9610,7 +9714,7 @@ export namespace Prisma {
     businessId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    budget?: FloatFieldUpdateOperationsInput | number
+    budget?: IntFieldUpdateOperationsInput | number
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9635,7 +9739,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    budget?: FloatFieldUpdateOperationsInput | number
+    budget?: IntFieldUpdateOperationsInput | number
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9648,7 +9752,7 @@ export namespace Prisma {
     businessId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    budget?: FloatFieldUpdateOperationsInput | number
+    budget?: IntFieldUpdateOperationsInput | number
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10046,6 +10150,10 @@ export namespace Prisma {
     socialLinks?: SortOrder
     earnings?: SortOrder
     followers?: SortOrder
+    avatar?: SortOrder
+    location?: SortOrder
+    payout_account?: SortOrder
+    payout_network?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10063,6 +10171,10 @@ export namespace Prisma {
     socialLinks?: SortOrder
     earnings?: SortOrder
     followers?: SortOrder
+    avatar?: SortOrder
+    location?: SortOrder
+    payout_account?: SortOrder
+    payout_network?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10075,6 +10187,10 @@ export namespace Prisma {
     socialLinks?: SortOrder
     earnings?: SortOrder
     followers?: SortOrder
+    avatar?: SortOrder
+    location?: SortOrder
+    payout_account?: SortOrder
+    payout_network?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11071,6 +11187,10 @@ export namespace Prisma {
     socialLinks?: string | null
     earnings?: number
     followers?: number
+    avatar?: string | null
+    location?: string | null
+    payout_account?: string | null
+    payout_network?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     contents?: ContentCreateNestedManyWithoutCreatorProfileInput
@@ -11083,6 +11203,10 @@ export namespace Prisma {
     socialLinks?: string | null
     earnings?: number
     followers?: number
+    avatar?: string | null
+    location?: string | null
+    payout_account?: string | null
+    payout_network?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     contents?: ContentUncheckedCreateNestedManyWithoutCreatorProfileInput
@@ -11267,6 +11391,10 @@ export namespace Prisma {
     socialLinks?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_account?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contents?: ContentUpdateManyWithoutCreatorProfileNestedInput
@@ -11279,6 +11407,10 @@ export namespace Prisma {
     socialLinks?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_account?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contents?: ContentUncheckedUpdateManyWithoutCreatorProfileNestedInput
@@ -11341,7 +11473,7 @@ export namespace Prisma {
     businessId?: StringFilter<"Campaign"> | string
     title?: StringFilter<"Campaign"> | string
     description?: StringNullableFilter<"Campaign"> | string | null
-    budget?: FloatFilter<"Campaign"> | number
+    budget?: IntFilter<"Campaign"> | number
     status?: EnumCampaignStatusFilter<"Campaign"> | $Enums.CampaignStatus
     startDate?: DateTimeFilter<"Campaign"> | Date | string
     endDate?: DateTimeFilter<"Campaign"> | Date | string
@@ -11430,7 +11562,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11447,7 +11579,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11566,7 +11698,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11583,7 +11715,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11606,6 +11738,10 @@ export namespace Prisma {
     socialLinks?: string | null
     earnings?: number
     followers?: number
+    avatar?: string | null
+    location?: string | null
+    payout_account?: string | null
+    payout_network?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutCreatorProfileInput
@@ -11619,6 +11755,10 @@ export namespace Prisma {
     socialLinks?: string | null
     earnings?: number
     followers?: number
+    avatar?: string | null
+    location?: string | null
+    payout_account?: string | null
+    payout_network?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11691,6 +11831,10 @@ export namespace Prisma {
     socialLinks?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_account?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
@@ -11704,6 +11848,10 @@ export namespace Prisma {
     socialLinks?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_account?: NullableStringFieldUpdateOperationsInput | string | null
+    payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11714,7 +11862,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11731,7 +11879,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11798,7 +11946,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11815,7 +11963,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11882,7 +12030,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11899,7 +12047,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11921,7 +12069,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11938,7 +12086,7 @@ export namespace Prisma {
     email: string
     password: string
     profileImage?: string | null
-    role: $Enums.Role
+    role?: $Enums.Role
     verificationStatus?: $Enums.VerificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12140,7 +12288,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    budget?: FloatFieldUpdateOperationsInput | number
+    budget?: IntFieldUpdateOperationsInput | number
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12152,7 +12300,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    budget?: FloatFieldUpdateOperationsInput | number
+    budget?: IntFieldUpdateOperationsInput | number
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12164,7 +12312,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    budget?: FloatFieldUpdateOperationsInput | number
+    budget?: IntFieldUpdateOperationsInput | number
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string

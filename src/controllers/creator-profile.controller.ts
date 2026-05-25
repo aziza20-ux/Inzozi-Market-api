@@ -1,38 +1,35 @@
 import { Request, Response } from 'express';
-import { prisma } from '../prisma';
+import prisma from '../config/prisma';
+import { AuthRequest } from '../middleware/auth';
 import { creatorProfileCreateSchema, creatorProfileUpdateSchema, creatorProfileStatusSchema } from '../validators/schema.validators';
 
-export const createProfile = async (req: Request, res: Response): Promise<void> => {
+export const createProfile = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const user = (req as any).user;
-    if (user.role !== 'CREATOR') {
+    if (req.role !== 'CREATOR') {
       res.status(403).json({ error: 'Creator role required' });
       return;
     }
 
+    if (!req.userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
     const body = req.body as Record<string, unknown>;
-    const legacyNiche = Array.isArray(body.niche) ? body.niche.map(String) : [];
-    const specialization = body.specialization
-      ? String(body.specialization)
-      : [body.display_name, ...legacyNiche].filter(Boolean).join(', ');
-    const socialLinks = body.socialLinks
-      ? String(body.socialLinks)
-      : JSON.stringify({
-          niche: body.niche,
-          country: body.country,
-          payout_network: body.payout_network,
-          payout_account: body.payout_account
-        });
 
     const data = creatorProfileCreateSchema.parse({
       bio: body.bio,
-      specialization,
-      socialLinks,
+      specialization: body.specialization,
+      socialLinks: body.socialLinks,
       earnings: body.earnings,
-      followers: body.followers
+      followers: body.followers,
+      avatar: body.avatar ? String(body.avatar) : undefined,
+      location: body.location ? String(body.location) : undefined,
+      payout_account: body.payout_account ? String(body.payout_account) : undefined,
+      payout_network: body.payout_network ? String(body.payout_network) : undefined
     });
 
-    const existing = await prisma.creatorProfile.findUnique({ where: { userId: user.userId } });
+    const existing = await prisma.creatorProfile.findUnique({ where: { userId: req.userId } });
     if (existing) {
       res.status(409).json({ error: 'Profile already exists' });
       return;
@@ -40,12 +37,16 @@ export const createProfile = async (req: Request, res: Response): Promise<void> 
 
     const profile = await prisma.creatorProfile.create({
       data: {
-        userId: user.userId,
+        userId: req.userId,
         bio: data.bio,
         specialization: data.specialization,
         socialLinks: data.socialLinks,
         earnings: data.earnings,
-        followers: data.followers
+        followers: data.followers,
+        avatar: data.avatar,
+        location: data.location,
+        payout_account: data.payout_account,
+        payout_network: data.payout_network
       }
     });
 
@@ -94,7 +95,12 @@ export const getProfileById = async (req: Request, res: Response): Promise<void>
 export const updateProfile = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const user = (req as any).user;
+    const authReq = req as AuthRequest;
+
+    if (!authReq.userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
     
     const profile = await prisma.creatorProfile.findUnique({ where: { id: String(id) } });
     if (!profile) {
@@ -102,35 +108,23 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    if (profile.userId !== user.userId) {
+    if (profile.userId !== authReq.userId) {
       res.status(403).json({ error: 'Forbidden' });
       return;
     }
 
     const body = req.body as Record<string, unknown>;
-    const legacyNiche = Array.isArray(body.niche) ? body.niche.map(String) : [];
-    const specialization = body.specialization
-      ? String(body.specialization)
-      : body.display_name || legacyNiche.length > 0
-        ? [body.display_name, ...legacyNiche].filter(Boolean).join(', ')
-        : undefined;
-    const socialLinks = body.socialLinks
-      ? String(body.socialLinks)
-      : body.payout_network || body.payout_account || body.country || legacyNiche.length > 0 || body.display_name
-        ? JSON.stringify({
-            niche: body.niche,
-            country: body.country,
-            payout_network: body.payout_network,
-            payout_account: body.payout_account
-          })
-        : undefined;
 
     const data = creatorProfileUpdateSchema.parse({
       bio: body.bio,
-      specialization,
-      socialLinks,
+      specialization: body.specialization,
+      socialLinks: body.socialLinks,
       earnings: body.earnings,
-      followers: body.followers
+      followers: body.followers,
+      avatar: body.avatar ? String(body.avatar) : undefined,
+      location: body.location ? String(body.location) : undefined,
+      payout_account: body.payout_account ? String(body.payout_account) : undefined,
+      payout_network: body.payout_network ? String(body.payout_network) : undefined
     });
 
     const updated = await prisma.creatorProfile.update({
@@ -140,7 +134,11 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
         ...(data.specialization !== undefined && { specialization: data.specialization }),
         ...(data.socialLinks !== undefined && { socialLinks: data.socialLinks }),
         ...(data.earnings !== undefined && { earnings: data.earnings }),
-        ...(data.followers !== undefined && { followers: data.followers })
+        ...(data.followers !== undefined && { followers: data.followers }),
+        ...(data.avatar !== undefined && { avatar: data.avatar }),
+        ...(data.location !== undefined && { location: data.location }),
+        ...(data.payout_account !== undefined && { payout_account: data.payout_account }),
+        ...(data.payout_network !== undefined && { payout_network: data.payout_network })
       }
     });
 
@@ -153,9 +151,9 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
 export const updateProfileStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const user = (req as any).user;
+    const authReq = req as AuthRequest;
     
-    if (user.role !== 'admin') {
+    if (authReq.role !== 'ADMIN') {
       res.status(403).json({ error: 'Admin role required' });
       return;
     }

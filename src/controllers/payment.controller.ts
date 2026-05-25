@@ -1,17 +1,16 @@
 import { Request, Response } from 'express';
-import { prisma } from '../prisma';
-import { paymentTransactionCreateSchema, paymentTypeEnum } from '../validators/schema.validators';
+import prisma from '../config/prisma';
+import { paymentTransactionCreateSchema, paymentTypeEnum, paymentStatusEnum } from '../validators/schema.validators';
 import { acquireIdempotencyLock, releaseIdempotencyLock } from '../services/idempotency.service';
+import { AuthRequest } from '../middleware/auth';
 
-const paymentTypeMap = {
-  subscription: 'SUBSCRIPTION',
-  tip: 'CAMPAIGN_PAYMENT',
-  premium_purchase: 'PRODUCT_PURCHASE'
-} as const;
-
-export const createPayment = async (req: Request, res: Response): Promise<void> => {
+export const createPayment = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const user = (req as any).user;
+    if (!req.userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
     const idempotencyKey = req.headers['idempotency-key'] as string;
 
     if (!idempotencyKey) {
@@ -19,10 +18,9 @@ export const createPayment = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    const paymentType = paymentTypeMap[req.body.type as keyof typeof paymentTypeMap];
     const { amount, paymentType: validatedPaymentType, transactionRef } = paymentTransactionCreateSchema.parse({
       amount: req.body.amount,
-      paymentType,
+      paymentType: req.body.paymentType,
       transactionRef: idempotencyKey
     });
 
@@ -51,7 +49,7 @@ export const createPayment = async (req: Request, res: Response): Promise<void> 
           amount,
           paymentType: validatedPaymentType,
           paymentStatus: 'PENDING',
-          userId: user.userId
+          userId: req.userId
         }
       });
 
@@ -69,10 +67,13 @@ export const createPayment = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-export const getPaymentById = async (req: Request, res: Response): Promise<void> => {
+export const getPaymentById = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const user = (req as any).user;
+    if (!req.userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
 
     const payment = await prisma.paymentTransaction.findUnique({ where: { id: String(id) } });
     if (!payment) {
@@ -80,7 +81,7 @@ export const getPaymentById = async (req: Request, res: Response): Promise<void>
       return;
     }
 
-    if (payment.userId !== user.userId && user.role !== 'ADMIN') {
+    if (payment.userId !== req.userId && req.role !== 'ADMIN') {
       res.status(403).json({ error: 'Forbidden' });
       return;
     }
@@ -93,12 +94,16 @@ export const getPaymentById = async (req: Request, res: Response): Promise<void>
 
 export const getPayments = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = (req as any).user;
+    const authReq = req as AuthRequest;
+    if (!authReq.userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
     const { type, status, cursor, limit = 10 } = req.query;
 
-    const where: any = { userId: user.userId };
-    if (type) where.paymentType = String(type).toUpperCase();
-    if (status) where.paymentStatus = String(status).toUpperCase();
+    const where: any = { userId: authReq.userId };
+    if (type) where.paymentType = paymentTypeEnum.parse(String(type).toUpperCase());
+    if (status) where.paymentStatus = paymentStatusEnum.parse(String(status).toUpperCase());
 
     const payments = await prisma.paymentTransaction.findMany({
       where,

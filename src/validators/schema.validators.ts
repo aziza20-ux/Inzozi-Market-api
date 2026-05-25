@@ -27,6 +27,7 @@ export const registerSchema = z
         email: z.string().email().optional(),
         phone: z.string().optional(),
         password: z.string().min(8),
+        role:roleEnum
     })
     .refine((data) => data.email || data.phone, { message: "Either email or phone is required" });
 
@@ -48,6 +49,7 @@ export const campaignCreateSchema = z.object({
     title: z.string().min(1, "Title is required"),
     description: z.string().optional(),
     budget: z.number().nonnegative("Budget must be >= 0"),
+    startDate: dateStringToDate,
     endDate: dateStringToDate,
 });
 
@@ -61,6 +63,10 @@ export const creatorProfileCreateSchema = z.object({
     bio: z.string().optional(),
     specialization: z.string().optional(),
     socialLinks: z.string().optional(),
+    avatar: z.url().optional(),
+    location:z.string().optional(),
+    payout_account: z.string().optional(),
+    payout_network: z.string().optional(),
     earnings: z.number().optional(),
     followers: z.number().int().optional(),
 });
@@ -78,6 +84,11 @@ export const creatorProfileSchema = z.object({
     socialLinks: z.string().optional(),
     earnings: z.number().optional(),
     followers: z.number().int().optional(),
+    avatar: z.string().optional(),
+    location: z.string().optional(),
+    payout_account: z.string().optional(),
+    payout_network: z.string().optional(),
+    
 });
 
 export const contentSchema = z.object({

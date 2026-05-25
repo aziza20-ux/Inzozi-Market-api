@@ -28,8 +28,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         name: identifier,
         email: identifier,
         password: password_hash,
-        role: 'CONSUMER',
-        verificationStatus: 'PENDING'
+        role: data.role,
       }
     });
 
