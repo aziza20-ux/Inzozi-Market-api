@@ -22,6 +22,55 @@ export const userCreateSchema = z.object({
     verificationStatus: verificationStatusEnum.optional(),
 });
 
+export const registerSchema = z
+    .object({
+        email: z.string().email().optional(),
+        phone: z.string().optional(),
+        password: z.string().min(8),
+    })
+    .refine((data) => data.email || data.phone, { message: "Either email or phone is required" });
+
+export const loginSchema = z.object({
+    email: z.string().email().optional(),
+    phone: z.string().optional(),
+    password: z.string(),
+});
+
+export const verifySchema = z.object({
+    otp: z.string().length(6),
+});
+
+export const refreshSchema = z.object({
+    refreshToken: z.string(),
+});
+
+export const campaignCreateSchema = z.object({
+    title: z.string().min(1, "Title is required"),
+    description: z.string().optional(),
+    budget: z.number().nonnegative("Budget must be >= 0"),
+    endDate: dateStringToDate,
+});
+
+export const campaignUpdateSchema = campaignCreateSchema.partial();
+
+export const campaignStatusUpdateSchema = z.object({
+    status: campaignStatusEnum,
+});
+
+export const creatorProfileCreateSchema = z.object({
+    bio: z.string().optional(),
+    specialization: z.string().optional(),
+    socialLinks: z.string().optional(),
+    earnings: z.number().optional(),
+    followers: z.number().int().optional(),
+});
+
+export const creatorProfileUpdateSchema = creatorProfileCreateSchema.partial();
+
+export const creatorProfileStatusSchema = z.object({
+    profile_status: z.enum(["active", "suspended"]),
+});
+
 export const creatorProfileSchema = z.object({
     userId: uuidString(),
     bio: z.string().optional(),
@@ -60,6 +109,12 @@ export const paymentTransactionSchema = z.object({
     transactionRef: z.string().min(1, "transactionRef is required"),
 });
 
+export const paymentTransactionCreateSchema = paymentTransactionSchema.pick({
+    amount: true,
+    paymentType: true,
+    transactionRef: true,
+});
+
 export const messageSchema = z.object({
     senderId: uuidString(),
     receiverId: uuidString(),
@@ -75,6 +130,17 @@ export type PaymentTransaction = z.infer<typeof paymentTransactionSchema>;
 export type Message = z.infer<typeof messageSchema>;
 
 export const validators = {
+    registerSchema,
+    loginSchema,
+    verifySchema,
+    refreshSchema,
+    campaignCreateSchema,
+    campaignUpdateSchema,
+    campaignStatusUpdateSchema,
+    creatorProfileCreateSchema,
+    creatorProfileUpdateSchema,
+    creatorProfileStatusSchema,
+    paymentTransactionCreateSchema,
     userCreateSchema,
     creatorProfileSchema,
     contentSchema,

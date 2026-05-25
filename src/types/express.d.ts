@@ -1,10 +1,9 @@
 import { Request } from "express";
 
 export interface AuthUser {
-  id: string;
-  email: string;
-  role: "ADMIN" | "SELLER" | "BUYER";
-  verification_status: "verified" | "pending";
+  userId: string;
+  role: "CREATOR" | "BUSINESS" | "CONSUMER" | "ADMIN";
+  verificationStatus: "PENDING" | "VERIFIED" | "REJECTED";
 }
 
 declare global {

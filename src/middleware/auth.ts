@@ -30,3 +30,5 @@ export const authenticate = (
     });
   }
 };
+
+export const authMiddleware = authenticate;
