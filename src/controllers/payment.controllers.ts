@@ -122,7 +122,12 @@ export async function disburseCampaign(req: Request, res: Response) {
       },
       orderBy: { createdAt: "asc" },
     });
-    if (existing.length > 0) return res.status(200).json(existing);
+    if (existing.length > 0) {
+      const allCompleted = existing.every(
+        (transaction) => transaction.paymentStatus === "COMPLETED",
+      );
+      return res.status(allCompleted ? 200 : 202).json(existing);
+    }
 
     const amount = campaign.budget / campaign.applications.length;
     const transactions = [];

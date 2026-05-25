@@ -10,6 +10,10 @@ const requireVerified_js_1 = require("../../middleware/requireVerified.js");
 const campaign_controllers_js_1 = require("../../controllers/campaign.controllers.js");
 const payment_controllers_js_1 = require("../../controllers/payment.controllers.js");
 const router = express_1.default.Router();
+// POST /v1/campaigns
+router.post("/", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)("BUSINESS"), campaign_controllers_js_1.createCampaign);
+// PATCH /v1/campaigns/:id/status
+router.patch("/:id/status", auth_js_1.authenticate, (0, requireRole_js_1.requireRole)("BUSINESS", "ADMIN"), campaign_controllers_js_1.updateCampaignStatus);
 // POST /v1/campaigns/:id/applications
 router.post("/:id/applications", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)("CREATOR"), campaign_controllers_js_1.applyToCampaign);
 // GET /v1/campaigns/:id/applications

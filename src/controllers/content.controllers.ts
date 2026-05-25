@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import prisma from "../config/prisma.js";
+import { storageService } from "../services/storage.service.js";
 
 type Visibility = "public" | "paid";
 
@@ -35,6 +36,29 @@ function isPaidContent(contentVisibility: Visibility) {
   return contentVisibility === "paid";
 }
 
+function getMediaUrl(body: any) {
+  return body?.media_url ?? body?.mediaUrl ?? body?.contentUrl;
+}
+
+export async function generateContentUploadUrl(req: Request, res: Response) {
+  try {
+    const { filename, mimeType } = req.body ?? {};
+
+    if (!filename || !mimeType) {
+      return res.status(400).json({ error: "FILENAME_AND_MIME_TYPE_REQUIRED" });
+    }
+
+    const upload = await storageService.generateUploadUrl(
+      String(filename),
+      String(mimeType),
+    );
+
+    return res.status(201).json(upload);
+  } catch (e) {
+    return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+  }
+}
+
 export async function createContent(req: Request, res: Response) {
   try {
     const user = req.user!;
@@ -49,9 +73,14 @@ export async function createContent(req: Request, res: Response) {
       price,
       currency,
     } = req.body ?? {};
+    const mediaUrl = getMediaUrl(req.body);
 
-    if (!title || !contentUrl || !type || !visibility) {
+    if (!title || !mediaUrl || !type || !visibility) {
       return res.status(400).json({ error: "MISSING_REQUIRED_FIELDS" });
+    }
+
+    if (!storageService.validatePublicUrl(String(mediaUrl))) {
+      return res.status(400).json({ error: "INVALID_MEDIA_URL" });
     }
 
     if (visibility === "paid") {
@@ -71,7 +100,7 @@ export async function createContent(req: Request, res: Response) {
       data: {
         title,
         description: description ?? null,
-        contentUrl,
+        contentUrl: String(mediaUrl),
         thumbnailUrl: thumbnailUrl ?? null,
         type,
         visibility,
@@ -176,6 +205,14 @@ export async function patchContent(req: Request, res: Response) {
       price,
       currency,
     } = req.body ?? {};
+    const mediaUrl = getMediaUrl(req.body);
+
+    if (
+      mediaUrl !== undefined &&
+      !storageService.validatePublicUrl(String(mediaUrl))
+    ) {
+      return res.status(400).json({ error: "INVALID_MEDIA_URL" });
+    }
 
     if (visibility === "paid") {
       if (
@@ -195,7 +232,7 @@ export async function patchContent(req: Request, res: Response) {
       data: {
         ...(title !== undefined ? { title } : {}),
         ...(description !== undefined ? { description: description } : {}),
-        ...(contentUrl !== undefined ? { contentUrl } : {}),
+        ...(mediaUrl !== undefined ? { contentUrl: String(mediaUrl) } : {}),
         ...(thumbnailUrl !== undefined ? { thumbnailUrl } : {}),
         ...(type !== undefined ? { type } : {}),
         ...(visibility !== undefined ? { visibility } : {}),
@@ -327,6 +364,7 @@ export async function getCreatorProfileContent(req: Request, res: Response) {
 }
 
 export default {
+  generateContentUploadUrl,
   createContent,
   getContentList,
   getContent,

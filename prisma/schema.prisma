@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -34,7 +34,6 @@ enum CampaignStatus {
   COMPLETED
   CANCELLED
 }
-
 
 enum ContentType {
   video
@@ -73,7 +72,6 @@ model User {
   role               Role
   verificationStatus VerificationStatus @default(PENDING)
 
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -92,7 +90,6 @@ model User {
   // Campaign applications made by this creator
   applications Application[]
 }
-
 
 //
 // CREATOR PROFILE
@@ -165,15 +162,15 @@ model Campaign {
   id         String @id @default(uuid())
   businessId String
 
-  title            String
-  description      String?
-  budget           Float
-  status           CampaignStatus @default(DRAFT)
+  title       String
+  description String?
+  budget      Float
+  status      CampaignStatus @default(DRAFT)
 
   // Eligibility gates for creators
-  niche_filter       String
-  min_audience_size  Int
-  max_creators        Int
+  niche_filter      String
+  min_audience_size Int
+  max_creators      Int
 
   // Applications move the campaign into progress
   startDate DateTime
@@ -185,8 +182,8 @@ model Campaign {
   //
   // RELATIONS
   //
-  business      User           @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  applications  Application[]
+  business     User          @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  applications Application[]
 }
 
 model Application {
@@ -205,10 +202,8 @@ model Application {
   creator  User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   @@unique([campaignId, creatorId])
-
   @@index([campaignId])
 }
-
 
 //
 // PAYMENT TRANSACTION MODEL
@@ -222,7 +217,7 @@ model PaymentTransaction {
   paymentType   PaymentType
   paymentStatus PaymentStatus @default(PENDING)
 
-  transactionRef String @unique
+  transactionRef String  @unique
   providerRef    String?
   idempotencyKey String?
   campaignId     String?
@@ -247,11 +242,14 @@ model PaymentTransaction {
 model Message {
   id String @id @default(uuid())
 
-  senderId   String
-  receiverId String
+  senderId       String
+  receiverId     String
+  conversationId String
 
-  message String
-  isRead  Boolean @default(false)
+  message   String
+  isRead    Boolean   @default(false)
+  readAt    DateTime?
+  deletedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -263,6 +261,10 @@ model Message {
   sender User @relation("SenderMessages", fields: [senderId], references: [id], onDelete: Cascade)
 
   receiver User @relation("ReceiverMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@index([receiverId])
 }
 
 model PremiumPurchase {

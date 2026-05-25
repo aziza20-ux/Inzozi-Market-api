@@ -31,6 +31,9 @@ exports.paymentStatusEnum = zod_1.z.enum([
     "COMPLETED",
 ]);
 const uuidString = () => zod_1.z.uuid();
+const httpsUrl = (message) => zod_1.z.url({ message }).refine((value) => new URL(value).protocol === "https:", {
+    message: "URL must use HTTPS",
+});
 const dateStringToDate = zod_1.z.preprocess((arg) => {
     if (typeof arg === "string" || arg instanceof Date)
         return new Date(arg);
@@ -53,15 +56,28 @@ exports.creatorProfileSchema = zod_1.z.object({
     earnings: zod_1.z.number().optional(),
     followers: zod_1.z.number().int().optional(),
 });
-exports.contentSchema = zod_1.z.object({
-    creatorId: uuidString(),
+exports.contentSchema = zod_1.z
+    .object({
+    creatorId: uuidString().optional(),
     title: zod_1.z.string().min(3, "Title must be at least 3 characters"),
     description: zod_1.z.string().optional(),
-    contentType: zod_1.z.string().min(1, "Content type is required"),
-    mediaUrl: zod_1.z.url({ message: "Invalid media URL" }),
+    contentType: zod_1.z.string().min(1, "Content type is required").optional(),
+    type: zod_1.z.string().min(1, "Content type is required").optional(),
+    media_url: httpsUrl("Invalid media URL").optional(),
+    mediaUrl: httpsUrl("Invalid media URL").optional(),
+    contentUrl: httpsUrl("Invalid media URL").optional(),
     moderationStatus: exports.moderationStatusEnum.optional(),
-    visibility: zod_1.z.boolean().optional(),
+    visibility: zod_1.z.union([zod_1.z.boolean(), zod_1.z.enum(["public", "paid"])]).optional(),
     creatorProfileId: zod_1.z.uuid().optional(),
+})
+    .superRefine((value, ctx) => {
+    if (!value.media_url && !value.mediaUrl && !value.contentUrl) {
+        ctx.addIssue({
+            code: "custom",
+            path: ["media_url"],
+            message: "media_url is required",
+        });
+    }
 });
 exports.campaignSchema = zod_1.z.object({
     businessId: uuidString(),
@@ -88,8 +104,11 @@ exports.paymentTransactionSchema = zod_1.z.object({
 exports.messageSchema = zod_1.z.object({
     senderId: uuidString(),
     receiverId: uuidString(),
+    conversationId: zod_1.z.string().min(1, "conversationId is required").optional(),
     message: zod_1.z.string().min(1, "Message cannot be empty"),
     isRead: zod_1.z.boolean().optional(),
+    readAt: dateStringToDate.optional(),
+    deletedAt: dateStringToDate.optional(),
 });
 exports.validators = {
     userCreateSchema: exports.userCreateSchema,

@@ -31,6 +31,10 @@ export const paymentStatusEnum = z.enum([
 ]);
 
 const uuidString = () => z.uuid();
+const httpsUrl = (message: string) =>
+  z.url({ message }).refine((value) => new URL(value).protocol === "https:", {
+    message: "URL must use HTTPS",
+  });
 const dateStringToDate = z.preprocess((arg) => {
   if (typeof arg === "string" || arg instanceof Date)
     return new Date(arg as any);
@@ -56,16 +60,29 @@ export const creatorProfileSchema = z.object({
   followers: z.number().int().optional(),
 });
 
-export const contentSchema = z.object({
-  creatorId: uuidString(),
-  title: z.string().min(3, "Title must be at least 3 characters"),
-  description: z.string().optional(),
-  contentType: z.string().min(1, "Content type is required"),
-  mediaUrl: z.url({ message: "Invalid media URL" }),
-  moderationStatus: moderationStatusEnum.optional(),
-  visibility: z.boolean().optional(),
-  creatorProfileId: z.uuid().optional(),
-});
+export const contentSchema = z
+  .object({
+    creatorId: uuidString().optional(),
+    title: z.string().min(3, "Title must be at least 3 characters"),
+    description: z.string().optional(),
+    contentType: z.string().min(1, "Content type is required").optional(),
+    type: z.string().min(1, "Content type is required").optional(),
+    media_url: httpsUrl("Invalid media URL").optional(),
+    mediaUrl: httpsUrl("Invalid media URL").optional(),
+    contentUrl: httpsUrl("Invalid media URL").optional(),
+    moderationStatus: moderationStatusEnum.optional(),
+    visibility: z.union([z.boolean(), z.enum(["public", "paid"])]).optional(),
+    creatorProfileId: z.uuid().optional(),
+  })
+  .superRefine((value, ctx) => {
+    if (!value.media_url && !value.mediaUrl && !value.contentUrl) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["media_url"],
+        message: "media_url is required",
+      });
+    }
+  });
 
 export const campaignSchema = z.object({
   businessId: uuidString(),
@@ -94,8 +111,11 @@ export const paymentTransactionSchema = z.object({
 export const messageSchema = z.object({
   senderId: uuidString(),
   receiverId: uuidString(),
+  conversationId: z.string().min(1, "conversationId is required").optional(),
   message: z.string().min(1, "Message cannot be empty"),
   isRead: z.boolean().optional(),
+  readAt: dateStringToDate.optional(),
+  deletedAt: dateStringToDate.optional(),
 });
 
 export type UserCreate = z.infer<typeof userCreateSchema>;

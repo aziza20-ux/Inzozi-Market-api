@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.generateContentUploadUrl = generateContentUploadUrl;
 exports.createContent = createContent;
 exports.getContentList = getContentList;
 exports.getContent = getContent;
@@ -11,6 +12,7 @@ exports.deleteContent = deleteContent;
 exports.moderationUpdate = moderationUpdate;
 exports.getCreatorProfileContent = getCreatorProfileContent;
 const prisma_js_1 = __importDefault(require("../config/prisma.js"));
+const storage_service_js_1 = require("../services/storage.service.js");
 function toModerationStatus(v) {
     if (!v)
         return undefined;
@@ -35,12 +37,32 @@ async function hasCompletedPremiumPurchase(userId, contentId) {
 function isPaidContent(contentVisibility) {
     return contentVisibility === "paid";
 }
+function getMediaUrl(body) {
+    return body?.media_url ?? body?.mediaUrl ?? body?.contentUrl;
+}
+async function generateContentUploadUrl(req, res) {
+    try {
+        const { filename, mimeType } = req.body ?? {};
+        if (!filename || !mimeType) {
+            return res.status(400).json({ error: "FILENAME_AND_MIME_TYPE_REQUIRED" });
+        }
+        const upload = await storage_service_js_1.storageService.generateUploadUrl(String(filename), String(mimeType));
+        return res.status(201).json(upload);
+    }
+    catch (e) {
+        return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+    }
+}
 async function createContent(req, res) {
     try {
         const user = req.user;
         const { title, description, contentUrl, thumbnailUrl, type, visibility, price, currency, } = req.body ?? {};
-        if (!title || !contentUrl || !type || !visibility) {
+        const mediaUrl = getMediaUrl(req.body);
+        if (!title || !mediaUrl || !type || !visibility) {
             return res.status(400).json({ error: "MISSING_REQUIRED_FIELDS" });
+        }
+        if (!storage_service_js_1.storageService.validatePublicUrl(String(mediaUrl))) {
+            return res.status(400).json({ error: "INVALID_MEDIA_URL" });
         }
         if (visibility === "paid") {
             if (price === undefined ||
@@ -56,7 +78,7 @@ async function createContent(req, res) {
             data: {
                 title,
                 description: description ?? null,
-                contentUrl,
+                contentUrl: String(mediaUrl),
                 thumbnailUrl: thumbnailUrl ?? null,
                 type,
                 visibility,
@@ -141,6 +163,11 @@ async function patchContent(req, res) {
             return res.status(403).json({ error: "CONTENT_UPDATE_DENIED" });
         }
         const { title, description, contentUrl, thumbnailUrl, type, visibility, price, currency, } = req.body ?? {};
+        const mediaUrl = getMediaUrl(req.body);
+        if (mediaUrl !== undefined &&
+            !storage_service_js_1.storageService.validatePublicUrl(String(mediaUrl))) {
+            return res.status(400).json({ error: "INVALID_MEDIA_URL" });
+        }
         if (visibility === "paid") {
             if (price === undefined ||
                 currency === undefined ||
@@ -156,7 +183,7 @@ async function patchContent(req, res) {
             data: {
                 ...(title !== undefined ? { title } : {}),
                 ...(description !== undefined ? { description: description } : {}),
-                ...(contentUrl !== undefined ? { contentUrl } : {}),
+                ...(mediaUrl !== undefined ? { contentUrl: String(mediaUrl) } : {}),
                 ...(thumbnailUrl !== undefined ? { thumbnailUrl } : {}),
                 ...(type !== undefined ? { type } : {}),
                 ...(visibility !== undefined ? { visibility } : {}),
@@ -275,6 +302,7 @@ async function getCreatorProfileContent(req, res) {
     }
 }
 exports.default = {
+    generateContentUploadUrl,
     createContent,
     getContentList,
     getContent,

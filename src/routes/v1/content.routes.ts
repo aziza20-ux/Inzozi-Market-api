@@ -5,6 +5,7 @@ import { requireRole } from "../../middleware/requireRole.js";
 import {
   createContent,
   deleteContent,
+  generateContentUploadUrl,
   getContent,
   getContentList,
   getCreatorProfileContent,
@@ -13,6 +14,15 @@ import {
 } from "../../controllers/content.controllers.js";
 
 const router = express.Router();
+
+// POST /v1/content/upload-url
+router.post(
+  "/upload-url",
+  authenticate,
+  requireVerified,
+  requireRole("CREATOR"),
+  generateContentUploadUrl,
+);
 
 // POST /v1/content
 router.post(

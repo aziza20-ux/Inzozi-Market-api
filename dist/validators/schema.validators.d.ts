@@ -63,17 +63,23 @@ export declare const creatorProfileSchema: z.ZodObject<{
     followers: z.ZodOptional<z.ZodNumber>;
 }, z.core.$strip>;
 export declare const contentSchema: z.ZodObject<{
-    creatorId: z.ZodUUID;
+    creatorId: z.ZodOptional<z.ZodUUID>;
     title: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
-    contentType: z.ZodString;
-    mediaUrl: z.ZodURL;
+    contentType: z.ZodOptional<z.ZodString>;
+    type: z.ZodOptional<z.ZodString>;
+    media_url: z.ZodOptional<z.ZodURL>;
+    mediaUrl: z.ZodOptional<z.ZodURL>;
+    contentUrl: z.ZodOptional<z.ZodURL>;
     moderationStatus: z.ZodOptional<z.ZodEnum<{
         PENDING: "PENDING";
         APPROVED: "APPROVED";
         REMOVED: "REMOVED";
     }>>;
-    visibility: z.ZodOptional<z.ZodBoolean>;
+    visibility: z.ZodOptional<z.ZodUnion<readonly [z.ZodBoolean, z.ZodEnum<{
+        public: "public";
+        paid: "paid";
+    }>]>>;
     creatorProfileId: z.ZodOptional<z.ZodUUID>;
 }, z.core.$strip>;
 export declare const campaignSchema: z.ZodObject<{
@@ -119,8 +125,11 @@ export declare const paymentTransactionSchema: z.ZodObject<{
 export declare const messageSchema: z.ZodObject<{
     senderId: z.ZodUUID;
     receiverId: z.ZodUUID;
+    conversationId: z.ZodOptional<z.ZodString>;
     message: z.ZodString;
     isRead: z.ZodOptional<z.ZodBoolean>;
+    readAt: z.ZodOptional<z.ZodPreprocess<z.ZodDate>>;
+    deletedAt: z.ZodOptional<z.ZodPreprocess<z.ZodDate>>;
 }, z.core.$strip>;
 export type UserCreate = z.infer<typeof userCreateSchema>;
 export type CreatorProfile = z.infer<typeof creatorProfileSchema>;
@@ -156,17 +165,23 @@ export declare const validators: {
         followers: z.ZodOptional<z.ZodNumber>;
     }, z.core.$strip>;
     contentSchema: z.ZodObject<{
-        creatorId: z.ZodUUID;
+        creatorId: z.ZodOptional<z.ZodUUID>;
         title: z.ZodString;
         description: z.ZodOptional<z.ZodString>;
-        contentType: z.ZodString;
-        mediaUrl: z.ZodURL;
+        contentType: z.ZodOptional<z.ZodString>;
+        type: z.ZodOptional<z.ZodString>;
+        media_url: z.ZodOptional<z.ZodURL>;
+        mediaUrl: z.ZodOptional<z.ZodURL>;
+        contentUrl: z.ZodOptional<z.ZodURL>;
         moderationStatus: z.ZodOptional<z.ZodEnum<{
             PENDING: "PENDING";
             APPROVED: "APPROVED";
             REMOVED: "REMOVED";
         }>>;
-        visibility: z.ZodOptional<z.ZodBoolean>;
+        visibility: z.ZodOptional<z.ZodUnion<readonly [z.ZodBoolean, z.ZodEnum<{
+            public: "public";
+            paid: "paid";
+        }>]>>;
         creatorProfileId: z.ZodOptional<z.ZodUUID>;
     }, z.core.$strip>;
     campaignSchema: z.ZodObject<{
@@ -212,8 +227,11 @@ export declare const validators: {
     messageSchema: z.ZodObject<{
         senderId: z.ZodUUID;
         receiverId: z.ZodUUID;
+        conversationId: z.ZodOptional<z.ZodString>;
         message: z.ZodString;
         isRead: z.ZodOptional<z.ZodBoolean>;
+        readAt: z.ZodOptional<z.ZodPreprocess<z.ZodDate>>;
+        deletedAt: z.ZodOptional<z.ZodPreprocess<z.ZodDate>>;
     }, z.core.$strip>;
 };
 //# sourceMappingURL=schema.validators.d.ts.map

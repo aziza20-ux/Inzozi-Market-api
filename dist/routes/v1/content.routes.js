@@ -9,6 +9,8 @@ const requireVerified_js_1 = require("../../middleware/requireVerified.js");
 const requireRole_js_1 = require("../../middleware/requireRole.js");
 const content_controllers_js_1 = require("../../controllers/content.controllers.js");
 const router = express_1.default.Router();
+// POST /v1/content/upload-url
+router.post("/upload-url", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)("CREATOR"), content_controllers_js_1.generateContentUploadUrl);
 // POST /v1/content
 router.post("/", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)("CREATOR"), content_controllers_js_1.createContent);
 // GET /v1/content

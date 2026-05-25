@@ -14,6 +14,105 @@ function getCampaignOpenStatuses(status: string) {
   return status === "ACTIVE" || status === "IN_PROGRESS";
 }
 
+function isTerminalCampaignStatus(status: string) {
+  return status === "CANCELLED" || status === "COMPLETED";
+}
+
+export async function createCampaign(req: Request, res: Response) {
+  try {
+    const user = req.user;
+    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
+    if ((user as any).role !== "BUSINESS") {
+      return res.status(403).json({ error: "BUSINESS_ONLY" });
+    }
+
+    const {
+      title,
+      description,
+      budget,
+      status,
+      niche_filter,
+      min_audience_size,
+      max_creators,
+      startDate,
+      endDate,
+    } = req.body ?? {};
+
+    const parsedBudget = Number(budget);
+    const parsedMaxCreators = Number(max_creators);
+    if (!Number.isFinite(parsedBudget) || parsedBudget <= 0) {
+      return res.status(400).json({ error: "INVALID_BUDGET" });
+    }
+    if (!Number.isInteger(parsedMaxCreators) || parsedMaxCreators <= 0) {
+      return res.status(400).json({ error: "INVALID_MAX_CREATORS" });
+    }
+    if (parsedBudget < parsedMaxCreators) {
+      return res.status(400).json({ error: "CAMPAIGN_BUDGET_TOO_LOW" });
+    }
+
+    const campaign = await prisma.campaign.create({
+      data: {
+        businessId: user.id,
+        title: String(title),
+        description: description ?? null,
+        budget: parsedBudget,
+        status: status ?? "DRAFT",
+        niche_filter: String(niche_filter),
+        min_audience_size: Number(min_audience_size ?? 0),
+        max_creators: parsedMaxCreators,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+      },
+    });
+
+    return res.status(201).json(campaign);
+  } catch (e) {
+    return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+  }
+}
+
+export async function updateCampaignStatus(req: Request, res: Response) {
+  try {
+    const user = req.user;
+    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
+    if (!((user as any).role === "BUSINESS" || (user as any).role === "ADMIN")) {
+      return res.status(403).json({ error: "INSUFFICIENT_ROLE" });
+    }
+
+    const campaignId = parseUuidParam(req.params.id);
+    const nextStatus = String(req.body?.status ?? "").toUpperCase();
+    if (!campaignId || !nextStatus) {
+      return res.status(400).json({ error: "INVALID_PARAMS" });
+    }
+
+    const allowed = ["DRAFT", "ACTIVE", "IN_PROGRESS", "COMPLETED", "CANCELLED"];
+    if (!allowed.includes(nextStatus)) {
+      return res.status(400).json({ error: "INVALID_CAMPAIGN_STATUS" });
+    }
+
+    const campaign = await prisma.campaign.findFirst({ where: { id: campaignId } });
+    if (!campaign) return res.status(404).json({ error: "CAMPAIGN_NOT_FOUND" });
+    if ((user as any).role === "BUSINESS" && campaign.businessId !== user.id) {
+      return res.status(403).json({ error: "ACCESS_DENIED" });
+    }
+    if (isTerminalCampaignStatus(campaign.status)) {
+      return res.status(400).json({ error: "CAMPAIGN_STATUS_TERMINAL" });
+    }
+    if (campaign.status === "DRAFT" && nextStatus === "COMPLETED") {
+      return res.status(400).json({ error: "INVALID_CAMPAIGN_STATUS_TRANSITION" });
+    }
+
+    const updated = await prisma.campaign.update({
+      where: { id: campaignId },
+      data: { status: nextStatus as any },
+    });
+
+    return res.json(updated);
+  } catch (e) {
+    return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+  }
+}
+
 export async function applyToCampaign(req: Request, res: Response) {
   try {
     const user = req.user;
@@ -204,6 +303,8 @@ export async function patchCampaignApplication(req: Request, res: Response) {
 }
 
 export default {
+  createCampaign,
+  updateCampaignStatus,
   applyToCampaign,
   listCampaignApplications,
   patchCampaignApplication,
