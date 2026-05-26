@@ -10,6 +10,7 @@ import {
 	getUserMessages,
 	usersStats,
 } from "../../controllers/users.controllers";
+import { authenticate } from "../../middleware/auth";
 
 const userRoutes = Router();
 

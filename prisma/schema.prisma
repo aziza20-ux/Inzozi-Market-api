@@ -69,7 +69,7 @@ model User {
   email              String             @unique
   password           String
   profileImage       String?
-  role               Role
+  role               Role               @default(CONSUMER)
   verificationStatus VerificationStatus @default(PENDING)
 
   createdAt DateTime @default(now())
@@ -105,6 +105,10 @@ model CreatorProfile {
   payout_account String?
   earnings       Float   @default(0)
   followers      Int     @default(0)
+  avatar         String?
+  location       String?
+  payout_account String?
+  payout_network String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -164,7 +168,7 @@ model Campaign {
 
   title       String
   description String?
-  budget      Float
+  budget      Int
   status      CampaignStatus @default(DRAFT)
 
   // Eligibility gates for creators
