@@ -26,4 +26,3 @@ describe("requireRole", () => {
         expect(next).not.toHaveBeenCalled();
     });
 });
-//# sourceMappingURL=requireRole.test.js.map

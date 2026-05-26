@@ -216,4 +216,3 @@ exports.default = {
     markMessageRead,
     deleteMessage,
 };
-//# sourceMappingURL=message.controllers.js.map

@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const argon2_1 = __importDefault(require("argon2"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const mockPrisma = {
     user: {
@@ -82,7 +82,7 @@ describe("Core integration rules", () => {
         jest.clearAllMocks();
     });
     it("covers register -> verify -> login -> refresh -> logout auth flow", async () => {
-        const hashedPassword = await bcrypt_1.default.hash("password123", 10);
+        const hashedPassword = await argon2_1.default.hash("password123");
         mockPrisma.user.findUnique
             .mockResolvedValueOnce(null)
             .mockResolvedValueOnce({
@@ -295,4 +295,3 @@ describe("Core integration rules", () => {
         });
     });
 });
-//# sourceMappingURL=core.integration.test.js.map

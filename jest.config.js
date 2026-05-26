@@ -12,6 +12,7 @@ const transformIgnorePatterns = [
 module.exports = {
   testMatch: ["**/src/tests/**/*.test.ts"],
   moduleNameMapper: {
+    "^\\./swagger\\.js$": "<rootDir>/src/swagger.ts",
     "^\\.\\./app\\.js$": "<rootDir>/src/app.ts",
     "^\\./routes/(.*)\\.js$": "<rootDir>/src/routes/$1.ts",
     "^\\./(.*\\.routes)\\.js$": "<rootDir>/src/routes/v1/$1.ts",

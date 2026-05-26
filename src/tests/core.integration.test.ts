@@ -1,5 +1,5 @@
 import request from "supertest";
-import bcrypt from "bcrypt";
+import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 
 const mockPrisma = {
@@ -86,7 +86,7 @@ describe("Core integration rules", () => {
   });
 
   it("covers register -> verify -> login -> refresh -> logout auth flow", async () => {
-    const hashedPassword = await bcrypt.hash("password123", 10);
+    const hashedPassword = await argon2.hash("password123");
 
     mockPrisma.user.findUnique
       .mockResolvedValueOnce(null)

@@ -194,4 +194,3 @@ exports.default = {
     disburseCampaign,
     mockProviderCallback,
 };
-//# sourceMappingURL=payment.controllers.js.map

@@ -11,4 +11,3 @@ async function connectDB() {
     console.log("Database connected successfully");
 }
 exports.default = prisma;
-//# sourceMappingURL=prisma.js.map

@@ -280,4 +280,3 @@ exports.default = {
     listCampaignApplications,
     patchCampaignApplication,
 };
-//# sourceMappingURL=campaign.controllers.js.map

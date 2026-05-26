@@ -17,4 +17,3 @@ const requireRole = (...roles) => {
     };
 };
 exports.requireRole = requireRole;
-//# sourceMappingURL=requireRole.js.map

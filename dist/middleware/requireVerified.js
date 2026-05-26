@@ -7,8 +7,8 @@ const requireVerified = (req, res, next) => {
             message: "Unauthorized",
         });
     }
-    const isVerified = req.user.verification_status === "verified" ||
-        req.user.verificationStatus === "VERIFIED";
+    const isVerified = req.user.verificationStatus === "VERIFIED" ||
+        req.user.verification_status === "verified";
     if (!isVerified) {
         return res.status(403).json({
             error: "USER_NOT_VERIFIED",
@@ -17,4 +17,3 @@ const requireVerified = (req, res, next) => {
     next();
 };
 exports.requireVerified = requireVerified;
-//# sourceMappingURL=requireVerified.js.map

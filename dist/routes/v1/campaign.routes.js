@@ -1,26 +1,15 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const auth_js_1 = require("../../middleware/auth.js");
-const requireRole_js_1 = require("../../middleware/requireRole.js");
-const requireVerified_js_1 = require("../../middleware/requireVerified.js");
-const campaign_controllers_js_1 = require("../../controllers/campaign.controllers.js");
-const payment_controllers_js_1 = require("../../controllers/payment.controllers.js");
-const router = express_1.default.Router();
-// POST /v1/campaigns
-router.post("/", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)("BUSINESS"), campaign_controllers_js_1.createCampaign);
-// PATCH /v1/campaigns/:id/status
-router.patch("/:id/status", auth_js_1.authenticate, (0, requireRole_js_1.requireRole)("BUSINESS", "ADMIN"), campaign_controllers_js_1.updateCampaignStatus);
-// POST /v1/campaigns/:id/applications
-router.post("/:id/applications", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)("CREATOR"), campaign_controllers_js_1.applyToCampaign);
-// GET /v1/campaigns/:id/applications
-router.get("/:id/applications", auth_js_1.authenticate, (0, requireRole_js_1.requireRole)("BUSINESS", "ADMIN"), campaign_controllers_js_1.listCampaignApplications);
-// PATCH /v1/campaigns/:id/applications/:appId
-router.patch("/:id/applications/:appId", auth_js_1.authenticate, (0, requireRole_js_1.requireRole)("BUSINESS"), campaign_controllers_js_1.patchCampaignApplication);
-// POST /v1/campaigns/:id/disburse
-router.post("/:id/disburse", auth_js_1.authenticate, (0, requireRole_js_1.requireRole)("BUSINESS", "ADMIN", "SYSTEM"), payment_controllers_js_1.disburseCampaign);
+const express_1 = require("express");
+const campaign_controller_1 = require("../../controllers/campaign.controller");
+const auth_1 = require("../../middleware/auth");
+const payment_controller_1 = require("../../controllers/payment.controller");
+const router = (0, express_1.Router)();
+router.post('/', auth_1.authenticate, campaign_controller_1.createCampaign);
+router.get('/', campaign_controller_1.getCampaigns);
+router.get('/:id', auth_1.authenticate, campaign_controller_1.getCampaignById);
+router.put('/:id', auth_1.authenticate, campaign_controller_1.updateCampaign);
+router.patch('/:id/status', auth_1.authenticate, campaign_controller_1.updateCampaignStatus);
+router.post('/:id/disburse', auth_1.authenticate, payment_controller_1.disburseCampaign);
+router.delete('/:id', auth_1.authenticate, campaign_controller_1.deleteCampaign);
 exports.default = router;
-//# sourceMappingURL=campaign.routes.js.map

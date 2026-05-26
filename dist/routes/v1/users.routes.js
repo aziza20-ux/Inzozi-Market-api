@@ -13,4 +13,3 @@ userRoutes.get("/:id/contents", users_controllers_1.getUserContents); //test don
 userRoutes.get("/:id/campaigns", users_controllers_1.getUserCampaigns); //test done
 userRoutes.get("/:id/messages", users_controllers_1.getUserMessages); //test done
 exports.default = userRoutes;
-//# sourceMappingURL=users.routes.js.map

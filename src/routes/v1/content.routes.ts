@@ -11,7 +11,7 @@ import {
   getCreatorProfileContent,
   moderationUpdate,
   patchContent,
-} from "../../controllers/content.controllers.js";
+} from "../../controllers/content.controller.js";
 
 const router = express.Router();
 

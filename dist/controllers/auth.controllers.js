@@ -122,4 +122,3 @@ exports.default = {
     refresh,
     logout,
 };
-//# sourceMappingURL=auth.controllers.js.map

@@ -15,19 +15,29 @@ export const createCampaign = async (req: AuthRequest, res: Response): Promise<v
       title: req.body.title,
       description: req.body.description,
       budget: req.body.budget,
+      niche_filter: req.body.niche_filter,
+      min_audience_size: req.body.min_audience_size,
+      max_creators: req.body.max_creators,
       startDate: req.body.startDate ?? new Date(),
       endDate: req.body.endDate ?? req.body.deadline_at,
     });
 
+    if (data.budget < data.max_creators) {
+      res.status(400).json({ error: 'CAMPAIGN_BUDGET_TOO_LOW' });
+      return;
+    }
+
     const campaign = await prisma.campaign.create({
       data: {
-        title: data.title!,
+        title: data.title,
         description: data.description,
-        budget: data.budget!,
-        // status: 'DRAFT',
-        startDate: new Date()!,
-        endDate: data.endDate!,
-        businessId: req.userId!
+        budget: data.budget,
+        niche_filter: data.niche_filter,
+        min_audience_size: data.min_audience_size,
+        max_creators: data.max_creators,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        businessId: req.userId!,
       }
     });
 
@@ -63,7 +73,7 @@ export const getCampaigns = async (req: Request, res: Response): Promise<void> =
 export const getCampaignById = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const campaign = await prisma.campaign.findUnique({ where: { id: String(id) } });
+    const campaign = await prisma.campaign.findFirst({ where: { id: String(id) } });
     if (!campaign) {
       res.status(404).json({ error: 'Campaign not found' });
       return;
@@ -79,7 +89,7 @@ export const updateCampaign = async (req: AuthRequest, res: Response): Promise<v
     const { id } = req.params;
   
     
-    const campaign = await prisma.campaign.findUnique({ where: { id: String(id) } });
+    const campaign = await prisma.campaign.findFirst({ where: { id: String(id) } });
     if (!campaign) {
       res.status(404).json({ error: 'Campaign not found' });
       return;
@@ -121,21 +131,25 @@ export const updateCampaign = async (req: AuthRequest, res: Response): Promise<v
 export const updateCampaignStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const user = (req as any).user;
+    const user = req.user;
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
     
-    const campaign = await prisma.campaign.findUnique({ where: { id: String(id) } });
+    const campaign = await prisma.campaign.findFirst({ where: { id: String(id) } });
     if (!campaign) {
       res.status(404).json({ error: 'Campaign not found' });
       return;
     }
 
-    if (campaign.businessId !== user.userId && user.role !== 'ADMIN') {
+    if (campaign.businessId !== user.id && user.role !== 'ADMIN') {
       res.status(403).json({ error: 'Forbidden' });
       return;
     }
 
     if (campaign.status === 'CANCELLED') {
-      res.status(400).json({ error: 'Cancelled is a terminal state' });
+      res.status(400).json({ error: 'CAMPAIGN_STATUS_TERMINAL' });
       return;
     }
 
@@ -144,13 +158,14 @@ export const updateCampaignStatus = async (req: Request, res: Response): Promise
 
     const validTransitions: Record<string, string[]> = {
       DRAFT: ['ACTIVE', 'CANCELLED'],
-      ACTIVE: ['COMPLETED', 'CANCELLED'],
+      ACTIVE: ['IN_PROGRESS', 'COMPLETED', 'CANCELLED'],
+      IN_PROGRESS: ['COMPLETED', 'CANCELLED'],
       COMPLETED: [],
       CANCELLED: []
     };
 
-    if (!validTransitions[campaign.status].includes(nextStatus)) {
-      res.status(422).json({ error: `Invalid transition from ${campaign.status} to ${nextStatus}` });
+    if (!validTransitions[campaign.status]?.includes(nextStatus)) {
+      res.status(400).json({ error: 'INVALID_CAMPAIGN_STATUS_TRANSITION' });
       return;
     }
 

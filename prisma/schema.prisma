@@ -107,7 +107,6 @@ model CreatorProfile {
   followers      Int     @default(0)
   avatar         String?
   location       String?
-  payout_account String?
   payout_network String?
 
   createdAt DateTime @default(now())

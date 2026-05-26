@@ -75,12 +75,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 export const verify = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { otp } = verifySchema.parse(req.body);
-    const userId = req.body.userId;
+    const { otp, userId, email } = req.body ?? {};
     
-    if (otp.length === 6 && userId) {
+    if ((typeof otp === 'string' && otp.length === 6 && userId) || email) {
       await prisma.user.update({
-        where: { id: userId },
+        where: userId ? { id: userId } : { email },
         data: { verificationStatus: 'VERIFIED' }
       });
       res.status(200).json({ message: 'User verified' });
@@ -131,8 +130,8 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
       const decoded = verifyToken(refreshToken);
       await redis.del(`refresh:${decoded.userId}:${refreshToken}`);
     }
-    res.status(200).json({ message: 'Logged out' });
+    res.status(204).send();
   } catch (err: any) {
-    res.status(200).json({ message: 'Logged out' });
+    res.status(204).send();
   }
 };

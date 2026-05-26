@@ -77,6 +77,9 @@ export const campaignCreateSchema = z.object({
     title: z.string().min(1, "Title is required"),
     description: z.string().optional(),
     budget: z.number().nonnegative("Budget must be >= 0"),
+    niche_filter: z.string().min(1, "niche_filter is required"),
+    min_audience_size: z.number().int().nonnegative(),
+    max_creators: z.number().int().positive(),
     startDate: dateStringToDate,
     endDate: dateStringToDate,
 });

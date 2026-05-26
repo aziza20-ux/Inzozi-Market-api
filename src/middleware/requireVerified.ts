@@ -11,7 +11,11 @@ export const requireVerified = (
     });
   }
 
-  if (req.user.verificationStatus !== "VERIFIED") {
+  const isVerified =
+    req.user.verificationStatus === "VERIFIED" ||
+    req.user.verification_status === "verified";
+
+  if (!isVerified) {
     return res.status(403).json({
       error: "USER_NOT_VERIFIED",
     });

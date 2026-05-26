@@ -1,15 +1,15 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecret123';
+const getJwtSecret = () => process.env.JWT_SECRET || 'supersecret123';
 
 export const generateAccessToken = (userId: string, role: string) => {
-  return jwt.sign({ userId, role }, JWT_SECRET, { expiresIn: '15m' });
+  return jwt.sign({ id: userId, userId, role }, getJwtSecret(), { expiresIn: '15m' });
 };
 
 export const generateRefreshToken = (userId: string) => {
-  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ userId }, getJwtSecret(), { expiresIn: '7d' });
 };
 
 export const verifyToken = (token: string) => {
-  return jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
+  return jwt.verify(token, getJwtSecret()) as jwt.JwtPayload;
 };

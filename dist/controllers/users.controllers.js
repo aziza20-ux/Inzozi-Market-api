@@ -195,4 +195,3 @@ exports.default = {
     getUserMessages: exports.getUserMessages,
     usersStats: exports.usersStats,
 };
-//# sourceMappingURL=users.controllers.js.map
