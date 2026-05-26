@@ -5,6 +5,10 @@ import cors from 'cors';
 import v1Routes from './routes/v1/index.js';
 import { setupSwagger } from './swagger';
 
+import dotenv from "dotenv";
+import app from "./app.js";
+
+dotenv.config();
 const app: Application = express();
 
 app.use(helmet());

@@ -1,15 +1,21 @@
 import { Request } from "express";
 
 export interface AuthUser {
-  userId: string;
-  role: "CREATOR" | "BUSINESS" | "CONSUMER" | "ADMIN";
-  verificationStatus: "PENDING" | "VERIFIED" | "REJECTED";
+  id: string;
+  email: string;
+  role: "ADMIN" | "CREATOR" | "BUSINESS" | "CONSUMER" | "SYSTEM";
+  verification_status?: "verified" | "pending";
+  verificationStatus?: "VERIFIED" | "PENDING" | "REJECTED";
 }
-
 declare global {
-  namespace Express {
+    namespace Express {
     interface Request {
       user?: AuthUser;
     }
   }
 }
+
+
+
+
+
