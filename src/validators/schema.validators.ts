@@ -65,7 +65,11 @@ export const loginSchema = z.object({
 });
 
 export const verifySchema = z.object({
-    otp: z.string().length(6),
+  otp: z.string().length(6),
+  email: z.string().email().optional(),
+  userId: z.uuid().optional(),
+}).refine((data) => data.email || data.userId, {
+  message: "Either email or userId is required",
 });
 
 export const refreshSchema = z.object({

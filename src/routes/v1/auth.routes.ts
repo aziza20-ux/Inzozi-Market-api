@@ -85,11 +85,14 @@ router.post('/login', login); //done
  *         application/json:
  *           schema:
  *             type: object
- *             required: [userId, otp]
+ *             required: [otp]
  *             properties:
  *               userId:
  *                 type: string
  *                 format: uuid
+ *               email:
+ *                 type: string
+ *                 format: email
  *               otp:
  *                 type: string
  *     responses:
