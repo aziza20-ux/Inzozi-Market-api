@@ -2,6 +2,9 @@ import type { Request, Response } from "express";
 import { randomUUID } from "crypto";
 import prisma from "../config/prisma.js";
 import { requestMobileMoneyTransfer } from "../services/mockMobileMoneyProvider.js";
+import { paymentTransactionCreateSchema, paymentTypeEnum, paymentStatusEnum } from '../validators/schema.validators';
+import { acquireIdempotencyLock, releaseIdempotencyLock } from '../services/idempotency.service';
+import { AuthRequest } from '../middleware/auth';
 
 function parsePositiveAmount(value: unknown): number | null {
   const amount = Number(value);
@@ -13,15 +16,17 @@ function makeTransactionRef(prefix: string) {
   return `${prefix}_${randomUUID()}`;
 }
 
-function isBusinessOrSystem(user: Express.Request["user"]) {
-  return user?.role === "BUSINESS" || user?.role === "ADMIN" || user?.role === "SYSTEM";
+function isBusinessOrSystem(role: string | undefined) {
+  return role === "BUSINESS" || role === "ADMIN" || role === "SYSTEM";
 }
 
-export async function withdraw(req: Request, res: Response) {
+export async function withdraw(req: AuthRequest, res: Response) {
   try {
-    const user = req.user;
-    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
-    if (user.role !== "CREATOR") {
+    // Support legacy tests that set `req.user` instead of `req.userId`/`req.role`.
+    const userId = req.userId ?? (req.user as any)?.id ?? (req.user as any)?.userId;
+    const role = req.role ?? (req.user as any)?.role;
+    if (!userId || !role) return res.status(401).json({ error: "UNAUTHORIZED" });
+    if (role !== "CREATOR") {
       return res.status(403).json({ error: "CREATOR_ONLY" });
     }
 
@@ -29,7 +34,7 @@ export async function withdraw(req: Request, res: Response) {
     if (!amount) return res.status(400).json({ error: "INVALID_AMOUNT" });
 
     const profile = await prisma.creatorProfile.findUnique({
-      where: { userId: user.id },
+      where: { userId },
     });
 
     if (!profile?.payout_account) {
@@ -39,7 +44,7 @@ export async function withdraw(req: Request, res: Response) {
     const transactionRef = makeTransactionRef("withdrawal");
     const transaction = await prisma.paymentTransaction.create({
       data: {
-        userId: user.id,
+        userId,
         amount,
         paymentType: "WITHDRAWAL",
         paymentStatus: "PENDING",
@@ -65,11 +70,13 @@ export async function withdraw(req: Request, res: Response) {
   }
 }
 
-export async function disburseCampaign(req: Request, res: Response) {
+export async function disburseCampaign(req: AuthRequest, res: Response) {
   try {
-    const user = req.user;
-    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
-    if (!isBusinessOrSystem(user)) {
+    // Support legacy tests that set `req.user` instead of `req.userId`/`req.role`.
+    const userId = req.userId ?? (req.user as any)?.id ?? (req.user as any)?.userId;
+    const role = req.role ?? (req.user as any)?.role;
+    if (!userId || !role) return res.status(401).json({ error: "UNAUTHORIZED" });
+    if (!isBusinessOrSystem(role)) {
       return res.status(403).json({ error: "INSUFFICIENT_ROLE" });
     }
 
@@ -104,7 +111,7 @@ export async function disburseCampaign(req: Request, res: Response) {
     })) as any;
 
     if (!campaign) return res.status(404).json({ error: "CAMPAIGN_NOT_FOUND" });
-    if (user.role === "BUSINESS" && campaign.businessId !== user.id) {
+    if (role === "BUSINESS" && campaign.businessId !== userId) {
       return res.status(403).json({ error: "ACCESS_DENIED" });
     }
     if (campaign.status !== "IN_PROGRESS" && campaign.status !== "COMPLETED") {
@@ -130,7 +137,9 @@ export async function disburseCampaign(req: Request, res: Response) {
     }
 
     const amount = campaign.budget / campaign.applications.length;
-    const transactions = [];
+    const transactions: Awaited<
+      ReturnType<typeof prisma.paymentTransaction.update>
+    >[] = [];
 
     for (const application of campaign.applications) {
       const payoutAccount = application.creator.creatorProfile?.payout_account;
@@ -209,6 +218,123 @@ export async function mockProviderCallback(req: Request, res: Response) {
     return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
 }
+
+
+export const createPayment = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    if (!req.userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    const idempotencyKey = req.headers['idempotency-key'] as string;
+
+    if (!idempotencyKey) {
+      res.status(400).json({ error: 'idempotency-key header is required' });
+      return;
+    }
+
+    const { amount, paymentType: validatedPaymentType, transactionRef } = paymentTransactionCreateSchema.parse({
+      amount: req.body.amount,
+      paymentType: req.body.paymentType,
+      transactionRef: idempotencyKey
+    });
+
+    const locked = await acquireIdempotencyLock(idempotencyKey);
+    if (!locked) {
+      res.status(409).json({ error: 'PAYMENT_IN_PROGRESS' });
+      return;
+    }
+
+    try {
+      const existing = await prisma.paymentTransaction.findUnique({ where: { transactionRef } });
+      
+      if (existing) {
+        if (existing.paymentStatus === 'SUCCESS') {
+          res.status(200).json(existing);
+          return;
+        } else {
+          res.status(409).json({ error: 'PAYMENT_IN_PROGRESS' });
+          return;
+        }
+      }
+
+      const transaction = await prisma.paymentTransaction.create({
+        data: {
+          transactionRef,
+          amount,
+          paymentType: validatedPaymentType,
+          paymentStatus: 'PENDING',
+          userId: req.userId
+        }
+      });
+
+      await prisma.paymentTransaction.update({
+        where: { id: transaction.id },
+        data: { paymentStatus: 'SUCCESS' }
+      });
+
+      res.status(201).json({ ...transaction, paymentStatus: 'SUCCESS' });
+    } finally {
+      await releaseIdempotencyLock(idempotencyKey);
+    }
+  } catch (err: any) {
+    res.status(400).json({ error: err.message || err.errors });
+  }
+};
+
+export const getPaymentById = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    if (!req.userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    const payment = await prisma.paymentTransaction.findUnique({ where: { id: String(id) } });
+    if (!payment) {
+      res.status(404).json({ error: 'Payment not found' });
+      return;
+    }
+
+    if (payment.userId !== req.userId && req.role !== 'ADMIN') {
+      res.status(403).json({ error: 'Forbidden' });
+      return;
+    }
+
+    res.status(200).json(payment);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const getPayments = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authReq = req as AuthRequest;
+    if (!authReq.userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    const { type, status, cursor, limit = 10 } = req.query;
+
+    const where: any = { userId: authReq.userId };
+    if (type) where.paymentType = paymentTypeEnum.parse(String(type).toUpperCase());
+    if (status) where.paymentStatus = paymentStatusEnum.parse(String(status).toUpperCase());
+
+    const payments = await prisma.paymentTransaction.findMany({
+      where,
+      take: Number(limit),
+      ...(cursor && { skip: 1, cursor: { id: String(cursor) } }),
+      orderBy: { createdAt: 'desc' }
+    });
+
+    res.status(200).json(payments);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
 
 export default {
   withdraw,

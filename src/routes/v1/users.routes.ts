@@ -9,7 +9,7 @@ import {
 	getUserCampaigns,
 	getUserMessages,
 	usersStats,
-} from "../../controllers/users.controllers";
+} from "../../controllers/users.controller";
 import { authenticate } from "../../middleware/auth";
 
 const userRoutes = Router();

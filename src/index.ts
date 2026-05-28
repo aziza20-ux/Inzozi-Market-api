@@ -3,10 +3,9 @@ import express, { Application, Request, Response } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import v1Routes from './routes/v1/index.js';
-import { setupSwagger } from './swagger';
+import { setupSwagger } from './config/swagger.js';
 
 import dotenv from "dotenv";
-import app from "./app.js";
 
 dotenv.config();
 const app: Application = express();

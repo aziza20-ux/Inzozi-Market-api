@@ -29,7 +29,7 @@ import {
   disburseCampaign,
   mockProviderCallback,
   withdraw,
-} from "../controllers/payment.controllers.js";
+} from "../controllers/payment.controller.js";
 
 function createResponse() {
   const res = {

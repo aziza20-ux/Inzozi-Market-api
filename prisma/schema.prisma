@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -20,12 +20,6 @@ enum VerificationStatus {
   REJECTED
 }
 
-enum ModerationStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  REMOVED
-}
 
 enum CampaignStatus {
   DRAFT
@@ -107,7 +101,6 @@ model CreatorProfile {
   followers      Int     @default(0)
   avatar         String?
   location       String?
-  payout_account String?
   payout_network String?
 
   createdAt DateTime @default(now())
@@ -138,8 +131,7 @@ model Content {
   price    Float?
   currency String?
 
-  moderationStatus ModerationStatus @default(PENDING)
-  rejectionReason  String?
+  // moderationStatus and rejectionReason removed
 
   deletedAt DateTime?
 

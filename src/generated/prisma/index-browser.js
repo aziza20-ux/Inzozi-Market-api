@@ -138,11 +138,11 @@ exports.Prisma.CreatorProfileScalarFieldEnum = {
   bio: 'bio',
   specialization: 'specialization',
   socialLinks: 'socialLinks',
+  payout_account: 'payout_account',
   earnings: 'earnings',
   followers: 'followers',
   avatar: 'avatar',
   location: 'location',
-  payout_account: 'payout_account',
   payout_network: 'payout_network',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -150,13 +150,16 @@ exports.Prisma.CreatorProfileScalarFieldEnum = {
 
 exports.Prisma.ContentScalarFieldEnum = {
   id: 'id',
-  creatorId: 'creatorId',
   title: 'title',
   description: 'description',
-  contentType: 'contentType',
-  mediaUrl: 'mediaUrl',
-  moderationStatus: 'moderationStatus',
+  contentUrl: 'contentUrl',
+  thumbnailUrl: 'thumbnailUrl',
+  type: 'type',
   visibility: 'visibility',
+  price: 'price',
+  currency: 'currency',
+  deletedAt: 'deletedAt',
+  creatorId: 'creatorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   creatorProfileId: 'creatorProfileId'
@@ -169,8 +172,20 @@ exports.Prisma.CampaignScalarFieldEnum = {
   description: 'description',
   budget: 'budget',
   status: 'status',
+  niche_filter: 'niche_filter',
+  min_audience_size: 'min_audience_size',
+  max_creators: 'max_creators',
   startDate: 'startDate',
   endDate: 'endDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ApplicationScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  creatorId: 'creatorId',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -182,6 +197,9 @@ exports.Prisma.PaymentTransactionScalarFieldEnum = {
   paymentType: 'paymentType',
   paymentStatus: 'paymentStatus',
   transactionRef: 'transactionRef',
+  providerRef: 'providerRef',
+  idempotencyKey: 'idempotencyKey',
+  campaignId: 'campaignId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -190,10 +208,21 @@ exports.Prisma.MessageScalarFieldEnum = {
   id: 'id',
   senderId: 'senderId',
   receiverId: 'receiverId',
+  conversationId: 'conversationId',
   message: 'message',
   isRead: 'isRead',
+  readAt: 'readAt',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PremiumPurchaseScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  contentId: 'contentId',
+  status: 'status',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -223,15 +252,22 @@ exports.VerificationStatus = exports.$Enums.VerificationStatus = {
   REJECTED: 'REJECTED'
 };
 
-exports.ModerationStatus = exports.$Enums.ModerationStatus = {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REMOVED: 'REMOVED'
+exports.ContentType = exports.$Enums.ContentType = {
+  video: 'video',
+  image: 'image',
+  article: 'article',
+  audio: 'audio'
+};
+
+exports.ContentVisibility = exports.$Enums.ContentVisibility = {
+  public: 'public',
+  paid: 'paid'
 };
 
 exports.CampaignStatus = exports.$Enums.CampaignStatus = {
   DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE',
+  IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
 };
@@ -239,14 +275,17 @@ exports.CampaignStatus = exports.$Enums.CampaignStatus = {
 exports.PaymentType = exports.$Enums.PaymentType = {
   SUBSCRIPTION: 'SUBSCRIPTION',
   PRODUCT_PURCHASE: 'PRODUCT_PURCHASE',
-  CAMPAIGN_PAYMENT: 'CAMPAIGN_PAYMENT'
+  CAMPAIGN_PAYMENT: 'CAMPAIGN_PAYMENT',
+  WITHDRAWAL: 'WITHDRAWAL',
+  CAMPAIGN_DISBURSEMENT: 'CAMPAIGN_DISBURSEMENT'
 };
 
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   PENDING: 'PENDING',
   SUCCESS: 'SUCCESS',
   FAILED: 'FAILED',
-  REFUNDED: 'REFUNDED'
+  REFUNDED: 'REFUNDED',
+  COMPLETED: 'COMPLETED'
 };
 
 exports.Prisma.ModelName = {
@@ -254,8 +293,10 @@ exports.Prisma.ModelName = {
   CreatorProfile: 'CreatorProfile',
   Content: 'Content',
   Campaign: 'Campaign',
+  Application: 'Application',
   PaymentTransaction: 'PaymentTransaction',
-  Message: 'Message'
+  Message: 'Message',
+  PremiumPurchase: 'PremiumPurchase'
 };
 
 /**

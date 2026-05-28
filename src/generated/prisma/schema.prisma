@@ -20,23 +20,32 @@ enum VerificationStatus {
   REJECTED
 }
 
-enum ModerationStatus {
-  PENDING
-  APPROVED
-  REMOVED
-}
-
 enum CampaignStatus {
   DRAFT
   ACTIVE
+  IN_PROGRESS
   COMPLETED
   CANCELLED
+}
+
+enum ContentType {
+  video
+  image
+  article
+  audio
+}
+
+enum ContentVisibility {
+  public
+  paid
 }
 
 enum PaymentType {
   SUBSCRIPTION
   PRODUCT_PURCHASE
   CAMPAIGN_PAYMENT
+  WITHDRAWAL
+  CAMPAIGN_DISBURSEMENT
 }
 
 enum PaymentStatus {
@@ -44,6 +53,7 @@ enum PaymentStatus {
   SUCCESS
   FAILED
   REFUNDED
+  COMPLETED
 }
 
 model User {
@@ -68,6 +78,10 @@ model User {
   sentMessages        Message[]            @relation("SenderMessages")
   receivedMessages    Message[]            @relation("ReceiverMessages")
   paymentTransactions PaymentTransaction[]
+  premiumPurchases    PremiumPurchase[]
+
+  // Campaign applications made by this creator
+  applications Application[]
 }
 
 //
@@ -81,11 +95,11 @@ model CreatorProfile {
   bio            String?
   specialization String?
   socialLinks    String?
+  payout_account String?
   earnings       Float   @default(0)
   followers      Int     @default(0)
   avatar         String?
   location       String?
-  payout_account String?
   payout_network String?
 
   createdAt DateTime @default(now())
@@ -95,8 +109,7 @@ model CreatorProfile {
   // RELATIONS
   //
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   contents Content[]
 }
 
@@ -105,15 +118,24 @@ model CreatorProfile {
 //
 
 model Content {
-  id        String @id @default(uuid())
-  creatorId String
+  id           String  @id @default(uuid())
+  title        String
+  description  String?
+  contentUrl   String
+  thumbnailUrl String?
 
-  title            String
-  description      String?
-  contentType      String
-  mediaUrl         String
-  moderationStatus ModerationStatus @default(PENDING)
-  visibility       Boolean          @default(true)
+  type       ContentType
+  visibility ContentVisibility
+
+  price    Float?
+  currency String?
+
+  // moderationStatus and rejectionReason removed
+
+  deletedAt DateTime?
+
+  creatorId String
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -122,9 +144,9 @@ model Content {
   // RELATIONS
   //
 
-  creator          User            @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  creatorProfile   CreatorProfile? @relation(fields: [creatorProfileId], references: [id])
+  creatorProfile   CreatorProfile?   @relation(fields: [creatorProfileId], references: [id])
   creatorProfileId String?
+  premiumPurchases PremiumPurchase[]
 }
 
 //
@@ -140,6 +162,12 @@ model Campaign {
   budget      Int
   status      CampaignStatus @default(DRAFT)
 
+  // Eligibility gates for creators
+  niche_filter      String
+  min_audience_size Int
+  max_creators      Int
+
+  // Applications move the campaign into progress
   startDate DateTime
   endDate   DateTime
 
@@ -149,8 +177,27 @@ model Campaign {
   //
   // RELATIONS
   //
+  business     User          @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  applications Application[]
+}
 
-  business User @relation(fields: [businessId], references: [id], onDelete: Cascade)
+model Application {
+  id String @id @default(uuid())
+
+  campaignId String
+  creatorId  String
+
+  // Creator's response
+  status String @default("PENDING")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  creator  User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, creatorId])
+  @@index([campaignId])
 }
 
 //
@@ -165,7 +212,10 @@ model PaymentTransaction {
   paymentType   PaymentType
   paymentStatus PaymentStatus @default(PENDING)
 
-  transactionRef String @unique
+  transactionRef String  @unique
+  providerRef    String?
+  idempotencyKey String?
+  campaignId     String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -175,6 +225,9 @@ model PaymentTransaction {
   //
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([idempotencyKey, userId, paymentType])
+  @@index([campaignId])
 }
 
 //
@@ -184,11 +237,14 @@ model PaymentTransaction {
 model Message {
   id String @id @default(uuid())
 
-  senderId   String
-  receiverId String
+  senderId       String
+  receiverId     String
+  conversationId String
 
-  message String
-  isRead  Boolean @default(false)
+  message   String
+  isRead    Boolean   @default(false)
+  readAt    DateTime?
+  deletedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -200,4 +256,23 @@ model Message {
   sender User @relation("SenderMessages", fields: [senderId], references: [id], onDelete: Cascade)
 
   receiver User @relation("ReceiverMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+model PremiumPurchase {
+  id String @id @default(uuid())
+
+  userId    String
+  contentId String
+
+  status String
+
+  // RELATIONS
+  user    User    @relation(fields: [userId], references: [id])
+  content Content @relation(fields: [contentId], references: [id])
+
+  createdAt DateTime @default(now())
 }

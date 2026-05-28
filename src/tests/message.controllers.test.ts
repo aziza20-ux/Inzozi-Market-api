@@ -18,7 +18,7 @@ jest.mock("../config/prisma.js", () => ({
 import {
   createMessage,
   deriveConversationId,
-} from "../controllers/message.controllers.js";
+} from "../controllers/message.controller.js";
 
 function createResponse() {
   return {

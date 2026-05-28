@@ -6,7 +6,6 @@ export const verificationStatusEnum = z.enum([
   "VERIFIED",
   "REJECTED",
 ]);
-export const moderationStatusEnum = z.enum(["PENDING", "APPROVED", "REMOVED"]);
 export const campaignStatusEnum = z.enum([
   "DRAFT",
   "ACTIVE",
@@ -76,9 +75,12 @@ export const refreshSchema = z.object({
 export const campaignCreateSchema = z.object({
     title: z.string().min(1, "Title is required"),
     description: z.string().optional(),
-    budget: z.number().nonnegative("Budget must be >= 0"),
-    startDate: dateStringToDate,
-    endDate: dateStringToDate,
+  budget: z.number().nonnegative("Budget must be >= 0"),
+  startDate: dateStringToDate,
+  endDate: dateStringToDate,
+  niche_filter: z.string().min(1, "niche_filter is required"),
+  min_audience_size: z.number().int().nonnegative(),
+  max_creators: z.number().int().positive(),
 });
 
 export const campaignUpdateSchema = campaignCreateSchema.partial();
@@ -129,7 +131,7 @@ export const contentSchema = z
     media_url: httpsUrl("Invalid media URL").optional(),
     mediaUrl: httpsUrl("Invalid media URL").optional(),
     contentUrl: httpsUrl("Invalid media URL").optional(),
-    moderationStatus: moderationStatusEnum.optional(),
+    // moderationStatus removed
     visibility: z.union([z.boolean(), z.enum(["public", "paid"])]).optional(),
     creatorProfileId: z.uuid().optional(),
   })

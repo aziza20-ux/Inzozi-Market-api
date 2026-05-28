@@ -17,6 +17,9 @@ export const createCampaign = async (req: AuthRequest, res: Response): Promise<v
       budget: req.body.budget,
       startDate: req.body.startDate ?? new Date(),
       endDate: req.body.endDate ?? req.body.deadline_at,
+      niche_filter: req.body.niche_filter,
+      min_audience_size: req.body.min_audience_size,
+      max_creators: req.body.max_creators,
     });
 
     const campaign = await prisma.campaign.create({
@@ -25,9 +28,12 @@ export const createCampaign = async (req: AuthRequest, res: Response): Promise<v
         description: data.description,
         budget: data.budget!,
         // status: 'DRAFT',
-        startDate: new Date()!,
+        startDate: data.startDate!,
         endDate: data.endDate!,
-        businessId: req.userId!
+        businessId: req.userId!,
+        niche_filter: data.niche_filter,
+        min_audience_size: data.min_audience_size,
+        max_creators: data.max_creators,
       }
     });
 
