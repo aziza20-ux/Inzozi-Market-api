@@ -29,7 +29,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         name: data.name,
         email: identifier,
         password: password_hash,
-        role: data.role,
+        role: data.role
       }
     });
     // generate 6-digit OTP

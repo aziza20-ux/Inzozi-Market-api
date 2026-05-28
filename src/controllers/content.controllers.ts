@@ -122,6 +122,7 @@ export async function createContent(req: AuthRequest, res: Response) {
 
     res.status(201).json(created);
   } catch (e) {
+    console.error("createContent error:", e);
     res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
 }
