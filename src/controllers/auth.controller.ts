@@ -4,7 +4,7 @@ import prisma  from '../config/prisma';
 import { redis } from '../services/redis.service';
 import { generateAccessToken, generateRefreshToken, verifyToken } from '../services/token.service';
 import { registerSchema, loginSchema, verifySchema, refreshSchema } from '../validators/schema.validators';
-import nodemailer from 'nodemailer';
+import { sendEmail } from '../config/email.js';
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -26,10 +26,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const user = await prisma.user.create({
       data: {
-        name: identifier,
+        name: data.name,
         email: identifier,
         password: password_hash,
-        role: data.role,
+        role: data.role
       }
     });
     // generate 6-digit OTP
@@ -41,32 +41,25 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       console.error('Failed to store OTP in redis', e);
     }
 
-    // send email if SMTP configured, otherwise log OTP
-    const smtpHost = process.env.SMTP_HOST;
-    if (smtpHost) {
+    if (data.email) {
       try {
-        const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST,
-          port: Number(process.env.SMTP_PORT) || 587,
-          secure: process.env.SMTP_SECURE === 'true',
-          auth: process.env.SMTP_USER
-            ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
-            : undefined,
-        });
-
-        const from = process.env.FROM_EMAIL || `no-reply@${process.env.SMTP_HOST}`;
-        await transporter.sendMail({
-          from,
-          to: identifier,
-          subject: 'Your verification code',
-          text: `Your verification code is ${otp}. It expires in 5 minutes.`,
-        });
+        await sendEmail(
+          data.email,
+          'Your Inzozi Market verification code',
+          `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111;">
+              <h2>Your verification code</h2>
+              <p>Use the code below to verify your account. It expires in 5 minutes.</p>
+              <p style="font-size: 28px; font-weight: 700; letter-spacing: 4px;">${otp}</p>
+            </div>
+          `,
+        );
       } catch (e) {
         console.error('Failed to send OTP email', e);
         console.log(`OTP for ${identifier}: ${otp}`);
       }
     } else {
-      console.log(`Sending OTP to ${identifier}: ${otp}`);
+      console.log(`Registered without email, OTP for ${identifier}: ${otp}`);
     }
 
     res.status(201).json({ message: 'User registered, please verify OTP', userId: user.id });
@@ -111,15 +104,22 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 export const verify = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { otp } = verifySchema.parse(req.body);
-    const userId = req.body.userId;
+    const { otp, email, userId } = verifySchema.parse(req.body) as {
+      otp: string;
+      email?: string;
+      userId?: string;
+    };
 
-    if (!userId) {
-      res.status(400).json({ error: 'Missing userId' });
+    const user = userId
+      ? await prisma.user.findUnique({ where: { id: userId } })
+      : await prisma.user.findUnique({ where: { email: email! } });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
       return;
     }
 
-    const stored = await redis.get(`otp:${userId}`);
+    const stored = await redis.get(`otp:${user.id}`);
     if (!stored) {
       res.status(400).json({ error: 'OTP expired or not found' });
       return;
@@ -131,8 +131,8 @@ export const verify = async (req: Request, res: Response): Promise<void> => {
     }
 
     // valid
-    await prisma.user.update({ where: { id: userId }, data: { verificationStatus: 'VERIFIED' } });
-    await redis.del(`otp:${userId}`);
+    await prisma.user.update({ where: { id: user.id }, data: { verificationStatus: 'VERIFIED' } });
+    await redis.del(`otp:${user.id}`);
     res.status(200).json({ message: 'User verified' });
   } catch (err: any) {
     res.status(400).json({ error: err.message || err.errors });
