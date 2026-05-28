@@ -15,7 +15,7 @@ jest.mock("../config/prisma.js", () => ({
     __esModule: true,
     default: mockPrisma,
 }));
-const message_controllers_js_1 = require("../controllers/message.controllers.js");
+const message_controller_js_1 = require("../controllers/message.controller.js");
 function createResponse() {
     return {
         status: jest.fn().mockReturnThis(),
@@ -32,7 +32,7 @@ describe("Messages", () => {
             body: { recipientId: "creator-1", message: "Hello" },
         };
         const res = createResponse();
-        await (0, message_controllers_js_1.createMessage)(req, res);
+        await (0, message_controller_js_1.createMessage)(req, res);
         expect(res.status).toHaveBeenCalledWith(403);
         expect(res.json).toHaveBeenCalledWith({
             error: "CONSUMER_CANNOT_INITIATE",
@@ -40,8 +40,8 @@ describe("Messages", () => {
         expect(mockPrisma.message.create).not.toHaveBeenCalled();
     });
     it("derives a deterministic conversation ID by sorting and hashing user IDs", () => {
-        const fromA = (0, message_controllers_js_1.deriveConversationId)("user-b", "user-a");
-        const fromB = (0, message_controllers_js_1.deriveConversationId)("user-a", "user-b");
+        const fromA = (0, message_controller_js_1.deriveConversationId)("user-b", "user-a");
+        const fromB = (0, message_controller_js_1.deriveConversationId)("user-a", "user-b");
         expect(fromA).toBe(fromB);
         expect(fromA).toMatch(/^[a-f0-9]{32}$/);
     });
@@ -51,7 +51,7 @@ describe("Messages", () => {
             id: "message-1",
             senderId: "user-a",
             receiverId: "user-b",
-            conversationId: (0, message_controllers_js_1.deriveConversationId)("user-a", "user-b"),
+            conversationId: (0, message_controller_js_1.deriveConversationId)("user-a", "user-b"),
             message: "Hello",
         });
         const req = {
@@ -59,16 +59,15 @@ describe("Messages", () => {
             body: { recipientId: "user-b", message: "Hello" },
         };
         const res = createResponse();
-        await (0, message_controllers_js_1.createMessage)(req, res);
+        await (0, message_controller_js_1.createMessage)(req, res);
         expect(mockPrisma.message.create).toHaveBeenCalledWith(expect.objectContaining({
             data: expect.objectContaining({
                 senderId: "user-a",
                 receiverId: "user-b",
-                conversationId: (0, message_controllers_js_1.deriveConversationId)("user-b", "user-a"),
+                conversationId: (0, message_controller_js_1.deriveConversationId)("user-b", "user-a"),
                 message: "Hello",
             }),
         }));
         expect(res.status).toHaveBeenCalledWith(201);
     });
 });
-//# sourceMappingURL=message.controllers.test.js.map

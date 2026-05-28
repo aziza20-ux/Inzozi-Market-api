@@ -23,7 +23,7 @@ jest.mock("../services/mockMobileMoneyProvider.js", () => ({
     __esModule: true,
     requestMobileMoneyTransfer: mockRequestMobileMoneyTransfer,
 }));
-const payment_controllers_js_1 = require("../controllers/payment.controllers.js");
+const payment_controller_js_1 = require("../controllers/payment.controller.js");
 function createResponse() {
     const res = {
         status: jest.fn().mockReturnThis(),
@@ -45,7 +45,7 @@ describe("Campaign Applications", () => {
             body: { amount: 5000 },
         };
         const res = createResponse();
-        await (0, payment_controllers_js_1.withdraw)(req, res);
+        await (0, payment_controller_js_1.withdraw)(req, res);
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ error: "PAYOUT_ACCOUNT_MISSING" });
         expect(mockPrisma.paymentTransaction.create).not.toHaveBeenCalled();
@@ -95,7 +95,7 @@ describe("Campaign Applications", () => {
             body: {},
         };
         const res = createResponse();
-        await (0, payment_controllers_js_1.disburseCampaign)(req, res);
+        await (0, payment_controller_js_1.disburseCampaign)(req, res);
         expect(res.status).toHaveBeenCalledWith(201);
         expect(mockPrisma.paymentTransaction.create).toHaveBeenCalledTimes(2);
         expect(mockPrisma.paymentTransaction.create).toHaveBeenCalledWith(expect.objectContaining({
@@ -119,7 +119,7 @@ describe("Campaign Applications", () => {
             },
         };
         const res = createResponse();
-        await (0, payment_controllers_js_1.mockProviderCallback)(req, res);
+        await (0, payment_controller_js_1.mockProviderCallback)(req, res);
         expect(mockPrisma.paymentTransaction.updateMany).toHaveBeenCalledWith({
             where: { OR: [{ providerRef: "mock-provider-1" }] },
             data: { paymentStatus: "COMPLETED" },
@@ -127,4 +127,3 @@ describe("Campaign Applications", () => {
         expect(res.json).toHaveBeenCalledWith({ updated: 1 });
     });
 });
-//# sourceMappingURL=campaign.applications.test.js.map

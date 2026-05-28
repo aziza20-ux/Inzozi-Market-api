@@ -5,23 +5,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticate = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const authenticate = (req, res, next) => {
+const allowedRoles = ["ADMIN", "CREATOR", "BUSINESS", "CONSUMER", "SYSTEM"];
+function isAuthRole(role) {
+    return allowedRoles.includes(role);
+}
+const JWT_SECRET = process.env.JWT_SECRET ?? "";
+const authenticate = async (req, res, next) => {
+    const header = req.headers['authorization'];
+    if (!header?.startsWith('Bearer ')) {
+        res.status(401).json({ error: 'Invalid token' });
+        return;
+    }
+    const token = header.split(" ")[1];
     try {
-        const token = req.headers.authorization?.split(" ")[1];
-        if (!token) {
-            return res.status(401).json({
-                message: "No token provided",
-            });
+        const decoded = jsonwebtoken_1.default.verify(token, JWT_SECRET);
+        req.userId = decoded.userId;
+        if (isAuthRole(decoded.role)) {
+            req.role = decoded.role;
         }
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
         next();
     }
-    catch (error) {
-        return res.status(401).json({
-            message: "Invalid token",
-        });
+    catch {
+        res.status(401).json({ error: 'Invalid or expired token' });
     }
 };
 exports.authenticate = authenticate;
-//# sourceMappingURL=auth.js.map

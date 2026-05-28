@@ -13,17 +13,7 @@ exports.moderationUpdate = moderationUpdate;
 exports.getCreatorProfileContent = getCreatorProfileContent;
 const prisma_js_1 = __importDefault(require("../config/prisma.js"));
 const storage_service_js_1 = require("../services/storage.service.js");
-function toModerationStatus(v) {
-    if (!v)
-        return undefined;
-    const up = v.toUpperCase();
-    if (up === "PENDING" ||
-        up === "APPROVED" ||
-        up === "REJECTED" ||
-        up === "REMOVED")
-        return up;
-    return undefined;
-}
+const cloudinary_js_1 = require("../config/cloudinary.js");
 async function hasCompletedPremiumPurchase(userId, contentId) {
     const purchase = await prisma_js_1.default.premiumPurchase.findFirst({
         where: {
@@ -40,6 +30,14 @@ function isPaidContent(contentVisibility) {
 function getMediaUrl(body) {
     return body?.media_url ?? body?.mediaUrl ?? body?.contentUrl;
 }
+async function resolveContentMedia(req) {
+    const file = req.file;
+    if (file) {
+        const uploaded = await (0, cloudinary_js_1.uploadToCloudinary)(file.buffer, "inzozi/content");
+        return uploaded.url;
+    }
+    return getMediaUrl(req.body);
+}
 async function generateContentUploadUrl(req, res) {
     try {
         const { filename, mimeType } = req.body ?? {};
@@ -55,9 +53,16 @@ async function generateContentUploadUrl(req, res) {
 }
 async function createContent(req, res) {
     try {
-        const user = req.user;
+        const userId = req.userId;
+        const role = req.role;
+        if (!userId) {
+            return res.status(401).json({ error: "UNAUTHORIZED" });
+        }
+        if (role !== "CREATOR") {
+            return res.status(403).json({ error: "CREATOR_ONLY" });
+        }
         const { title, description, contentUrl, thumbnailUrl, type, visibility, price, currency, } = req.body ?? {};
-        const mediaUrl = getMediaUrl(req.body);
+        const mediaUrl = await resolveContentMedia(req);
         if (!title || !mediaUrl || !type || !visibility) {
             return res.status(400).json({ error: "MISSING_REQUIRED_FIELDS" });
         }
@@ -84,9 +89,7 @@ async function createContent(req, res) {
                 visibility,
                 price: visibility === "paid" ? Number(price) : null,
                 currency: visibility === "paid" ? String(currency) : null,
-                moderationStatus: "PENDING",
-                rejectionReason: null,
-                creatorId: user.id,
+                creatorId: userId,
             },
         });
         res.status(201).json(created);
@@ -98,10 +101,7 @@ async function createContent(req, res) {
 async function getContentList(req, res) {
     try {
         const { type, visibility } = req.query;
-        const where = {
-            deletedAt: null,
-            moderationStatus: "APPROVED",
-        };
+        const where = { deletedAt: null };
         if (typeof type === "string")
             where.type = type;
         if (typeof visibility === "string")
@@ -128,10 +128,7 @@ async function getContent(req, res) {
         if (!content) {
             return res.status(404).json({ error: "CONTENT_NOT_FOUND" });
         }
-        // Public endpoint should only expose approved content unless paid-gate allows access.
-        if (content.moderationStatus !== "APPROVED") {
-            return res.status(403).json({ error: "CONTENT_NOT_ACCESSIBLE" });
-        }
+        // Public endpoint: no moderation gating configured.
         if (isPaidContent(content.visibility)) {
             // Requires completed premium purchase.
             const user = req.user;
@@ -152,18 +149,22 @@ async function getContent(req, res) {
 }
 async function patchContent(req, res) {
     try {
-        const user = req.user;
+        const userId = req.userId;
+        const role = req.role;
         const { id } = req.params;
+        if (!userId) {
+            return res.status(401).json({ error: "UNAUTHORIZED" });
+        }
         const content = await prisma_js_1.default.content.findFirst({
             where: { id: String(id), deletedAt: null },
         });
         if (!content)
             return res.status(404).json({ error: "CONTENT_NOT_FOUND" });
-        if (content.creatorId !== user.id && user.role !== "ADMIN") {
+        if (content.creatorId !== userId && role !== "ADMIN") {
             return res.status(403).json({ error: "CONTENT_UPDATE_DENIED" });
         }
         const { title, description, contentUrl, thumbnailUrl, type, visibility, price, currency, } = req.body ?? {};
-        const mediaUrl = getMediaUrl(req.body);
+        const mediaUrl = await resolveContentMedia(req);
         if (mediaUrl !== undefined &&
             !storage_service_js_1.storageService.validatePublicUrl(String(mediaUrl))) {
             return res.status(400).json({ error: "INVALID_MEDIA_URL" });
@@ -224,55 +225,21 @@ async function deleteContent(req, res) {
     }
 }
 async function moderationUpdate(req, res) {
-    try {
-        const { id } = req.params;
-        const { moderationStatus, rejectionReason } = req.body ?? {};
-        const status = toModerationStatus(moderationStatus);
-        if (!status || (status !== "APPROVED" && status !== "REJECTED")) {
-            return res.status(400).json({ error: "INVALID_MODERATION_TRANSITION" });
-        }
-        const content = await prisma_js_1.default.content.findFirst({
-            where: { id: String(id), deletedAt: null },
-        });
-        if (!content)
-            return res.status(404).json({ error: "CONTENT_NOT_FOUND" });
-        if (content.moderationStatus !== "PENDING") {
-            return res.status(400).json({ error: "INVALID_MODERATION_STATE" });
-        }
-        if (status === "REJECTED") {
-            if (!rejectionReason) {
-                return res.status(400).json({ error: "REJECTION_REASON_REQUIRED" });
-            }
-        }
-        const updated = await prisma_js_1.default.content.update({
-            where: { id: String(id) },
-            data: {
-                moderationStatus: status,
-                rejectionReason: status === "REJECTED" ? String(rejectionReason) : null,
-            },
-        });
-        res.json(updated);
-    }
-    catch (e) {
-        res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
-    }
+    // Moderation endpoint removed
+    return res.status(404).json({ error: "NOT_FOUND" });
 }
 async function getCreatorProfileContent(req, res) {
     try {
         const { id } = req.params;
         const { visibility, type } = req.query;
-        // Only list by creator; this endpoint is public but still must respect moderation visibility.
+        // Only list by creator.
         const creatorProfile = await prisma_js_1.default.creatorProfile.findFirst({
             where: { id: String(id) },
         });
         if (!creatorProfile) {
             return res.json([]);
         }
-        const where = {
-            deletedAt: null,
-            creatorId: creatorProfile.userId,
-            moderationStatus: "APPROVED",
-        };
+        const where = { deletedAt: null, creatorId: creatorProfile.userId };
         if (type)
             where.type = String(type);
         if (visibility)
@@ -308,7 +275,5 @@ exports.default = {
     getContent,
     patchContent,
     deleteContent,
-    moderationUpdate,
     getCreatorProfileContent,
 };
-//# sourceMappingURL=content.controllers.js.map
