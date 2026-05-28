@@ -29,13 +29,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         name: data.name,
         email: identifier,
         password: password_hash,
-<<<<<<< HEAD
-        role: data.role,
-      },
-=======
         role: data.role
       }
->>>>>>> origin/Aziza_branch
     });
     // generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
