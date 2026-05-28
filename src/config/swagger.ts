@@ -25,9 +25,8 @@ const options = {
         },
       },
     },
-    security: [{ bearerAuth: [] }],
   },
-  apis: ['./src/routes/*.ts'], // Generate docs from route comments if present
+  apis: ['./src/routes/**/*.ts', './dist/routes/**/*.js'], // Generate docs from route comments if present
 };
 
 const specs = swaggerJsdoc(options);
