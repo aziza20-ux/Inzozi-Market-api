@@ -1,12 +1,16 @@
 import { Request, Response } from 'express';
 import prisma from '../config/prisma';
-import { paymentTransactionCreateSchema, paymentTypeEnum, paymentStatusEnum } from '../validators/schema.validators';
+import {
+  paymentTransactionCreateSchema,
+  paymentTypeEnum,
+  paymentStatusEnum,
+} from '../validators/schema.validators';
 import { acquireIdempotencyLock, releaseIdempotencyLock } from '../services/idempotency.service';
 import { AuthRequest } from '../middleware/auth';
-import type { PaymentTransaction } from "../../generated/prisma";
-import { randomUUID } from "crypto";
+import type { PaymentTransaction } from '../generated/prisma';
+import { randomUUID } from 'crypto';
 
-import { requestMobileMoneyTransfer } from "../services/mockMobileMoneyProvider.js";
+import { requestMobileMoneyTransfer } from '../services/mockMobileMoneyProvider.js';
 
 export const createPayment = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -22,10 +26,14 @@ export const createPayment = async (req: AuthRequest, res: Response): Promise<vo
       return;
     }
 
-    const { amount, paymentType: validatedPaymentType, transactionRef } = paymentTransactionCreateSchema.parse({
+    const {
+      amount,
+      paymentType: validatedPaymentType,
+      transactionRef,
+    } = paymentTransactionCreateSchema.parse({
       amount: req.body.amount,
       paymentType: req.body.paymentType,
-      transactionRef: idempotencyKey
+      transactionRef: idempotencyKey,
     });
 
     const locked = await acquireIdempotencyLock(idempotencyKey);
@@ -36,7 +44,7 @@ export const createPayment = async (req: AuthRequest, res: Response): Promise<vo
 
     try {
       const existing = await prisma.paymentTransaction.findUnique({ where: { transactionRef } });
-      
+
       if (existing) {
         if (existing.paymentStatus === 'SUCCESS') {
           res.status(200).json(existing);
@@ -53,13 +61,13 @@ export const createPayment = async (req: AuthRequest, res: Response): Promise<vo
           amount,
           paymentType: validatedPaymentType,
           paymentStatus: 'PENDING',
-          userId: req.userId
-        }
+          userId: req.userId,
+        },
       });
 
       await prisma.paymentTransaction.update({
         where: { id: transaction.id },
-        data: { paymentStatus: 'SUCCESS' }
+        data: { paymentStatus: 'SUCCESS' },
       });
 
       res.status(201).json({ ...transaction, paymentStatus: 'SUCCESS' });
@@ -113,7 +121,7 @@ export const getPayments = async (req: Request, res: Response): Promise<void> =>
       where,
       take: Number(limit),
       ...(cursor && { skip: 1, cursor: { id: String(cursor) } }),
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
 
     res.status(200).json(payments);
@@ -121,10 +129,6 @@ export const getPayments = async (req: Request, res: Response): Promise<void> =>
     res.status(500).json({ error: err.message });
   }
 };
-
-
-
-
 
 function parsePositiveAmount(value: unknown): number | null {
   const amount = Number(value);
@@ -136,36 +140,36 @@ function makeTransactionRef(prefix: string) {
   return `${prefix}_${randomUUID()}`;
 }
 
-function isBusinessOrSystem(user: Express.Request["user"]) {
-  return user?.role === "BUSINESS" || user?.role === "ADMIN" || user?.role === "SYSTEM";
+function isBusinessOrSystem(user: Express.Request['user']) {
+  return user?.role === 'BUSINESS' || user?.role === 'ADMIN' || user?.role === 'SYSTEM';
 }
 
 export async function withdraw(req: Request, res: Response) {
   try {
     const user = req.user;
-    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
-    if (user.role !== "CREATOR") {
-      return res.status(403).json({ error: "CREATOR_ONLY" });
+    if (!user) return res.status(401).json({ error: 'UNAUTHORIZED' });
+    if (user.role !== 'CREATOR') {
+      return res.status(403).json({ error: 'CREATOR_ONLY' });
     }
 
     const amount = parsePositiveAmount(req.body?.amount);
-    if (!amount) return res.status(400).json({ error: "INVALID_AMOUNT" });
+    if (!amount) return res.status(400).json({ error: 'INVALID_AMOUNT' });
 
     const profile = await prisma.creatorProfile.findUnique({
       where: { userId: user.id },
     });
 
     if (!profile?.payout_account) {
-      return res.status(400).json({ error: "PAYOUT_ACCOUNT_MISSING" });
+      return res.status(400).json({ error: 'PAYOUT_ACCOUNT_MISSING' });
     }
 
-    const transactionRef = makeTransactionRef("withdrawal");
+    const transactionRef = makeTransactionRef('withdrawal');
     const transaction = await prisma.paymentTransaction.create({
       data: {
         userId: user.id,
         amount,
-        paymentType: "WITHDRAWAL",
-        paymentStatus: "PENDING",
+        paymentType: 'WITHDRAWAL',
+        paymentStatus: 'PENDING',
         transactionRef,
       },
     });
@@ -184,31 +188,26 @@ export async function withdraw(req: Request, res: Response) {
 
     return res.status(201).json(updated);
   } catch (e) {
-    return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+    return res.status(500).json({ error: 'INTERNAL_SERVER_ERROR' });
   }
 }
 
 export async function disburseCampaign(req: Request, res: Response) {
   try {
     const user = req.user;
-    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
+    if (!user) return res.status(401).json({ error: 'UNAUTHORIZED' });
     if (!isBusinessOrSystem(user)) {
-      return res.status(403).json({ error: "INSUFFICIENT_ROLE" });
+      return res.status(403).json({ error: 'INSUFFICIENT_ROLE' });
     }
 
-    const campaignId =
-      typeof req.params.id === "string" ? req.params.id : undefined;
+    const campaignId = typeof req.params.id === 'string' ? req.params.id : undefined;
     if (!campaignId) {
-      return res.status(400).json({ error: "INVALID_CAMPAIGN_ID" });
+      return res.status(400).json({ error: 'INVALID_CAMPAIGN_ID' });
     }
 
-    const idempotencyKeyValue =
-      req.headers["idempotency-key"] ?? req.body?.idempotency_key;
-    if (
-      typeof idempotencyKeyValue !== "string" ||
-      idempotencyKeyValue.trim().length === 0
-    ) {
-      return res.status(400).json({ error: "IDEMPOTENCY_KEY_REQUIRED" });
+    const idempotencyKeyValue = req.headers['idempotency-key'] ?? req.body?.idempotency_key;
+    if (typeof idempotencyKeyValue !== 'string' || idempotencyKeyValue.trim().length === 0) {
+      return res.status(400).json({ error: 'IDEMPOTENCY_KEY_REQUIRED' });
     }
     const idempotencyKey = idempotencyKeyValue.trim();
 
@@ -216,7 +215,7 @@ export async function disburseCampaign(req: Request, res: Response) {
       where: { id: campaignId },
       include: {
         applications: {
-          where: { status: "ACCEPTED" },
+          where: { status: 'ACCEPTED' },
           include: {
             creator: {
               include: { creatorProfile: true },
@@ -226,28 +225,28 @@ export async function disburseCampaign(req: Request, res: Response) {
       },
     })) as any;
 
-    if (!campaign) return res.status(404).json({ error: "CAMPAIGN_NOT_FOUND" });
-    if (user.role === "BUSINESS" && campaign.businessId !== user.id) {
-      return res.status(403).json({ error: "ACCESS_DENIED" });
+    if (!campaign) return res.status(404).json({ error: 'CAMPAIGN_NOT_FOUND' });
+    if (user.role === 'BUSINESS' && campaign.businessId !== user.id) {
+      return res.status(403).json({ error: 'ACCESS_DENIED' });
     }
-    if (campaign.status !== "IN_PROGRESS" && campaign.status !== "COMPLETED") {
-      return res.status(400).json({ error: "INVALID_CAMPAIGN_STATE" });
+    if (campaign.status !== 'IN_PROGRESS' && campaign.status !== 'COMPLETED') {
+      return res.status(400).json({ error: 'INVALID_CAMPAIGN_STATE' });
     }
     if (campaign.applications.length === 0) {
-      return res.status(400).json({ error: "NO_ACCEPTED_CREATORS" });
+      return res.status(400).json({ error: 'NO_ACCEPTED_CREATORS' });
     }
 
     const existing = await prisma.paymentTransaction.findMany({
       where: {
         campaignId,
         idempotencyKey,
-        paymentType: "CAMPAIGN_DISBURSEMENT",
+        paymentType: 'CAMPAIGN_DISBURSEMENT',
       },
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: 'asc' },
     });
     if (existing.length > 0) {
       const allCompleted = existing.every(
-        (transaction) => transaction.paymentStatus === "COMPLETED",
+        (transaction) => transaction.paymentStatus === 'COMPLETED',
       );
       return res.status(allCompleted ? 200 : 202).json(existing);
     }
@@ -259,18 +258,18 @@ export async function disburseCampaign(req: Request, res: Response) {
       const payoutAccount = application.creator.creatorProfile?.payout_account;
       if (!payoutAccount) {
         return res.status(400).json({
-          error: "PAYOUT_ACCOUNT_MISSING",
+          error: 'PAYOUT_ACCOUNT_MISSING',
           creatorId: application.creatorId,
         });
       }
 
-      const transactionRef = makeTransactionRef("campaign_disbursement");
+      const transactionRef = makeTransactionRef('campaign_disbursement');
       const created = await prisma.paymentTransaction.create({
         data: {
           userId: application.creatorId,
           amount,
-          paymentType: "CAMPAIGN_DISBURSEMENT",
-          paymentStatus: "PENDING",
+          paymentType: 'CAMPAIGN_DISBURSEMENT',
+          paymentStatus: 'PENDING',
           transactionRef,
           idempotencyKey,
           campaignId,
@@ -296,10 +295,10 @@ export async function disburseCampaign(req: Request, res: Response) {
 
     return res.status(201).json(transactions);
   } catch (e: any) {
-    if (e?.code === "P2002") {
-      return res.status(409).json({ error: "DUPLICATE_IDEMPOTENCY_KEY" });
+    if (e?.code === 'P2002') {
+      return res.status(409).json({ error: 'DUPLICATE_IDEMPOTENCY_KEY' });
     }
-    return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+    return res.status(500).json({ error: 'INTERNAL_SERVER_ERROR' });
   }
 }
 
@@ -307,10 +306,10 @@ export async function mockProviderCallback(req: Request, res: Response) {
   try {
     const { transactionRef, providerRef, status } = req.body ?? {};
     if (!transactionRef && !providerRef) {
-      return res.status(400).json({ error: "TRANSACTION_REFERENCE_REQUIRED" });
+      return res.status(400).json({ error: 'TRANSACTION_REFERENCE_REQUIRED' });
     }
-    if (status !== "completed") {
-      return res.status(400).json({ error: "UNSUPPORTED_CALLBACK_STATUS" });
+    if (status !== 'completed') {
+      return res.status(400).json({ error: 'UNSUPPORTED_CALLBACK_STATUS' });
     }
 
     const filters = [
@@ -324,12 +323,12 @@ export async function mockProviderCallback(req: Request, res: Response) {
       where: {
         OR: filters,
       },
-      data: { paymentStatus: "COMPLETED" },
+      data: { paymentStatus: 'COMPLETED' },
     });
 
     return res.json({ updated: updated.count });
   } catch (e) {
-    return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+    return res.status(500).json({ error: 'INTERNAL_SERVER_ERROR' });
   }
 }
 

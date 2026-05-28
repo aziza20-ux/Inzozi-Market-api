@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -255,7 +255,7 @@ model Message {
   deletedAt DateTime?
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt 
 
   //
   // RELATIONS
@@ -275,7 +275,7 @@ model PremiumPurchase {
 
   userId    String
   contentId String
-
+ 
   status String
 
   // RELATIONS
