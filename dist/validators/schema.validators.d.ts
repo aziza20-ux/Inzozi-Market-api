@@ -1,0 +1,237 @@
+import { z } from "zod";
+export declare const roleEnum: z.ZodEnum<{
+    CREATOR: "CREATOR";
+    BUSINESS: "BUSINESS";
+    CONSUMER: "CONSUMER";
+    ADMIN: "ADMIN";
+}>;
+export declare const verificationStatusEnum: z.ZodEnum<{
+    PENDING: "PENDING";
+    VERIFIED: "VERIFIED";
+    REJECTED: "REJECTED";
+}>;
+export declare const moderationStatusEnum: z.ZodEnum<{
+    PENDING: "PENDING";
+    APPROVED: "APPROVED";
+    REMOVED: "REMOVED";
+}>;
+export declare const campaignStatusEnum: z.ZodEnum<{
+    DRAFT: "DRAFT";
+    ACTIVE: "ACTIVE";
+    IN_PROGRESS: "IN_PROGRESS";
+    COMPLETED: "COMPLETED";
+    CANCELLED: "CANCELLED";
+}>;
+export declare const paymentTypeEnum: z.ZodEnum<{
+    SUBSCRIPTION: "SUBSCRIPTION";
+    PRODUCT_PURCHASE: "PRODUCT_PURCHASE";
+    CAMPAIGN_PAYMENT: "CAMPAIGN_PAYMENT";
+    WITHDRAWAL: "WITHDRAWAL";
+    CAMPAIGN_DISBURSEMENT: "CAMPAIGN_DISBURSEMENT";
+}>;
+export declare const paymentStatusEnum: z.ZodEnum<{
+    PENDING: "PENDING";
+    COMPLETED: "COMPLETED";
+    SUCCESS: "SUCCESS";
+    FAILED: "FAILED";
+    REFUNDED: "REFUNDED";
+}>;
+export declare const userCreateSchema: z.ZodObject<{
+    name: z.ZodString;
+    email: z.ZodEmail;
+    password: z.ZodString;
+    profileImage: z.ZodOptional<z.ZodURL>;
+    role: z.ZodEnum<{
+        CREATOR: "CREATOR";
+        BUSINESS: "BUSINESS";
+        CONSUMER: "CONSUMER";
+        ADMIN: "ADMIN";
+    }>;
+    verificationStatus: z.ZodOptional<z.ZodEnum<{
+        PENDING: "PENDING";
+        VERIFIED: "VERIFIED";
+        REJECTED: "REJECTED";
+    }>>;
+}, z.core.$strip>;
+export declare const creatorProfileSchema: z.ZodObject<{
+    userId: z.ZodUUID;
+    bio: z.ZodOptional<z.ZodString>;
+    specialization: z.ZodOptional<z.ZodString>;
+    socialLinks: z.ZodOptional<z.ZodString>;
+    payout_account: z.ZodOptional<z.ZodString>;
+    earnings: z.ZodOptional<z.ZodNumber>;
+    followers: z.ZodOptional<z.ZodNumber>;
+}, z.core.$strip>;
+export declare const contentSchema: z.ZodObject<{
+    creatorId: z.ZodOptional<z.ZodUUID>;
+    title: z.ZodString;
+    description: z.ZodOptional<z.ZodString>;
+    contentType: z.ZodOptional<z.ZodString>;
+    type: z.ZodOptional<z.ZodString>;
+    media_url: z.ZodOptional<z.ZodURL>;
+    mediaUrl: z.ZodOptional<z.ZodURL>;
+    contentUrl: z.ZodOptional<z.ZodURL>;
+    moderationStatus: z.ZodOptional<z.ZodEnum<{
+        PENDING: "PENDING";
+        APPROVED: "APPROVED";
+        REMOVED: "REMOVED";
+    }>>;
+    visibility: z.ZodOptional<z.ZodUnion<readonly [z.ZodBoolean, z.ZodEnum<{
+        public: "public";
+        paid: "paid";
+    }>]>>;
+    creatorProfileId: z.ZodOptional<z.ZodUUID>;
+}, z.core.$strip>;
+export declare const campaignSchema: z.ZodObject<{
+    businessId: z.ZodUUID;
+    title: z.ZodString;
+    description: z.ZodOptional<z.ZodString>;
+    budget: z.ZodNumber;
+    status: z.ZodOptional<z.ZodEnum<{
+        DRAFT: "DRAFT";
+        ACTIVE: "ACTIVE";
+        IN_PROGRESS: "IN_PROGRESS";
+        COMPLETED: "COMPLETED";
+        CANCELLED: "CANCELLED";
+    }>>;
+    niche_filter: z.ZodString;
+    min_audience_size: z.ZodNumber;
+    max_creators: z.ZodNumber;
+    startDate: z.ZodPreprocess<z.ZodDate>;
+    endDate: z.ZodPreprocess<z.ZodDate>;
+}, z.core.$strip>;
+export declare const paymentTransactionSchema: z.ZodObject<{
+    userId: z.ZodUUID;
+    amount: z.ZodNumber;
+    paymentType: z.ZodEnum<{
+        SUBSCRIPTION: "SUBSCRIPTION";
+        PRODUCT_PURCHASE: "PRODUCT_PURCHASE";
+        CAMPAIGN_PAYMENT: "CAMPAIGN_PAYMENT";
+        WITHDRAWAL: "WITHDRAWAL";
+        CAMPAIGN_DISBURSEMENT: "CAMPAIGN_DISBURSEMENT";
+    }>;
+    paymentStatus: z.ZodOptional<z.ZodEnum<{
+        PENDING: "PENDING";
+        COMPLETED: "COMPLETED";
+        SUCCESS: "SUCCESS";
+        FAILED: "FAILED";
+        REFUNDED: "REFUNDED";
+    }>>;
+    transactionRef: z.ZodString;
+    providerRef: z.ZodOptional<z.ZodString>;
+    idempotencyKey: z.ZodOptional<z.ZodString>;
+    campaignId: z.ZodOptional<z.ZodUUID>;
+}, z.core.$strip>;
+export declare const messageSchema: z.ZodObject<{
+    senderId: z.ZodUUID;
+    receiverId: z.ZodUUID;
+    conversationId: z.ZodOptional<z.ZodString>;
+    message: z.ZodString;
+    isRead: z.ZodOptional<z.ZodBoolean>;
+    readAt: z.ZodOptional<z.ZodPreprocess<z.ZodDate>>;
+    deletedAt: z.ZodOptional<z.ZodPreprocess<z.ZodDate>>;
+}, z.core.$strip>;
+export type UserCreate = z.infer<typeof userCreateSchema>;
+export type CreatorProfile = z.infer<typeof creatorProfileSchema>;
+export type Content = z.infer<typeof contentSchema>;
+export type Campaign = z.infer<typeof campaignSchema>;
+export type PaymentTransaction = z.infer<typeof paymentTransactionSchema>;
+export type Message = z.infer<typeof messageSchema>;
+export declare const validators: {
+    userCreateSchema: z.ZodObject<{
+        name: z.ZodString;
+        email: z.ZodEmail;
+        password: z.ZodString;
+        profileImage: z.ZodOptional<z.ZodURL>;
+        role: z.ZodEnum<{
+            CREATOR: "CREATOR";
+            BUSINESS: "BUSINESS";
+            CONSUMER: "CONSUMER";
+            ADMIN: "ADMIN";
+        }>;
+        verificationStatus: z.ZodOptional<z.ZodEnum<{
+            PENDING: "PENDING";
+            VERIFIED: "VERIFIED";
+            REJECTED: "REJECTED";
+        }>>;
+    }, z.core.$strip>;
+    creatorProfileSchema: z.ZodObject<{
+        userId: z.ZodUUID;
+        bio: z.ZodOptional<z.ZodString>;
+        specialization: z.ZodOptional<z.ZodString>;
+        socialLinks: z.ZodOptional<z.ZodString>;
+        payout_account: z.ZodOptional<z.ZodString>;
+        earnings: z.ZodOptional<z.ZodNumber>;
+        followers: z.ZodOptional<z.ZodNumber>;
+    }, z.core.$strip>;
+    contentSchema: z.ZodObject<{
+        creatorId: z.ZodOptional<z.ZodUUID>;
+        title: z.ZodString;
+        description: z.ZodOptional<z.ZodString>;
+        contentType: z.ZodOptional<z.ZodString>;
+        type: z.ZodOptional<z.ZodString>;
+        media_url: z.ZodOptional<z.ZodURL>;
+        mediaUrl: z.ZodOptional<z.ZodURL>;
+        contentUrl: z.ZodOptional<z.ZodURL>;
+        moderationStatus: z.ZodOptional<z.ZodEnum<{
+            PENDING: "PENDING";
+            APPROVED: "APPROVED";
+            REMOVED: "REMOVED";
+        }>>;
+        visibility: z.ZodOptional<z.ZodUnion<readonly [z.ZodBoolean, z.ZodEnum<{
+            public: "public";
+            paid: "paid";
+        }>]>>;
+        creatorProfileId: z.ZodOptional<z.ZodUUID>;
+    }, z.core.$strip>;
+    campaignSchema: z.ZodObject<{
+        businessId: z.ZodUUID;
+        title: z.ZodString;
+        description: z.ZodOptional<z.ZodString>;
+        budget: z.ZodNumber;
+        status: z.ZodOptional<z.ZodEnum<{
+            DRAFT: "DRAFT";
+            ACTIVE: "ACTIVE";
+            IN_PROGRESS: "IN_PROGRESS";
+            COMPLETED: "COMPLETED";
+            CANCELLED: "CANCELLED";
+        }>>;
+        niche_filter: z.ZodString;
+        min_audience_size: z.ZodNumber;
+        max_creators: z.ZodNumber;
+        startDate: z.ZodPreprocess<z.ZodDate>;
+        endDate: z.ZodPreprocess<z.ZodDate>;
+    }, z.core.$strip>;
+    paymentTransactionSchema: z.ZodObject<{
+        userId: z.ZodUUID;
+        amount: z.ZodNumber;
+        paymentType: z.ZodEnum<{
+            SUBSCRIPTION: "SUBSCRIPTION";
+            PRODUCT_PURCHASE: "PRODUCT_PURCHASE";
+            CAMPAIGN_PAYMENT: "CAMPAIGN_PAYMENT";
+            WITHDRAWAL: "WITHDRAWAL";
+            CAMPAIGN_DISBURSEMENT: "CAMPAIGN_DISBURSEMENT";
+        }>;
+        paymentStatus: z.ZodOptional<z.ZodEnum<{
+            PENDING: "PENDING";
+            COMPLETED: "COMPLETED";
+            SUCCESS: "SUCCESS";
+            FAILED: "FAILED";
+            REFUNDED: "REFUNDED";
+        }>>;
+        transactionRef: z.ZodString;
+        providerRef: z.ZodOptional<z.ZodString>;
+        idempotencyKey: z.ZodOptional<z.ZodString>;
+        campaignId: z.ZodOptional<z.ZodUUID>;
+    }, z.core.$strip>;
+    messageSchema: z.ZodObject<{
+        senderId: z.ZodUUID;
+        receiverId: z.ZodUUID;
+        conversationId: z.ZodOptional<z.ZodString>;
+        message: z.ZodString;
+        isRead: z.ZodOptional<z.ZodBoolean>;
+        readAt: z.ZodOptional<z.ZodPreprocess<z.ZodDate>>;
+        deletedAt: z.ZodOptional<z.ZodPreprocess<z.ZodDate>>;
+    }, z.core.$strip>;
+};
+//# sourceMappingURL=schema.validators.d.ts.map

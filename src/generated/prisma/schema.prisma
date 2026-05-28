@@ -1,0 +1,278 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  CREATOR
+  BUSINESS
+  CONSUMER
+  ADMIN
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ContentType {
+  video
+  image
+  article
+  audio
+}
+
+enum ContentVisibility {
+  public
+  paid
+}
+
+enum PaymentType {
+  SUBSCRIPTION
+  PRODUCT_PURCHASE
+  CAMPAIGN_PAYMENT
+  WITHDRAWAL
+  CAMPAIGN_DISBURSEMENT
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+  COMPLETED
+}
+
+model User {
+  id                 String             @id @default(uuid())
+  name               String
+  email              String             @unique
+  password           String
+  profileImage       String?
+  role               Role               @default(CONSUMER)
+  verificationStatus VerificationStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  creatorProfile      CreatorProfile?
+  contents            Content[]
+  campaigns           Campaign[]
+  sentMessages        Message[]            @relation("SenderMessages")
+  receivedMessages    Message[]            @relation("ReceiverMessages")
+  paymentTransactions PaymentTransaction[]
+  premiumPurchases    PremiumPurchase[]
+
+  // Campaign applications made by this creator
+  applications Application[]
+}
+
+//
+// CREATOR PROFILE
+//
+
+model CreatorProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  bio            String?
+  specialization String?
+  socialLinks    String?
+  payout_account String?
+  earnings       Float   @default(0)
+  followers      Int     @default(0)
+  avatar         String?
+  location       String?
+  payout_network String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contents Content[]
+}
+
+//
+// CONTENT MODEL
+//
+
+model Content {
+  id           String  @id @default(uuid())
+  title        String
+  description  String?
+  contentUrl   String
+  thumbnailUrl String?
+
+  type       ContentType
+  visibility ContentVisibility
+
+  price    Float?
+  currency String?
+
+  // moderationStatus and rejectionReason removed
+
+  deletedAt DateTime?
+
+  creatorId String
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  creatorProfile   CreatorProfile?   @relation(fields: [creatorProfileId], references: [id])
+  creatorProfileId String?
+  premiumPurchases PremiumPurchase[]
+}
+
+//
+// CAMPAIGN MODEL
+//
+
+model Campaign {
+  id         String @id @default(uuid())
+  businessId String
+
+  title       String
+  description String?
+  budget      Int
+  status      CampaignStatus @default(DRAFT)
+
+  // Eligibility gates for creators
+  niche_filter      String
+  min_audience_size Int
+  max_creators      Int
+
+  // Applications move the campaign into progress
+  startDate DateTime
+  endDate   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+  business     User          @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  applications Application[]
+}
+
+model Application {
+  id String @id @default(uuid())
+
+  campaignId String
+  creatorId  String
+
+  // Creator's response
+  status String @default("PENDING")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  creator  User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, creatorId])
+  @@index([campaignId])
+}
+
+//
+// PAYMENT TRANSACTION MODEL
+//
+
+model PaymentTransaction {
+  id     String @id @default(uuid())
+  userId String
+
+  amount        Float
+  paymentType   PaymentType
+  paymentStatus PaymentStatus @default(PENDING)
+
+  transactionRef String  @unique
+  providerRef    String?
+  idempotencyKey String?
+  campaignId     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([idempotencyKey, userId, paymentType])
+  @@index([campaignId])
+}
+
+//
+// MESSAGE MODEL
+//
+
+model Message {
+  id String @id @default(uuid())
+
+  senderId       String
+  receiverId     String
+  conversationId String
+
+  message   String
+  isRead    Boolean   @default(false)
+  readAt    DateTime?
+  deletedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //
+  // RELATIONS
+  //
+
+  sender User @relation("SenderMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  receiver User @relation("ReceiverMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+model PremiumPurchase {
+  id String @id @default(uuid())
+
+  userId    String
+  contentId String
+
+  status String
+
+  // RELATIONS
+  user    User    @relation(fields: [userId], references: [id])
+  content Content @relation(fields: [contentId], references: [id])
+
+  createdAt DateTime @default(now())
+}
