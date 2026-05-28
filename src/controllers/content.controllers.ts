@@ -101,6 +101,10 @@ export async function createContent(req: AuthRequest, res: Response) {
       }
     }
 
+    const creatorProfile = await prisma.creatorProfile.findUnique({
+      where: { userId },
+    });
+
     const created = await prisma.content.create({
       data: {
         title,
@@ -112,6 +116,7 @@ export async function createContent(req: AuthRequest, res: Response) {
         price: visibility === "paid" ? Number(price) : null,
         currency: visibility === "paid" ? String(currency) : null,
         creatorId: userId,
+        ...(creatorProfile ? { creatorProfileId: creatorProfile.id } : {}),
       },
     });
 
@@ -160,7 +165,7 @@ export async function getContent(req: AuthRequest, res: Response) {
 
     if (isPaidContent(content.visibility)) {
       // Requires completed premium purchase.
-      const user = req.user;
+      const user = await prisma.user.findFirst({where:{id:req.userId}});
       // If no user, deny.
       if (!user) {
         return res.status(403).json({ error: "CONTENT_ACCESS_DENIED" });
@@ -253,10 +258,14 @@ export async function patchContent(req: AuthRequest, res: Response) {
   }
 }
 
-export async function deleteContent(req: Request, res: Response) {
+export async function deleteContent(req: AuthRequest, res: Response) {
   try {
-    const user = req.user!;
+    const user = await prisma.user.findFirst({where:{id: req.userId}})
     const { id } = req.params;
+
+    if (!user){
+      return res.status(401).json({ error: "UNAUTHORIZED" })
+    }
 
     const content = await prisma.content.findFirst({
       where: { id: String(id), deletedAt: null },
@@ -272,7 +281,7 @@ export async function deleteContent(req: Request, res: Response) {
       data: { deletedAt: new Date() },
     });
 
-    res.status(204).send();
+    res.status(204).json({message:"deleted successfully", id:id});
   } catch (e) {
     res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
