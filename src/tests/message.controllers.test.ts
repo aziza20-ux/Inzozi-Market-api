@@ -17,7 +17,14 @@ jest.mock('../config/prisma.js', () => ({
   default: mockPrisma,
 }));
 
+<<<<<<< HEAD
 import { createMessage, deriveConversationId } from '../controllers/message.controller.js';
+=======
+import {
+  createMessage,
+  deriveConversationId,
+} from "../controllers/message.controller.js";
+>>>>>>> origin/Aziza_branch
 
 function createResponse() {
   return {

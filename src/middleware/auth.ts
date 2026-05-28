@@ -1,9 +1,17 @@
-import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import type { Request, Response,NextFunction } from "express";
+import prisma from "../config/prisma";
+import jwt, { type Secret, type SignOptions } from "jsonwebtoken";
+import type { AuthUser } from "../types/express.js";
+
+const allowedRoles = ["ADMIN", "CREATOR", "BUSINESS", "CONSUMER", "SYSTEM"] as const;
+
+function isAuthRole(role: string): role is AuthUser["role"] {
+    return allowedRoles.includes(role as AuthUser["role"]);
+}
 
 export interface AuthRequest extends Request {
   userId?: string;
-  role?: string;
+    role?: AuthUser["role"];
 }
 type AuthRole = NonNullable<Express.Request["user"]>["role"];
 
@@ -15,26 +23,11 @@ export const authenticate= async (req:AuthRequest,res:Response, next:NextFunctio
     }
     const token = header.split(" ")[1]
     try{
-        const decoded = jwt.verify(token!, process.env.JWT_SECRET || "supersecret123") as {
-            id?: string;
-            userId?: string;
-            role: AuthRole;
-            email?: string;
-            verificationStatus?: "VERIFIED" | "PENDING" | "REJECTED";
-        };
-        const userId = decoded.userId ?? decoded.id;
-        if (!userId) {
-            res.status(401).json({error:'Invalid or expired token'})
-            return;
+        const decoded = jwt.verify(token!, JWT_SECRET) as { userId: string; role: string }
+        req.userId=decoded.userId;
+        if (isAuthRole(decoded.role)) {
+            req.role = decoded.role;
         }
-        req.userId=userId;
-        req.role=decoded.role;
-        req.user = {
-            id: userId,
-            email: decoded.email,
-            role: decoded.role,
-            verificationStatus: decoded.verificationStatus,
-        };
         next();
     } catch {
         res.status(401).json({error:'Invalid or expired token'})

@@ -20,6 +20,7 @@ enum VerificationStatus {
   REJECTED
 }
 
+<<<<<<< HEAD
 enum ModerationStatus {
   PENDING
   APPROVED
@@ -27,6 +28,8 @@ enum ModerationStatus {
   REMOVED
 }
 
+=======
+>>>>>>> origin/Aziza_branch
 enum CampaignStatus {
   DRAFT
   ACTIVE
@@ -130,6 +133,7 @@ model Content {
   description  String?
   contentUrl   String
   thumbnailUrl String?
+<<<<<<< HEAD
 
   type       ContentType
   visibility ContentVisibility
@@ -139,6 +143,16 @@ model Content {
 
   moderationStatus ModerationStatus @default(PENDING)
   rejectionReason  String?
+=======
+
+  type       ContentType
+  visibility ContentVisibility
+
+  price    Float?
+  currency String?
+
+  // moderationStatus and rejectionReason removed
+>>>>>>> origin/Aziza_branch
 
   deletedAt DateTime?
 

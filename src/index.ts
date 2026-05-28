@@ -1,5 +1,11 @@
 import 'dotenv/config';
-import app from "./app.js";
+import express, { Application, Request, Response } from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import v1Routes from './routes/v1/index.js';
+import { setupSwagger } from './config/swagger.js';
+
+import dotenv from "dotenv";
 
 const PORT = Number(process.env.PORT) || 3000;
 

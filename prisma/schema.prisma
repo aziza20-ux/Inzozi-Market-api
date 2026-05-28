@@ -20,12 +20,6 @@ enum VerificationStatus {
   REJECTED
 }
 
-enum ModerationStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  REMOVED
-}
 
 enum CampaignStatus {
   DRAFT
@@ -137,8 +131,7 @@ model Content {
   price    Float?
   currency String?
 
-  moderationStatus ModerationStatus @default(PENDING)
-  rejectionReason  String?
+  // moderationStatus and rejectionReason removed
 
   deletedAt DateTime?
 

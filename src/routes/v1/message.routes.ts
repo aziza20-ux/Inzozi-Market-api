@@ -6,7 +6,7 @@ import {
   getConversationThread,
   listConversations,
   markMessageRead,
-} from '../../controllers/message.controller.js';
+} from "../../controllers/message.controller.js";
 
 const router = express.Router();
 

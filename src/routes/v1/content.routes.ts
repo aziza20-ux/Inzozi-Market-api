@@ -1,4 +1,5 @@
 import express from "express";
+import { mediaUpload } from "../../config/multer.js";
 import { authenticate } from "../../middleware/auth.js";
 import { requireVerified } from "../../middleware/requireVerified.js";
 import { requireRole } from "../../middleware/requireRole.js";
@@ -11,7 +12,8 @@ import {
   getCreatorProfileContent,
   moderationUpdate,
   patchContent,
-} from "../../controllers/content.controller.js";
+} from "../../controllers/content.controllers.js";
+import { uploadCreatorMedia } from "../../controllers/upload.controllers.js";
 
 const router = express.Router();
 
@@ -24,12 +26,23 @@ router.post(
   generateContentUploadUrl,
 );
 
+// POST /v1/content/media
+router.post(
+  "/media",
+  authenticate,
+  requireVerified,
+  requireRole("CREATOR"),
+  mediaUpload.single("media"),
+  uploadCreatorMedia,
+);
+
 // POST /v1/content
 router.post(
   "/",
   authenticate,
   requireVerified,
   requireRole("CREATOR"),
+  mediaUpload.single("media"),
   createContent,
 );
 

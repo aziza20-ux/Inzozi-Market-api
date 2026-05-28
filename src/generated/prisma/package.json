@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "prisma-client-e2503be3704216d82bb0e0bcbf2ad374dab190ecaafea14096672f5603938100",
+=======
+  "name": "prisma-client-e065d03a30fb71fa26ace8b08434f5d420678d16d3ba85143a95284a1b74e789",
+>>>>>>> origin/Aziza_branch
   "main": "index.js",
   "types": "index.d.ts",
   "browser": "default.js",

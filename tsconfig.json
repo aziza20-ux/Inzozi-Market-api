@@ -13,7 +13,8 @@
     "strict": true,
     "isolatedModules": true,
     "noImplicitAny": false,
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "isolatedModules": true
   },
   "include": ["src", "prisma/generated"],
   "exclude": ["node_modules", "dist"]
