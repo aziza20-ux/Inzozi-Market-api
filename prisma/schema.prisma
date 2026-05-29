@@ -132,6 +132,7 @@ model Content {
   currency String?
 
   // moderationStatus and rejectionReason removed
+ 
 
   deletedAt DateTime?
 

@@ -51,6 +51,7 @@ export const userCreateSchema = z.object({
 
 export const registerSchema = z
     .object({
+        name: z.string().min(1).optional(),
         email: z.string().email().optional(),
         phone: z.string().optional(),
         password: z.string().min(8),

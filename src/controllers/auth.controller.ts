@@ -26,7 +26,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const user = await prisma.user.create({
       data: {
-        name: data.name,
+        name: data.name ?? identifier,
         email: identifier,
         password: password_hash,
         role: data.role
@@ -82,6 +82,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     if (!user) {
       res.status(401).json({ error: 'Invalid credentials' });
+      return;
+    }
+
+    if (user.verificationStatus !== 'VERIFIED') {
+      res.status(403).json({ error: 'Please verify your email before logging in' });
       return;
     }
 

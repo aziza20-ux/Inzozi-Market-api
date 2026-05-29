@@ -1,5 +1,8 @@
 import type { Request, Response } from "express";
+import type { File as MulterFile } from "multer";
 import prisma from "../config/prisma";
+import { uploadToCloudinary } from "../config/cloudinary";
+import type { AuthRequest } from "../middleware/auth";
 import { userCreateSchema } from "../validators/schema.validators";
 
 const parsePositiveInteger = (value: unknown, defaultValue = 1): number => {
@@ -135,6 +138,51 @@ export const updateUser = async (
   res.status(200).json({ data: safeUser });
 };
 
+export const uploadMyProfileImage = async (
+  req: AuthRequest & { file?: MulterFile },
+  res: Response,
+): Promise<void> => {
+  if (!req.userId) {
+    res.status(401).json({ error: "UNAUTHORIZED" });
+    return;
+  }
+
+  if (!req.file) {
+    res.status(400).json({ error: "NO_PROFILE_IMAGE_UPLOADED" });
+    return;
+  }
+
+  try {
+    const uploaded = await uploadToCloudinary(
+      req.file.buffer,
+      "inzozi/profile-images",
+    );
+
+    const updated = await prisma.user.update({
+      where: { id: req.userId },
+      data: { profileImage: uploaded.url },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        profileImage: true,
+        role: true,
+        verificationStatus: true,
+        updatedAt: true,
+      },
+    });
+
+    res.status(200).json({
+      data: updated,
+      profileImage: uploaded.url,
+      publicId: uploaded.publicId,
+    });
+  } catch (e) {
+    console.error("uploadMyProfileImage error:", e);
+    res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+  }
+};
+
 export const deleteUser = async (
   req: Request,
   res: Response,
@@ -226,6 +274,7 @@ export default {
   getUserById,
   createUser,
   updateUser,
+  uploadMyProfileImage,
   deleteUser,
   getUserContents,
   getUserCampaigns,
