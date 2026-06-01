@@ -127,4 +127,3 @@ describe("Campaign Applications", () => {
         expect(res.json).toHaveBeenCalledWith({ updated: 1 });
     });
 });
-//# sourceMappingURL=campaign.applications.test.js.map

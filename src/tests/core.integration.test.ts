@@ -47,7 +47,7 @@ jest.mock("../services/mockMobileMoneyProvider.js", () => ({
   })),
 }));
 
-import app from "../app.js";
+import app from "../index.js";
 
 process.env.JWT_SECRET = "integration-secret";
 

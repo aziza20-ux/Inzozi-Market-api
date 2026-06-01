@@ -10,4 +10,3 @@ async function requestMobileMoneyTransfer(input) {
 exports.default = {
     requestMobileMoneyTransfer,
 };
-//# sourceMappingURL=mockMobileMoneyProvider.js.map

@@ -14,11 +14,9 @@ function safeFilename(filename) {
     return `${base || "upload"}${ext}`;
 }
 class LocalStubStorageService {
-    constructor() {
-        this.uploadDir = path_1.default.resolve(process.env.LOCAL_STORAGE_DIR ?? "storage/uploads");
-        this.publicBaseUrl = (process.env.LOCAL_STORAGE_PUBLIC_BASE_URL ??
-            "https://local-storage.inzozi.test").replace(/\/$/, "");
-    }
+    uploadDir = path_1.default.resolve(process.env.LOCAL_STORAGE_DIR ?? "storage/uploads");
+    publicBaseUrl = (process.env.LOCAL_STORAGE_PUBLIC_BASE_URL ??
+        "https://local-storage.inzozi.test").replace(/\/$/, "");
     async generateUploadUrl(filename, mimeType) {
         const storageKey = `${(0, crypto_1.randomUUID)()}-${safeFilename(filename)}`;
         const localPath = path_1.default.join(this.uploadDir, storageKey);
@@ -54,4 +52,3 @@ function createStorageService() {
     throw new Error(`Unsupported STORAGE_DRIVER: ${driver}`);
 }
 exports.storageService = createStorageService();
-//# sourceMappingURL=storage.service.js.map
