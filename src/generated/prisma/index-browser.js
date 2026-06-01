@@ -158,11 +158,6 @@ exports.Prisma.ContentScalarFieldEnum = {
   visibility: 'visibility',
   price: 'price',
   currency: 'currency',
-<<<<<<< HEAD
-  moderationStatus: 'moderationStatus',
-  rejectionReason: 'rejectionReason',
-=======
->>>>>>> origin/Aziza_branch
   deletedAt: 'deletedAt',
   creatorId: 'creatorId',
   createdAt: 'createdAt',
@@ -267,16 +262,6 @@ exports.ContentType = exports.$Enums.ContentType = {
 exports.ContentVisibility = exports.$Enums.ContentVisibility = {
   public: 'public',
   paid: 'paid'
-<<<<<<< HEAD
-};
-
-exports.ModerationStatus = exports.$Enums.ModerationStatus = {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  REMOVED: 'REMOVED'
-=======
->>>>>>> origin/Aziza_branch
 };
 
 exports.CampaignStatus = exports.$Enums.CampaignStatus = {

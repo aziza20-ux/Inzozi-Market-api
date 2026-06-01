@@ -31,7 +31,7 @@ jest.mock("../config/cloudinary.js", () => ({
   uploadToCloudinary: jest.fn(),
 }));
 
-import { createContent } from "../controllers/content.controllers.js";
+import { createContent } from "../controllers/content.controller.js";
 
 function createResponse() {
   return {

@@ -77,19 +77,6 @@ export const VerificationStatus: {
 export type VerificationStatus = (typeof VerificationStatus)[keyof typeof VerificationStatus]
 
 
-<<<<<<< HEAD
-export const ModerationStatus: {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  REMOVED: 'REMOVED'
-};
-
-export type ModerationStatus = (typeof ModerationStatus)[keyof typeof ModerationStatus]
-
-
-=======
->>>>>>> origin/Aziza_branch
 export const CampaignStatus: {
   DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE',
@@ -4379,11 +4366,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility | null
     price: number | null
     currency: string | null
-<<<<<<< HEAD
-    moderationStatus: $Enums.ModerationStatus | null
-    rejectionReason: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt: Date | null
     creatorId: string | null
     createdAt: Date | null
@@ -4401,11 +4383,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility | null
     price: number | null
     currency: string | null
-<<<<<<< HEAD
-    moderationStatus: $Enums.ModerationStatus | null
-    rejectionReason: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt: Date | null
     creatorId: string | null
     createdAt: Date | null
@@ -4423,11 +4400,6 @@ export namespace Prisma {
     visibility: number
     price: number
     currency: number
-<<<<<<< HEAD
-    moderationStatus: number
-    rejectionReason: number
-=======
->>>>>>> origin/Aziza_branch
     deletedAt: number
     creatorId: number
     createdAt: number
@@ -4455,11 +4427,6 @@ export namespace Prisma {
     visibility?: true
     price?: true
     currency?: true
-<<<<<<< HEAD
-    moderationStatus?: true
-    rejectionReason?: true
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: true
     creatorId?: true
     createdAt?: true
@@ -4477,11 +4444,6 @@ export namespace Prisma {
     visibility?: true
     price?: true
     currency?: true
-<<<<<<< HEAD
-    moderationStatus?: true
-    rejectionReason?: true
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: true
     creatorId?: true
     createdAt?: true
@@ -4499,11 +4461,6 @@ export namespace Prisma {
     visibility?: true
     price?: true
     currency?: true
-<<<<<<< HEAD
-    moderationStatus?: true
-    rejectionReason?: true
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: true
     creatorId?: true
     createdAt?: true
@@ -4608,11 +4565,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price: number | null
     currency: string | null
-<<<<<<< HEAD
-    moderationStatus: $Enums.ModerationStatus
-    rejectionReason: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt: Date | null
     creatorId: string
     createdAt: Date
@@ -4649,11 +4601,6 @@ export namespace Prisma {
     visibility?: boolean
     price?: boolean
     currency?: boolean
-<<<<<<< HEAD
-    moderationStatus?: boolean
-    rejectionReason?: boolean
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: boolean
     creatorId?: boolean
     createdAt?: boolean
@@ -4675,11 +4622,6 @@ export namespace Prisma {
     visibility?: boolean
     price?: boolean
     currency?: boolean
-<<<<<<< HEAD
-    moderationStatus?: boolean
-    rejectionReason?: boolean
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: boolean
     creatorId?: boolean
     createdAt?: boolean
@@ -4699,11 +4641,6 @@ export namespace Prisma {
     visibility?: boolean
     price?: boolean
     currency?: boolean
-<<<<<<< HEAD
-    moderationStatus?: boolean
-    rejectionReason?: boolean
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: boolean
     creatorId?: boolean
     createdAt?: boolean
@@ -4723,11 +4660,6 @@ export namespace Prisma {
     visibility?: boolean
     price?: boolean
     currency?: boolean
-<<<<<<< HEAD
-    moderationStatus?: boolean
-    rejectionReason?: boolean
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: boolean
     creatorId?: boolean
     createdAt?: boolean
@@ -4735,11 +4667,7 @@ export namespace Prisma {
     creatorProfileId?: boolean
   }
 
-<<<<<<< HEAD
-  export type ContentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "contentUrl" | "thumbnailUrl" | "type" | "visibility" | "price" | "currency" | "moderationStatus" | "rejectionReason" | "deletedAt" | "creatorId" | "createdAt" | "updatedAt" | "creatorProfileId", ExtArgs["result"]["content"]>
-=======
   export type ContentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "contentUrl" | "thumbnailUrl" | "type" | "visibility" | "price" | "currency" | "deletedAt" | "creatorId" | "createdAt" | "updatedAt" | "creatorProfileId", ExtArgs["result"]["content"]>
->>>>>>> origin/Aziza_branch
   export type ContentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creator?: boolean | UserDefaultArgs<ExtArgs>
     creatorProfile?: boolean | Content$creatorProfileArgs<ExtArgs>
@@ -4772,11 +4700,6 @@ export namespace Prisma {
       visibility: $Enums.ContentVisibility
       price: number | null
       currency: string | null
-<<<<<<< HEAD
-      moderationStatus: $Enums.ModerationStatus
-      rejectionReason: string | null
-=======
->>>>>>> origin/Aziza_branch
       deletedAt: Date | null
       creatorId: string
       createdAt: Date
@@ -5217,11 +5140,6 @@ export namespace Prisma {
     readonly visibility: FieldRef<"Content", 'ContentVisibility'>
     readonly price: FieldRef<"Content", 'Float'>
     readonly currency: FieldRef<"Content", 'String'>
-<<<<<<< HEAD
-    readonly moderationStatus: FieldRef<"Content", 'ModerationStatus'>
-    readonly rejectionReason: FieldRef<"Content", 'String'>
-=======
->>>>>>> origin/Aziza_branch
     readonly deletedAt: FieldRef<"Content", 'DateTime'>
     readonly creatorId: FieldRef<"Content", 'String'>
     readonly createdAt: FieldRef<"Content", 'DateTime'>
@@ -11452,11 +11370,6 @@ export namespace Prisma {
     visibility: 'visibility',
     price: 'price',
     currency: 'currency',
-<<<<<<< HEAD
-    moderationStatus: 'moderationStatus',
-    rejectionReason: 'rejectionReason',
-=======
->>>>>>> origin/Aziza_branch
     deletedAt: 'deletedAt',
     creatorId: 'creatorId',
     createdAt: 'createdAt',
@@ -11657,7 +11570,6 @@ export namespace Prisma {
 
   /**
    * Reference to a field of type 'ContentType'
-<<<<<<< HEAD
    */
   export type EnumContentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentType'>
     
@@ -11685,39 +11597,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'ModerationStatus'
-=======
->>>>>>> origin/Aziza_branch
-   */
-  export type EnumContentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentType'>
-    
-
-
-  /**
-   * Reference to a field of type 'ContentType[]'
-   */
-  export type ListEnumContentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentType[]'>
-    
-
-
-  /**
-<<<<<<< HEAD
-=======
-   * Reference to a field of type 'ContentVisibility'
-   */
-  export type EnumContentVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentVisibility'>
-    
-
-
-  /**
-   * Reference to a field of type 'ContentVisibility[]'
-   */
-  export type ListEnumContentVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentVisibility[]'>
-    
-
-
-  /**
->>>>>>> origin/Aziza_branch
    * Reference to a field of type 'CampaignStatus'
    */
   export type EnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignStatus'>
@@ -11978,11 +11857,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFilter<"Content"> | $Enums.ContentVisibility
     price?: FloatNullableFilter<"Content"> | number | null
     currency?: StringNullableFilter<"Content"> | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFilter<"Content"> | $Enums.ModerationStatus
-    rejectionReason?: StringNullableFilter<"Content"> | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: DateTimeNullableFilter<"Content"> | Date | string | null
     creatorId?: StringFilter<"Content"> | string
     createdAt?: DateTimeFilter<"Content"> | Date | string
@@ -12003,11 +11877,6 @@ export namespace Prisma {
     visibility?: SortOrder
     price?: SortOrderInput | SortOrder
     currency?: SortOrderInput | SortOrder
-<<<<<<< HEAD
-    moderationStatus?: SortOrder
-    rejectionReason?: SortOrderInput | SortOrder
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: SortOrderInput | SortOrder
     creatorId?: SortOrder
     createdAt?: SortOrder
@@ -12031,11 +11900,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFilter<"Content"> | $Enums.ContentVisibility
     price?: FloatNullableFilter<"Content"> | number | null
     currency?: StringNullableFilter<"Content"> | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFilter<"Content"> | $Enums.ModerationStatus
-    rejectionReason?: StringNullableFilter<"Content"> | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: DateTimeNullableFilter<"Content"> | Date | string | null
     creatorId?: StringFilter<"Content"> | string
     createdAt?: DateTimeFilter<"Content"> | Date | string
@@ -12056,11 +11920,6 @@ export namespace Prisma {
     visibility?: SortOrder
     price?: SortOrderInput | SortOrder
     currency?: SortOrderInput | SortOrder
-<<<<<<< HEAD
-    moderationStatus?: SortOrder
-    rejectionReason?: SortOrderInput | SortOrder
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: SortOrderInput | SortOrder
     creatorId?: SortOrder
     createdAt?: SortOrder
@@ -12086,11 +11945,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityWithAggregatesFilter<"Content"> | $Enums.ContentVisibility
     price?: FloatNullableWithAggregatesFilter<"Content"> | number | null
     currency?: StringNullableWithAggregatesFilter<"Content"> | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusWithAggregatesFilter<"Content"> | $Enums.ModerationStatus
-    rejectionReason?: StringNullableWithAggregatesFilter<"Content"> | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Content"> | Date | string | null
     creatorId?: StringWithAggregatesFilter<"Content"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Content"> | Date | string
@@ -12732,11 +12586,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12755,11 +12604,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     creatorId: string
     createdAt?: Date | string
@@ -12778,11 +12622,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12801,11 +12640,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12824,11 +12658,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     creatorId: string
     createdAt?: Date | string
@@ -12846,11 +12675,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12866,11 +12690,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13647,7 +13466,6 @@ export namespace Prisma {
     in?: $Enums.ContentType[] | ListEnumContentTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.ContentType[] | ListEnumContentTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumContentTypeFilter<$PrismaModel> | $Enums.ContentType
-<<<<<<< HEAD
   }
 
   export type EnumContentVisibilityFilter<$PrismaModel = never> = {
@@ -13668,35 +13486,6 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type EnumModerationStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ModerationStatus | EnumModerationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ModerationStatus[] | ListEnumModerationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ModerationStatus[] | ListEnumModerationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumModerationStatusFilter<$PrismaModel> | $Enums.ModerationStatus
-  }
-
-=======
-  }
-
-  export type EnumContentVisibilityFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContentVisibility | EnumContentVisibilityFieldRefInput<$PrismaModel>
-    in?: $Enums.ContentVisibility[] | ListEnumContentVisibilityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ContentVisibility[] | ListEnumContentVisibilityFieldRefInput<$PrismaModel>
-    not?: NestedEnumContentVisibilityFilter<$PrismaModel> | $Enums.ContentVisibility
-  }
-
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
->>>>>>> origin/Aziza_branch
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -13718,11 +13507,6 @@ export namespace Prisma {
     visibility?: SortOrder
     price?: SortOrder
     currency?: SortOrder
-<<<<<<< HEAD
-    moderationStatus?: SortOrder
-    rejectionReason?: SortOrder
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: SortOrder
     creatorId?: SortOrder
     createdAt?: SortOrder
@@ -13744,11 +13528,6 @@ export namespace Prisma {
     visibility?: SortOrder
     price?: SortOrder
     currency?: SortOrder
-<<<<<<< HEAD
-    moderationStatus?: SortOrder
-    rejectionReason?: SortOrder
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: SortOrder
     creatorId?: SortOrder
     createdAt?: SortOrder
@@ -13766,11 +13545,6 @@ export namespace Prisma {
     visibility?: SortOrder
     price?: SortOrder
     currency?: SortOrder
-<<<<<<< HEAD
-    moderationStatus?: SortOrder
-    rejectionReason?: SortOrder
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: SortOrder
     creatorId?: SortOrder
     createdAt?: SortOrder
@@ -13780,7 +13554,6 @@ export namespace Prisma {
 
   export type ContentSumOrderByAggregateInput = {
     price?: SortOrder
-<<<<<<< HEAD
   }
 
   export type EnumContentTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -13819,56 +13592,6 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type EnumModerationStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ModerationStatus | EnumModerationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ModerationStatus[] | ListEnumModerationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ModerationStatus[] | ListEnumModerationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumModerationStatusWithAggregatesFilter<$PrismaModel> | $Enums.ModerationStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumModerationStatusFilter<$PrismaModel>
-    _max?: NestedEnumModerationStatusFilter<$PrismaModel>
-  }
-
-=======
-  }
-
-  export type EnumContentTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContentType | EnumContentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ContentType[] | ListEnumContentTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ContentType[] | ListEnumContentTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumContentTypeWithAggregatesFilter<$PrismaModel> | $Enums.ContentType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumContentTypeFilter<$PrismaModel>
-    _max?: NestedEnumContentTypeFilter<$PrismaModel>
-  }
-
-  export type EnumContentVisibilityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContentVisibility | EnumContentVisibilityFieldRefInput<$PrismaModel>
-    in?: $Enums.ContentVisibility[] | ListEnumContentVisibilityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ContentVisibility[] | ListEnumContentVisibilityFieldRefInput<$PrismaModel>
-    not?: NestedEnumContentVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.ContentVisibility
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumContentVisibilityFilter<$PrismaModel>
-    _max?: NestedEnumContentVisibilityFilter<$PrismaModel>
-  }
-
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
-  }
-
->>>>>>> origin/Aziza_branch
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -14603,7 +14326,6 @@ export namespace Prisma {
     connectOrCreate?: PremiumPurchaseCreateOrConnectWithoutContentInput | PremiumPurchaseCreateOrConnectWithoutContentInput[]
     createMany?: PremiumPurchaseCreateManyContentInputEnvelope
     connect?: PremiumPurchaseWhereUniqueInput | PremiumPurchaseWhereUniqueInput[]
-<<<<<<< HEAD
   }
 
   export type PremiumPurchaseUncheckedCreateNestedManyWithoutContentInput = {
@@ -14629,37 +14351,6 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type EnumModerationStatusFieldUpdateOperationsInput = {
-    set?: $Enums.ModerationStatus
-  }
-
-=======
-  }
-
-  export type PremiumPurchaseUncheckedCreateNestedManyWithoutContentInput = {
-    create?: XOR<PremiumPurchaseCreateWithoutContentInput, PremiumPurchaseUncheckedCreateWithoutContentInput> | PremiumPurchaseCreateWithoutContentInput[] | PremiumPurchaseUncheckedCreateWithoutContentInput[]
-    connectOrCreate?: PremiumPurchaseCreateOrConnectWithoutContentInput | PremiumPurchaseCreateOrConnectWithoutContentInput[]
-    createMany?: PremiumPurchaseCreateManyContentInputEnvelope
-    connect?: PremiumPurchaseWhereUniqueInput | PremiumPurchaseWhereUniqueInput[]
-  }
-
-  export type EnumContentTypeFieldUpdateOperationsInput = {
-    set?: $Enums.ContentType
-  }
-
-  export type EnumContentVisibilityFieldUpdateOperationsInput = {
-    set?: $Enums.ContentVisibility
-  }
-
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
->>>>>>> origin/Aziza_branch
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
@@ -15071,7 +14762,6 @@ export namespace Prisma {
     in?: $Enums.ContentType[] | ListEnumContentTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.ContentType[] | ListEnumContentTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumContentTypeFilter<$PrismaModel> | $Enums.ContentType
-<<<<<<< HEAD
   }
 
   export type NestedEnumContentVisibilityFilter<$PrismaModel = never> = {
@@ -15090,13 +14780,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedEnumModerationStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ModerationStatus | EnumModerationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ModerationStatus[] | ListEnumModerationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ModerationStatus[] | ListEnumModerationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumModerationStatusFilter<$PrismaModel> | $Enums.ModerationStatus
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -15144,78 +14827,8 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
-=======
   }
 
-  export type NestedEnumContentVisibilityFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContentVisibility | EnumContentVisibilityFieldRefInput<$PrismaModel>
-    in?: $Enums.ContentVisibility[] | ListEnumContentVisibilityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ContentVisibility[] | ListEnumContentVisibilityFieldRefInput<$PrismaModel>
-    not?: NestedEnumContentVisibilityFilter<$PrismaModel> | $Enums.ContentVisibility
->>>>>>> origin/Aziza_branch
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedEnumContentTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContentType | EnumContentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ContentType[] | ListEnumContentTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ContentType[] | ListEnumContentTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumContentTypeWithAggregatesFilter<$PrismaModel> | $Enums.ContentType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumContentTypeFilter<$PrismaModel>
-    _max?: NestedEnumContentTypeFilter<$PrismaModel>
-  }
-
-<<<<<<< HEAD
-=======
-  export type NestedEnumContentVisibilityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContentVisibility | EnumContentVisibilityFieldRefInput<$PrismaModel>
-    in?: $Enums.ContentVisibility[] | ListEnumContentVisibilityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ContentVisibility[] | ListEnumContentVisibilityFieldRefInput<$PrismaModel>
-    not?: NestedEnumContentVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.ContentVisibility
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumContentVisibilityFilter<$PrismaModel>
-    _max?: NestedEnumContentVisibilityFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
-  }
-
->>>>>>> origin/Aziza_branch
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -15341,11 +14954,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15363,11 +14971,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15653,11 +15256,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFilter<"Content"> | $Enums.ContentVisibility
     price?: FloatNullableFilter<"Content"> | number | null
     currency?: StringNullableFilter<"Content"> | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFilter<"Content"> | $Enums.ModerationStatus
-    rejectionReason?: StringNullableFilter<"Content"> | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: DateTimeNullableFilter<"Content"> | Date | string | null
     creatorId?: StringFilter<"Content"> | string
     createdAt?: DateTimeFilter<"Content"> | Date | string
@@ -15889,11 +15487,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15911,11 +15504,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     creatorId: string
     createdAt?: Date | string
@@ -16845,11 +16433,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16867,11 +16450,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     creatorId: string
     createdAt?: Date | string
@@ -16954,11 +16532,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16976,11 +16549,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16998,11 +16566,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17086,11 +16649,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17108,11 +16666,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17130,11 +16683,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17354,11 +16902,6 @@ export namespace Prisma {
     visibility: $Enums.ContentVisibility
     price?: number | null
     currency?: string | null
-<<<<<<< HEAD
-    moderationStatus?: $Enums.ModerationStatus
-    rejectionReason?: string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: Date | string | null
     creatorId: string
     createdAt?: Date | string
@@ -17375,11 +16918,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17397,11 +16935,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17419,11 +16952,6 @@ export namespace Prisma {
     visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
-<<<<<<< HEAD
-    moderationStatus?: EnumModerationStatusFieldUpdateOperationsInput | $Enums.ModerationStatus
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-=======
->>>>>>> origin/Aziza_branch
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
