@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validators = exports.messageSchema = exports.paymentTransactionCreateSchema = exports.paymentTransactionSchema = exports.campaignSchema = exports.contentSchema = exports.creatorProfileSchema = exports.creatorProfileStatusSchema = exports.creatorProfileUpdateSchema = exports.creatorProfileCreateSchema = exports.campaignStatusUpdateSchema = exports.campaignUpdateSchema = exports.campaignCreateSchema = exports.refreshSchema = exports.verifySchema = exports.loginSchema = exports.registerSchema = exports.userCreateSchema = exports.paymentStatusEnum = exports.paymentTypeEnum = exports.campaignStatusEnum = exports.moderationStatusEnum = exports.verificationStatusEnum = exports.roleEnum = void 0;
+exports.validators = exports.messageSchema = exports.paymentTransactionCreateSchema = exports.paymentTransactionSchema = exports.campaignSchema = exports.contentSchema = exports.creatorProfileSchema = exports.creatorProfileStatusSchema = exports.creatorProfileUpdateSchema = exports.creatorProfileCreateSchema = exports.campaignStatusUpdateSchema = exports.campaignUpdateSchema = exports.campaignCreateSchema = exports.refreshSchema = exports.verifySchema = exports.loginSchema = exports.registerSchema = exports.userCreateSchema = exports.paymentStatusEnum = exports.paymentTypeEnum = exports.campaignStatusEnum = exports.verificationStatusEnum = exports.roleEnum = void 0;
 const zod_1 = require("zod");
 exports.roleEnum = zod_1.z.enum(["CREATOR", "BUSINESS", "CONSUMER", "ADMIN"]);
 exports.verificationStatusEnum = zod_1.z.enum([
@@ -8,7 +8,6 @@ exports.verificationStatusEnum = zod_1.z.enum([
     "VERIFIED",
     "REJECTED",
 ]);
-exports.moderationStatusEnum = zod_1.z.enum(["PENDING", "APPROVED", "REMOVED"]);
 exports.campaignStatusEnum = zod_1.z.enum([
     "DRAFT",
     "ACTIVE",
@@ -62,6 +61,10 @@ exports.loginSchema = zod_1.z.object({
 });
 exports.verifySchema = zod_1.z.object({
     otp: zod_1.z.string().length(6),
+    email: zod_1.z.string().email().optional(),
+    userId: zod_1.z.uuid().optional(),
+}).refine((data) => data.email || data.userId, {
+    message: "Either email or userId is required",
 });
 exports.refreshSchema = zod_1.z.object({
     refreshToken: zod_1.z.string(),
@@ -70,11 +73,11 @@ exports.campaignCreateSchema = zod_1.z.object({
     title: zod_1.z.string().min(1, "Title is required"),
     description: zod_1.z.string().optional(),
     budget: zod_1.z.number().nonnegative("Budget must be >= 0"),
+    startDate: dateStringToDate,
+    endDate: dateStringToDate,
     niche_filter: zod_1.z.string().min(1, "niche_filter is required"),
     min_audience_size: zod_1.z.number().int().nonnegative(),
     max_creators: zod_1.z.number().int().positive(),
-    startDate: dateStringToDate,
-    endDate: dateStringToDate,
 });
 exports.campaignUpdateSchema = exports.campaignCreateSchema.partial();
 exports.campaignStatusUpdateSchema = zod_1.z.object({
@@ -117,7 +120,7 @@ exports.contentSchema = zod_1.z
     media_url: httpsUrl("Invalid media URL").optional(),
     mediaUrl: httpsUrl("Invalid media URL").optional(),
     contentUrl: httpsUrl("Invalid media URL").optional(),
-    moderationStatus: exports.moderationStatusEnum.optional(),
+    // moderationStatus removed
     visibility: zod_1.z.union([zod_1.z.boolean(), zod_1.z.enum(["public", "paid"])]).optional(),
     creatorProfileId: zod_1.z.uuid().optional(),
 })

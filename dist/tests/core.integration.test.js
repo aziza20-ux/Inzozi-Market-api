@@ -163,28 +163,6 @@ describe("Core integration rules", () => {
             .send({ amount: 100 })
             .expect(403);
     });
-    it("guards content moderation state transitions", async () => {
-        mockPrisma.content.findFirst
-            .mockResolvedValueOnce({ id: "content-1", moderationStatus: "PENDING" })
-            .mockResolvedValueOnce({ id: "content-1", moderationStatus: "APPROVED" });
-        mockPrisma.content.update.mockResolvedValue({
-            id: "content-1",
-            moderationStatus: "APPROVED",
-        });
-        await (0, supertest_1.default)(app_js_1.default)
-            .patch("/api/v1/content/content-1/moderation")
-            .set("Authorization", `Bearer ${adminToken}`)
-            .send({ moderationStatus: "APPROVED" })
-            .expect(200);
-        await (0, supertest_1.default)(app_js_1.default)
-            .patch("/api/v1/content/content-1/moderation")
-            .set("Authorization", `Bearer ${adminToken}`)
-            .send({ moderationStatus: "REJECTED", rejectionReason: "Policy" })
-            .expect(400)
-            .expect(({ body }) => {
-            expect(body.error).toBe("INVALID_MODERATION_STATE");
-        });
-    });
     it("enforces campaign budget integrity and status transition guards", async () => {
         await (0, supertest_1.default)(app_js_1.default)
             .post("/api/v1/campaigns")

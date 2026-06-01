@@ -23,3 +23,6 @@ app.use("/api/v1", v1Routes);
 setupSwagger(app);
 
 export default app;
+app.listen(3000, () => {
+  console.log(`Server is running on port http://localhost:3000`);
+});
