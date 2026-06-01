@@ -1,4 +1,5 @@
 import { Router } from "express";
+import upload from "../../config/multer.js";
 import {
 	getUsers,
 	getUserById,
@@ -11,8 +12,44 @@ import {
 	usersStats,
 } from "../../controllers/users.controller";
 import { authenticate } from "../../middleware/auth";
+import { uploadProfilePicture } from "../../controllers/upload.controllers.js";
 
 const userRoutes = Router();
+
+/**
+ * @openapi
+ * /users/profile-picture:
+ *   post:
+ *     tags:
+ *       - Users
+ *     summary: Upload or replace the authenticated user's profile picture
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [profilePicture]
+ *             properties:
+ *               profilePicture:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Profile picture uploaded successfully
+ *       400:
+ *         description: No file uploaded
+ *       401:
+ *         description: Unauthorized
+ */
+userRoutes.post(
+	"/profile-picture",
+	authenticate,
+	upload.single("profilePicture"),
+	uploadProfilePicture,
+);
 
 /**
  * @openapi

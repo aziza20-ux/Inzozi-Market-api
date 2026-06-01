@@ -30,8 +30,6 @@ const router = Router();
  *                 type: number
  *               followers:
  *                 type: number
- *               avatar:
- *                 type: string
  *               location:
  *                 type: string
  *               payout_account:
@@ -133,8 +131,6 @@ router.get('/:id', getProfileById);
  *                 type: number
  *               followers:
  *                 type: number
- *               avatar:
- *                 type: string
  *               location:
  *                 type: string
  *               payout_account:
