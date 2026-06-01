@@ -73,6 +73,16 @@ export const verifySchema = z.object({
   message: "Either email or userId is required",
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
+export const resetPasswordSchema = z.object({
+  email: z.string().email(),
+  otp: z.string().length(6),
+  password: z.string().min(8),
+});
+
 export const refreshSchema = z.object({
     refreshToken: z.string(),
 });
@@ -201,6 +211,8 @@ export const validators = {
     registerSchema,
     loginSchema,
     verifySchema,
+    forgotPasswordSchema,
+    resetPasswordSchema,
     refreshSchema,
     campaignCreateSchema,
     campaignUpdateSchema,

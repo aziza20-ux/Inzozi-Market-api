@@ -37,7 +37,7 @@ jest.mock("argon2", () => ({
   },
 }));
 
-import { register, verify } from "../controllers/auth.controller";
+import { forgotPassword, register, resetPassword, verify } from "../controllers/auth.controller";
 
 function createResponse() {
   return {
@@ -106,6 +106,58 @@ describe("Auth registration", () => {
       data: { verificationStatus: "VERIFIED" },
     });
     expect(mockRedis.del).toHaveBeenCalledWith("otp:user-1");
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it("sends a password reset OTP email", async () => {
+    mockPrisma.user.findUnique.mockResolvedValue({ id: "user-1", email: "alice@example.com" });
+    mockRedis.set.mockResolvedValue("OK");
+
+    const req = {
+      body: {
+        email: "alice@example.com",
+      },
+    } as any;
+    const res = createResponse();
+
+    await forgotPassword(req, res);
+
+    expect(mockRedis.set).toHaveBeenCalledWith(
+      "password-reset:user-1",
+      expect.stringMatching(/^\d{6}$/),
+      "EX",
+      300,
+    );
+    expect(mockSendEmail).toHaveBeenCalledWith(
+      "alice@example.com",
+      "Your Inzozi Market password reset code",
+      expect.stringContaining("password reset code"),
+    );
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it("resets a password using email and otp", async () => {
+    mockPrisma.user.findUnique.mockResolvedValue({ id: "user-1", email: "alice@example.com" });
+    mockPrisma.user.update.mockResolvedValue({ id: "user-1" });
+    mockRedis.get.mockResolvedValue("123456");
+    mockRedis.del.mockResolvedValue(1);
+
+    const req = {
+      body: {
+        email: "alice@example.com",
+        otp: "123456",
+        password: "newpassword123",
+      },
+    } as any;
+    const res = createResponse();
+
+    await resetPassword(req, res);
+
+    expect(mockPrisma.user.update).toHaveBeenCalledWith({
+      where: { id: "user-1" },
+      data: { password: "hashed-password" },
+    });
+    expect(mockRedis.del).toHaveBeenCalledWith("password-reset:user-1");
     expect(res.status).toHaveBeenCalledWith(200);
   });
 });
