@@ -48,13 +48,21 @@ export const getUserById = async (
 
   const user = await prisma.user.findUnique({
     where: { id },
-    include: {
-      creatorProfile: true,
-      contents: true,
-      campaigns: true,
-      paymentTransactions: true,
-      sentMessages: true,
-      receivedMessages: true,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      profileImage: true,
+      role: true,
+      verificationStatus: true,
+      createdAt: true,
+      updatedAt: true,
+      _count: {
+        select: {
+          contents: true,
+          campaigns: true,
+        },
+      },
     },
   });
 
@@ -63,14 +71,17 @@ export const getUserById = async (
     return;
   }
 
-  // never return password
-  // prisma client includes password field by default; remove it if present
-  // (we selected include above so password will still be present on top-level fields)
-  // convert to plain object and delete password
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { password, ...safeUser } = user;
+  const { _count, ...safeUser } = user;
 
-  res.status(200).json({ data: safeUser });
+  res.status(200).json({
+    data: {
+      ...safeUser,
+      counts: {
+        contents: _count.contents,
+        campaigns: _count.campaigns,
+      },
+    },
+  });
 };
 
 export const createUser = async (

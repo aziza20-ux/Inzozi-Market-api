@@ -1,0 +1,1 @@
+ALTER TABLE "CreatorProfile" DROP COLUMN IF EXISTS "avatar";

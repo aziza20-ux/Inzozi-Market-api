@@ -3132,7 +3132,6 @@ export namespace Prisma {
     payout_account: string | null
     earnings: number | null
     followers: number | null
-    avatar: string | null
     location: string | null
     payout_network: string | null
     createdAt: Date | null
@@ -3148,7 +3147,6 @@ export namespace Prisma {
     payout_account: string | null
     earnings: number | null
     followers: number | null
-    avatar: string | null
     location: string | null
     payout_network: string | null
     createdAt: Date | null
@@ -3164,7 +3162,6 @@ export namespace Prisma {
     payout_account: number
     earnings: number
     followers: number
-    avatar: number
     location: number
     payout_network: number
     createdAt: number
@@ -3192,7 +3189,6 @@ export namespace Prisma {
     payout_account?: true
     earnings?: true
     followers?: true
-    avatar?: true
     location?: true
     payout_network?: true
     createdAt?: true
@@ -3208,7 +3204,6 @@ export namespace Prisma {
     payout_account?: true
     earnings?: true
     followers?: true
-    avatar?: true
     location?: true
     payout_network?: true
     createdAt?: true
@@ -3224,7 +3219,6 @@ export namespace Prisma {
     payout_account?: true
     earnings?: true
     followers?: true
-    avatar?: true
     location?: true
     payout_network?: true
     createdAt?: true
@@ -3327,7 +3321,6 @@ export namespace Prisma {
     payout_account: string | null
     earnings: number
     followers: number
-    avatar: string | null
     location: string | null
     payout_network: string | null
     createdAt: Date
@@ -3362,7 +3355,6 @@ export namespace Prisma {
     payout_account?: boolean
     earnings?: boolean
     followers?: boolean
-    avatar?: boolean
     location?: boolean
     payout_network?: boolean
     createdAt?: boolean
@@ -3381,7 +3373,6 @@ export namespace Prisma {
     payout_account?: boolean
     earnings?: boolean
     followers?: boolean
-    avatar?: boolean
     location?: boolean
     payout_network?: boolean
     createdAt?: boolean
@@ -3398,7 +3389,6 @@ export namespace Prisma {
     payout_account?: boolean
     earnings?: boolean
     followers?: boolean
-    avatar?: boolean
     location?: boolean
     payout_network?: boolean
     createdAt?: boolean
@@ -3415,14 +3405,13 @@ export namespace Prisma {
     payout_account?: boolean
     earnings?: boolean
     followers?: boolean
-    avatar?: boolean
     location?: boolean
     payout_network?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CreatorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "bio" | "specialization" | "socialLinks" | "payout_account" | "earnings" | "followers" | "avatar" | "location" | "payout_network" | "createdAt" | "updatedAt", ExtArgs["result"]["creatorProfile"]>
+  export type CreatorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "bio" | "specialization" | "socialLinks" | "payout_account" | "earnings" | "followers" | "location" | "payout_network" | "createdAt" | "updatedAt", ExtArgs["result"]["creatorProfile"]>
   export type CreatorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     contents?: boolean | CreatorProfile$contentsArgs<ExtArgs>
@@ -3450,7 +3439,6 @@ export namespace Prisma {
       payout_account: string | null
       earnings: number
       followers: number
-      avatar: string | null
       location: string | null
       payout_network: string | null
       createdAt: Date
@@ -3888,7 +3876,6 @@ export namespace Prisma {
     readonly payout_account: FieldRef<"CreatorProfile", 'String'>
     readonly earnings: FieldRef<"CreatorProfile", 'Float'>
     readonly followers: FieldRef<"CreatorProfile", 'Int'>
-    readonly avatar: FieldRef<"CreatorProfile", 'String'>
     readonly location: FieldRef<"CreatorProfile", 'String'>
     readonly payout_network: FieldRef<"CreatorProfile", 'String'>
     readonly createdAt: FieldRef<"CreatorProfile", 'DateTime'>
@@ -11350,7 +11337,6 @@ export namespace Prisma {
     payout_account: 'payout_account',
     earnings: 'earnings',
     followers: 'followers',
-    avatar: 'avatar',
     location: 'location',
     payout_network: 'payout_network',
     createdAt: 'createdAt',
@@ -11756,7 +11742,6 @@ export namespace Prisma {
     payout_account?: StringNullableFilter<"CreatorProfile"> | string | null
     earnings?: FloatFilter<"CreatorProfile"> | number
     followers?: IntFilter<"CreatorProfile"> | number
-    avatar?: StringNullableFilter<"CreatorProfile"> | string | null
     location?: StringNullableFilter<"CreatorProfile"> | string | null
     payout_network?: StringNullableFilter<"CreatorProfile"> | string | null
     createdAt?: DateTimeFilter<"CreatorProfile"> | Date | string
@@ -11774,7 +11759,6 @@ export namespace Prisma {
     payout_account?: SortOrderInput | SortOrder
     earnings?: SortOrder
     followers?: SortOrder
-    avatar?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
     payout_network?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -11795,7 +11779,6 @@ export namespace Prisma {
     payout_account?: StringNullableFilter<"CreatorProfile"> | string | null
     earnings?: FloatFilter<"CreatorProfile"> | number
     followers?: IntFilter<"CreatorProfile"> | number
-    avatar?: StringNullableFilter<"CreatorProfile"> | string | null
     location?: StringNullableFilter<"CreatorProfile"> | string | null
     payout_network?: StringNullableFilter<"CreatorProfile"> | string | null
     createdAt?: DateTimeFilter<"CreatorProfile"> | Date | string
@@ -11813,7 +11796,6 @@ export namespace Prisma {
     payout_account?: SortOrderInput | SortOrder
     earnings?: SortOrder
     followers?: SortOrder
-    avatar?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
     payout_network?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -11837,7 +11819,6 @@ export namespace Prisma {
     payout_account?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
     earnings?: FloatWithAggregatesFilter<"CreatorProfile"> | number
     followers?: IntWithAggregatesFilter<"CreatorProfile"> | number
-    avatar?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
     location?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
     payout_network?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CreatorProfile"> | Date | string
@@ -12469,7 +12450,6 @@ export namespace Prisma {
     payout_account?: string | null
     earnings?: number
     followers?: number
-    avatar?: string | null
     location?: string | null
     payout_network?: string | null
     createdAt?: Date | string
@@ -12487,7 +12467,6 @@ export namespace Prisma {
     payout_account?: string | null
     earnings?: number
     followers?: number
-    avatar?: string | null
     location?: string | null
     payout_network?: string | null
     createdAt?: Date | string
@@ -12503,7 +12482,6 @@ export namespace Prisma {
     payout_account?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12521,7 +12499,6 @@ export namespace Prisma {
     payout_account?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12538,7 +12515,6 @@ export namespace Prisma {
     payout_account?: string | null
     earnings?: number
     followers?: number
-    avatar?: string | null
     location?: string | null
     payout_network?: string | null
     createdAt?: Date | string
@@ -12553,7 +12529,6 @@ export namespace Prisma {
     payout_account?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12569,7 +12544,6 @@ export namespace Prisma {
     payout_account?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13380,7 +13354,6 @@ export namespace Prisma {
     payout_account?: SortOrder
     earnings?: SortOrder
     followers?: SortOrder
-    avatar?: SortOrder
     location?: SortOrder
     payout_network?: SortOrder
     createdAt?: SortOrder
@@ -13401,7 +13374,6 @@ export namespace Prisma {
     payout_account?: SortOrder
     earnings?: SortOrder
     followers?: SortOrder
-    avatar?: SortOrder
     location?: SortOrder
     payout_network?: SortOrder
     createdAt?: SortOrder
@@ -13417,7 +13389,6 @@ export namespace Prisma {
     payout_account?: SortOrder
     earnings?: SortOrder
     followers?: SortOrder
-    avatar?: SortOrder
     location?: SortOrder
     payout_network?: SortOrder
     createdAt?: SortOrder
@@ -14915,7 +14886,6 @@ export namespace Prisma {
     payout_account?: string | null
     earnings?: number
     followers?: number
-    avatar?: string | null
     location?: string | null
     payout_network?: string | null
     createdAt?: Date | string
@@ -14931,7 +14901,6 @@ export namespace Prisma {
     payout_account?: string | null
     earnings?: number
     followers?: number
-    avatar?: string | null
     location?: string | null
     payout_network?: string | null
     createdAt?: Date | string
@@ -15203,7 +15172,6 @@ export namespace Prisma {
     payout_account?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15219,7 +15187,6 @@ export namespace Prisma {
     payout_account?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15637,7 +15604,6 @@ export namespace Prisma {
     payout_account?: string | null
     earnings?: number
     followers?: number
-    avatar?: string | null
     location?: string | null
     payout_network?: string | null
     createdAt?: Date | string
@@ -15654,7 +15620,6 @@ export namespace Prisma {
     payout_account?: string | null
     earnings?: number
     followers?: number
-    avatar?: string | null
     location?: string | null
     payout_network?: string | null
     createdAt?: Date | string
@@ -15758,7 +15723,6 @@ export namespace Prisma {
     payout_account?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15775,7 +15739,6 @@ export namespace Prisma {
     payout_account?: NullableStringFieldUpdateOperationsInput | string | null
     earnings?: FloatFieldUpdateOperationsInput | number
     followers?: IntFieldUpdateOperationsInput | number
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     payout_network?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
