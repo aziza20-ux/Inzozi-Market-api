@@ -1,8 +1,8 @@
-import express from "express";
-import { mediaUpload } from "../../config/multer.js";
-import { authenticate } from "../../middleware/auth.js";
-import { requireVerified } from "../../middleware/requireVerified.js";
-import { requireRole } from "../../middleware/requireRole.js";
+import express from 'express';
+import { mediaUpload } from '../../config/multer.js';
+import { authenticate } from '../../middleware/auth.js';
+import { requireVerified } from '../../middleware/requireVerified.js';
+import { requireRole } from '../../middleware/requireRole.js';
 import {
   createContent,
   deleteContent,
@@ -12,8 +12,8 @@ import {
   getCreatorProfileContent,
   moderationUpdate,
   patchContent,
-} from "../../controllers/content.controller.js";
-import { uploadCreatorMedia } from "../../controllers/upload.controllers.js";
+} from '../../controllers/content.controller.js';
+import { uploadCreatorMedia } from '../../controllers/upload.controllers.js';
 
 const router = express.Router();
 
@@ -46,10 +46,10 @@ const router = express.Router();
  *         description: Missing filename or mimeType
  */
 router.post(
-  "/upload-url",
+  '/upload-url',
   authenticate,
   requireVerified,
-  requireRole("CREATOR"),
+  requireRole('CREATOR'),
   generateContentUploadUrl,
 );
 
@@ -78,11 +78,11 @@ router.post(
  *         description: Media uploaded
  */
 router.post(
-  "/media",
+  '/media',
   authenticate,
   requireVerified,
-  requireRole("CREATOR"),
-  mediaUpload.single("media"),
+  requireRole('CREATOR'),
+  mediaUpload.single('media'),
   uploadCreatorMedia,
 );
 
@@ -130,11 +130,11 @@ router.post(
  *         description: Invalid request body
  */
 router.post(
-  "/",
+  '/',
   authenticate,
   requireVerified,
-  requireRole("CREATOR"),
-  mediaUpload.single("media"),
+  requireRole('CREATOR'),
+  mediaUpload.single('media'),
   createContent,
 );
 
@@ -159,7 +159,7 @@ router.post(
  *       200:
  *         description: Content list
  */
-router.get("/", getContentList);
+router.get('/', getContentList);
 
 // GET /v1/content/:id
 /**
@@ -182,7 +182,7 @@ router.get("/", getContentList);
  *       404:
  *         description: Content not found
  */
-router.get("/:id", getContent);
+router.get('/:id', getContent);
 
 // PATCH /v1/content/:id
 /**
@@ -228,7 +228,7 @@ router.get("/:id", getContent);
  *       200:
  *         description: Updated content
  */
-router.put("/:id", authenticate, requireRole("CREATOR"), patchContent);
+router.put('/:id', authenticate, requireRole('CREATOR'), patchContent);
 
 // DELETE /v1/content/:id
 /**
@@ -251,12 +251,7 @@ router.put("/:id", authenticate, requireRole("CREATOR"), patchContent);
  *       204:
  *         description: Content deleted
  */
-router.delete(
-  "/:id",
-  authenticate,
-  requireRole("CREATOR", "ADMIN"),
-  deleteContent,
-);
+router.delete('/:id', authenticate, requireRole('CREATOR', 'ADMIN'), deleteContent);
 
 // PATCH /v1/content/:id/moderation (admin)
 /**
@@ -279,12 +274,7 @@ router.delete(
  *       404:
  *         description: Not found
  */
-router.patch(
-  "/:id/moderation",
-  authenticate,
-  requireRole("ADMIN"),
-  moderationUpdate,
-);
+router.patch('/:id/moderation', authenticate, requireRole('ADMIN'), moderationUpdate);
 
 // GET /v1/creator-profiles/:id/content
 /**
@@ -313,6 +303,6 @@ router.patch(
  *       200:
  *         description: Filtered content list
  */
-router.get("/creator-profiles/:id/content", getCreatorProfileContent);
+router.get('/creator-profiles/:id/content', getCreatorProfileContent);
 
 export default router;
