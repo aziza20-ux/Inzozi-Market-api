@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { createHash } from "crypto";
 import prisma from "../config/prisma.js";
+import { AuthRequest } from "../middleware/auth.js";
 
 const DEFAULT_PAGE_SIZE = 25;
 const MAX_PAGE_SIZE = 100;
@@ -36,11 +37,11 @@ const userSelect = {
   profileImage: true,
 };
 
-export async function createMessage(req: Request, res: Response) {
+export async function createMessage(req: AuthRequest, res: Response) {
   try {
-    const user = req.user;
-    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
-    if (user.role === "CONSUMER") {
+    const userId = req.userId;
+    if (!userId) return res.status(401).json({ error: "UNAUTHORIZED" });
+    if (req.role === "CONSUMER") {
       return res.status(403).json({ error: "CONSUMER_CANNOT_INITIATE" });
     }
 
@@ -50,7 +51,7 @@ export async function createMessage(req: Request, res: Response) {
     if (!receiverId || !message) {
       return res.status(400).json({ error: "RECIPIENT_AND_MESSAGE_REQUIRED" });
     }
-    if (String(receiverId) === user.id) {
+    if (String(receiverId) === userId) {
       return res.status(400).json({ error: "SENDER_AND_RECIPIENT_MUST_DIFFER" });
     }
 
@@ -60,10 +61,10 @@ export async function createMessage(req: Request, res: Response) {
     });
     if (!receiver) return res.status(404).json({ error: "RECIPIENT_NOT_FOUND" });
 
-    const conversationId = deriveConversationId(user.id, receiver.id);
+    const conversationId = deriveConversationId(userId, receiver.id);
     const created = await prisma.message.create({
       data: {
-        senderId: user.id,
+        senderId: userId,
         receiverId: receiver.id,
         conversationId,
         message: String(message),
@@ -80,15 +81,15 @@ export async function createMessage(req: Request, res: Response) {
   }
 }
 
-export async function listConversations(req: Request, res: Response) {
+export async function listConversations(req: AuthRequest, res: Response) {
   try {
-    const user = req.user;
-    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
+    const userId = req.userId;
+    if (!userId) return res.status(401).json({ error: "UNAUTHORIZED" });
 
     const messages = await prisma.message.findMany({
       where: {
         deletedAt: null,
-        OR: [{ senderId: user.id }, { receiverId: user.id }],
+        OR: [{ senderId: userId }, { receiverId: userId }],
       },
       orderBy: { createdAt: "desc" },
       include: {
@@ -101,7 +102,7 @@ export async function listConversations(req: Request, res: Response) {
     for (const message of messages) {
       if (conversations.has(message.conversationId)) continue;
       const otherUser =
-        message.senderId === user.id ? message.receiver : message.sender;
+        message.senderId === userId ? message.receiver : message.sender;
       conversations.set(message.conversationId, {
         conversationId: message.conversationId,
         participant: otherUser,
@@ -122,10 +123,10 @@ export async function listConversations(req: Request, res: Response) {
   }
 }
 
-export async function getConversationThread(req: Request, res: Response) {
+export async function getConversationThread(req: AuthRequest, res: Response) {
   try {
-    const user = req.user;
-    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
+    const userId = req.userId;
+    if (!userId) return res.status(401).json({ error: "UNAUTHORIZED" });
 
     const convId =
       typeof req.params.convId === "string" ? req.params.convId : undefined;
@@ -136,7 +137,7 @@ export async function getConversationThread(req: Request, res: Response) {
     const participantMessage = await prisma.message.findFirst({
       where: {
         conversationId: convId,
-        OR: [{ senderId: user.id }, { receiverId: user.id }],
+        OR: [{ senderId: userId }, { receiverId: userId }],
       },
       select: { id: true },
     });
@@ -167,10 +168,10 @@ export async function getConversationThread(req: Request, res: Response) {
   }
 }
 
-export async function markMessageRead(req: Request, res: Response) {
+export async function markMessageRead(req: AuthRequest, res: Response) {
   try {
-    const user = req.user;
-    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
+    const userId = req.userId;
+    if (!userId) return res.status(401).json({ error: "UNAUTHORIZED" });
 
     const id = typeof req.params.id === "string" ? req.params.id : undefined;
     if (!id) return res.status(400).json({ error: "INVALID_MESSAGE_ID" });
@@ -179,7 +180,7 @@ export async function markMessageRead(req: Request, res: Response) {
       where: { id, deletedAt: null },
     });
     if (!message) return res.status(404).json({ error: "MESSAGE_NOT_FOUND" });
-    if (!isParticipant(message, user.id)) {
+    if (!isParticipant(message, userId)) {
       return res.status(403).json({ error: "MESSAGE_ACCESS_DENIED" });
     }
 
@@ -194,10 +195,10 @@ export async function markMessageRead(req: Request, res: Response) {
   }
 }
 
-export async function deleteMessage(req: Request, res: Response) {
+export async function deleteMessage(req: AuthRequest, res: Response) {
   try {
-    const user = req.user;
-    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
+    const userId = req.userId;
+    if (!userId) return res.status(401).json({ error: "UNAUTHORIZED" });
 
     const id = typeof req.params.id === "string" ? req.params.id : undefined;
     if (!id) return res.status(400).json({ error: "INVALID_MESSAGE_ID" });
@@ -206,7 +207,7 @@ export async function deleteMessage(req: Request, res: Response) {
       where: { id },
     });
     if (!message) return res.status(404).json({ error: "MESSAGE_NOT_FOUND" });
-    if (!isParticipant(message, user.id)) {
+    if (!isParticipant(message, userId)) {
       return res.status(403).json({ error: "MESSAGE_ACCESS_DENIED" });
     }
 

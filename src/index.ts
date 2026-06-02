@@ -22,7 +22,7 @@ app.get('/health', (_req: Request, res: Response) => {
 app.use('/api/v1', v1Routes);
 setupSwagger(app);
 
-const PORT = Number(process.env.PORT) || 4000;
+const PORT = Number(process.env.PORT) || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);
