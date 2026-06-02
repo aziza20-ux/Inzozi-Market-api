@@ -99,7 +99,6 @@ model CreatorProfile {
   payout_account String?
   earnings       Float   @default(0)
   followers      Int     @default(0)
-  avatar         String?
   location       String?
   payout_network String?
 
