@@ -26,7 +26,8 @@ export const createProfile = async (req: AuthRequest, res: Response): Promise<vo
       avatar: body.avatar ? String(body.avatar) : undefined,
       location: body.location ? String(body.location) : undefined,
       payout_account: body.payout_account ? String(body.payout_account) : undefined,
-      payout_network: body.payout_network ? String(body.payout_network) : undefined
+      payout_network: body.payout_network ? String(body.payout_network) : undefined,
+      subscriptionFee: body.subscriptionFee ? Number(body.subscriptionFee) : undefined
     });
 
     const existing = await prisma.creatorProfile.findUnique({ where: { userId: req.userId } });
@@ -46,7 +47,8 @@ export const createProfile = async (req: AuthRequest, res: Response): Promise<vo
         avatar: data.avatar,
         location: data.location,
         payout_account: data.payout_account,
-        payout_network: data.payout_network
+        payout_network: data.payout_network,
+        subscriptionFee: data.subscriptionFee
       }
     });
 
@@ -124,7 +126,8 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
       avatar: body.avatar ? String(body.avatar) : undefined,
       location: body.location ? String(body.location) : undefined,
       payout_account: body.payout_account ? String(body.payout_account) : undefined,
-      payout_network: body.payout_network ? String(body.payout_network) : undefined
+      payout_network: body.payout_network ? String(body.payout_network) : undefined,
+      subscriptionFee: body.subscriptionFee !== undefined ? Number(body.subscriptionFee) : undefined
     });
 
     const updated = await prisma.creatorProfile.update({
@@ -138,7 +141,8 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
         ...(data.avatar !== undefined && { avatar: data.avatar }),
         ...(data.location !== undefined && { location: data.location }),
         ...(data.payout_account !== undefined && { payout_account: data.payout_account }),
-        ...(data.payout_network !== undefined && { payout_network: data.payout_network })
+        ...(data.payout_network !== undefined && { payout_network: data.payout_network }),
+        ...(data.subscriptionFee !== undefined && { subscriptionFee: data.subscriptionFee })
       }
     });
 

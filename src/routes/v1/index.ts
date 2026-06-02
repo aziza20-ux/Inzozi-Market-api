@@ -6,6 +6,7 @@ import creatorProfileRoutes from './creator-profile.routes.js';
 import paymentRoutes from './payment.routes.js';
 import contentRoutes from './content.routes.js';
 import messageRouter from './message.routes.js';
+import subscriptionRoutes from './subscription.routes.js';
 
 const v1Routes = Router();
 
@@ -16,5 +17,6 @@ v1Routes.use('/creator-profile', creatorProfileRoutes);
 v1Routes.use('/payments', paymentRoutes);
 v1Routes.use('/content', contentRoutes);
 v1Routes.use('/messages', messageRouter)
+v1Routes.use('/subscriptions', subscriptionRoutes);
 
 export default v1Routes;

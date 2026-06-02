@@ -28,7 +28,8 @@ export const uploadCreatorMedia = async (
 		return;
 	}
 
-	const uploaded = await uploadToCloudinary(authReq.file.buffer, "inzozi/content");
+	const resourceType = authReq.file.mimetype.startsWith("video/") ? "video" : "auto";
+	const uploaded = await uploadToCloudinary(authReq.file.buffer, "inzozi/content", resourceType);
 
 	res.status(201).json({
 		status: "success",

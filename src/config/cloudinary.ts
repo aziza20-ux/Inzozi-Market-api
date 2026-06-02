@@ -14,7 +14,8 @@ cloudinary.config({
 // Returns the upload result which includes secure_url and public_id
 export async function uploadToCloudinary(
   buffer: Buffer,
-  folder: string
+  folder: string,
+  resourceType: "auto" | "image" | "video" | "raw" = "auto"
 ): Promise<{ url: string; publicId: string }> {
   return new Promise((resolve, reject) => {
     // upload_stream is used when you have a buffer (not a file path)
@@ -23,7 +24,8 @@ export async function uploadToCloudinary(
       {
         folder,
         // resource_type: "auto" detects whether it's an image or video
-        resource_type: "auto",
+        resource_type: resourceType,
+        chunk_size: 6000000,
       },
       (error, result) => {
         if (error || !result) return reject(error);
