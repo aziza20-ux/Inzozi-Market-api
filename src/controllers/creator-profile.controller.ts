@@ -23,7 +23,6 @@ export const createProfile = async (req: AuthRequest, res: Response): Promise<vo
       socialLinks: body.socialLinks,
       earnings: body.earnings,
       followers: body.followers,
-      avatar: body.avatar ? String(body.avatar) : undefined,
       location: body.location ? String(body.location) : undefined,
       payout_account: body.payout_account ? String(body.payout_account) : undefined,
       payout_network: body.payout_network ? String(body.payout_network) : undefined
@@ -43,7 +42,6 @@ export const createProfile = async (req: AuthRequest, res: Response): Promise<vo
         socialLinks: data.socialLinks,
         earnings: data.earnings,
         followers: data.followers,
-        avatar: data.avatar,
         location: data.location,
         payout_account: data.payout_account,
         payout_network: data.payout_network
@@ -121,7 +119,6 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
       socialLinks: body.socialLinks,
       earnings: body.earnings,
       followers: body.followers,
-      avatar: body.avatar ? String(body.avatar) : undefined,
       location: body.location ? String(body.location) : undefined,
       payout_account: body.payout_account ? String(body.payout_account) : undefined,
       payout_network: body.payout_network ? String(body.payout_network) : undefined
@@ -135,7 +132,6 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
         ...(data.socialLinks !== undefined && { socialLinks: data.socialLinks }),
         ...(data.earnings !== undefined && { earnings: data.earnings }),
         ...(data.followers !== undefined && { followers: data.followers }),
-        ...(data.avatar !== undefined && { avatar: data.avatar }),
         ...(data.location !== undefined && { location: data.location }),
         ...(data.payout_account !== undefined && { payout_account: data.payout_account }),
         ...(data.payout_network !== undefined && { payout_network: data.payout_network })

@@ -141,7 +141,6 @@ exports.Prisma.CreatorProfileScalarFieldEnum = {
   payout_account: 'payout_account',
   earnings: 'earnings',
   followers: 'followers',
-  avatar: 'avatar',
   location: 'location',
   payout_network: 'payout_network',
   createdAt: 'createdAt',
