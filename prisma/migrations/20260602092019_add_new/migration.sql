@@ -9,5 +9,8 @@
 ALTER TABLE "Content" DROP COLUMN "moderationStatus",
 DROP COLUMN "rejectionReason";
 
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "name" DROP NOT NULL;
+
 -- DropEnum
 DROP TYPE "ModerationStatus";
