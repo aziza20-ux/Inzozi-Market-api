@@ -3,6 +3,8 @@ import prisma from "../config/prisma";
 import jwt, { type Secret, type SignOptions } from "jsonwebtoken";
 import type { AuthUser } from "../types/express.js";
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+
 const allowedRoles = ["ADMIN", "CREATOR", "BUSINESS", "CONSUMER", "SYSTEM"] as const;
 
 function isAuthRole(role: string): role is AuthUser["role"] {

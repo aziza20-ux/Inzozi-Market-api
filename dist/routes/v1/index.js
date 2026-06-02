@@ -19,5 +19,4 @@ v1Routes.use('/content', content_routes_js_1.default);
 v1Routes.use('/creator-profile', creator_profile_routes_js_1.default);
 v1Routes.use('/messages', message_routes_js_1.default);
 v1Routes.use('/payments', payment_routes_js_1.default);
-v1Routes.use('/content', content_routes_js_1.default);
 exports.default = v1Routes;

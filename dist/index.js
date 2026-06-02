@@ -23,5 +23,5 @@ app.use("/api/v1", index_js_1.default);
 (0, swagger_1.setupSwagger)(app);
 exports.default = app;
 app.listen(3000, () => {
-    console.log("Server is running on port  3000");
+    console.log(`Server is running on port http://localhost:3000`);
 });

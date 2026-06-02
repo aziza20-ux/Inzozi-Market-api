@@ -1,11 +1,15 @@
 import { Request, Response } from 'express';
 import prisma from '../config/prisma';
-import {AuthRequest} from "../middleware/auth";
-import { campaignCreateSchema, campaignUpdateSchema, campaignStatusUpdateSchema, campaignStatusEnum } from '../validators/schema.validators';
+import { AuthRequest } from '../middleware/auth';
+import {
+  campaignCreateSchema,
+  campaignUpdateSchema,
+  campaignStatusUpdateSchema,
+  campaignStatusEnum,
+} from '../validators/schema.validators';
 
 export const createCampaign = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    
     if (req.role !== 'BUSINESS') {
       res.status(403).json({ error: 'Business role required' });
       return;
@@ -20,9 +24,6 @@ export const createCampaign = async (req: AuthRequest, res: Response): Promise<v
       max_creators: req.body.max_creators,
       startDate: req.body.startDate ?? new Date(),
       endDate: req.body.endDate ?? req.body.deadline_at,
-      niche_filter: req.body.niche_filter,
-      min_audience_size: req.body.min_audience_size,
-      max_creators: req.body.max_creators,
     });
 
     if (data.budget < data.max_creators) {
@@ -42,7 +43,7 @@ export const createCampaign = async (req: AuthRequest, res: Response): Promise<v
         niche_filter: data.niche_filter,
         min_audience_size: data.min_audience_size,
         max_creators: data.max_creators,
-      }
+      },
     });
 
     res.status(201).json(campaign);
@@ -65,7 +66,7 @@ export const getCampaigns = async (req: Request, res: Response): Promise<void> =
       where,
       take: Number(limit),
       ...(cursor && { skip: 1, cursor: { id: String(cursor) } }),
-      orderBy: { endDate: 'asc' }
+      orderBy: { endDate: 'asc' },
     });
 
     res.status(200).json(campaigns);
@@ -91,8 +92,7 @@ export const getCampaignById = async (req: Request, res: Response): Promise<void
 export const updateCampaign = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-  
-    
+
     const campaign = await prisma.campaign.findFirst({ where: { id: String(id) } });
     if (!campaign) {
       res.status(404).json({ error: 'Campaign not found' });
@@ -103,7 +103,7 @@ export const updateCampaign = async (req: AuthRequest, res: Response): Promise<v
       res.status(403).json({ error: 'Forbidden' });
       return;
     }
-    
+
     if (campaign.status !== 'DRAFT') {
       res.status(400).json({ error: 'Can only update draft campaigns' });
       return;
@@ -122,8 +122,8 @@ export const updateCampaign = async (req: AuthRequest, res: Response): Promise<v
         ...(data.title && { title: data.title }),
         ...(data.description !== undefined && { description: data.description }),
         ...(data.budget && { budget: data.budget }),
-        ...(data.endDate && { endDate: data.endDate })
-      }
+        ...(data.endDate && { endDate: data.endDate }),
+      },
     });
 
     res.status(200).json(updated);
@@ -140,7 +140,7 @@ export const updateCampaignStatus = async (req: Request, res: Response): Promise
       res.status(401).json({ error: 'Unauthorized' });
       return;
     }
-    
+
     const campaign = await prisma.campaign.findFirst({ where: { id: String(id) } });
     if (!campaign) {
       res.status(404).json({ error: 'Campaign not found' });
@@ -165,7 +165,7 @@ export const updateCampaignStatus = async (req: Request, res: Response): Promise
       ACTIVE: ['IN_PROGRESS', 'COMPLETED', 'CANCELLED'],
       IN_PROGRESS: ['COMPLETED', 'CANCELLED'],
       COMPLETED: [],
-      CANCELLED: []
+      CANCELLED: [],
     };
 
     if (!validTransitions[campaign.status]?.includes(nextStatus)) {
@@ -175,7 +175,7 @@ export const updateCampaignStatus = async (req: Request, res: Response): Promise
 
     const updated = await prisma.campaign.update({
       where: { id: String(id) },
-      data: { status: nextStatus as any }
+      data: { status: nextStatus as any },
     });
 
     res.status(200).json(updated);
