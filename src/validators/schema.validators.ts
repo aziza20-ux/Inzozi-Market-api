@@ -114,6 +114,7 @@ export const creatorProfileCreateSchema = z.object({
     payout_network: z.string().optional(),
     earnings: z.number().optional(),
     followers: z.number().int().optional(),
+    subscriptionFee: z.number().optional(),
 });
 
 export const creatorProfileUpdateSchema = creatorProfileCreateSchema.partial();
@@ -129,11 +130,11 @@ export const creatorProfileSchema = z.object({
     socialLinks: z.string().optional(),
     earnings: z.number().optional(),
     followers: z.number().int().optional(),
+    subscriptionFee: z.number().optional(),
     avatar: z.string().optional(),
     location: z.string().optional(),
     payout_account: z.string().optional(),
     payout_network: z.string().optional(),
-    
 });
 
 export const contentSchema = z
@@ -146,7 +147,6 @@ export const contentSchema = z
     media_url: httpsUrl("Invalid media URL").optional(),
     mediaUrl: httpsUrl("Invalid media URL").optional(),
     contentUrl: httpsUrl("Invalid media URL").optional(),
-    // moderationStatus removed
     visibility: z.union([z.boolean(), z.enum(["public", "paid"])]).optional(),
     creatorProfileId: z.uuid().optional(),
   })

@@ -29,7 +29,8 @@ function getMediaUrl(body: any) {
 async function resolveContentMedia(req: Request) {
   const file = (req as Request & { file?: MulterFile }).file;
   if (file) {
-    const uploaded = await uploadToCloudinary(file.buffer, "inzozi/content");
+    const resourceType = file.mimetype.startsWith("video/") ? "video" : "auto";
+    const uploaded = await uploadToCloudinary(file.buffer, "inzozi/content", resourceType);
     return uploaded.url;
   }
 
