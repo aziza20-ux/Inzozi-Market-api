@@ -1,6 +1,6 @@
-import request from "supertest";
-import argon2 from "argon2";
-import jwt from "jsonwebtoken";
+import request from 'supertest';
+import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
 
 const mockPrisma = {
   user: {
@@ -34,268 +34,265 @@ const mockPrisma = {
   },
 };
 
-jest.mock("../config/prisma.js", () => ({
+jest.mock('../config/prisma.js', () => ({
   __esModule: true,
   default: mockPrisma,
 }));
 
-jest.mock("../services/mockMobileMoneyProvider.js", () => ({
+jest.mock('../services/mockMobileMoneyProvider.js', () => ({
   __esModule: true,
   requestMobileMoneyTransfer: jest.fn(async ({ transactionRef }) => ({
     providerRef: `mock_${transactionRef}`,
-    status: "pending",
+    status: 'pending',
   })),
 }));
 
-import app from "../index.js";
+import app from '../index.js';
 
-process.env.JWT_SECRET = "integration-secret";
+process.env.JWT_SECRET = 'integration-secret';
 
 function token(payload: Record<string, unknown>) {
   return jwt.sign(payload, process.env.JWT_SECRET as string);
 }
 
 const businessToken = token({
-  id: "business-1",
-  email: "business@example.com",
-  role: "BUSINESS",
-  verificationStatus: "VERIFIED",
+  id: 'business-1',
+  email: 'business@example.com',
+  role: 'BUSINESS',
+  verificationStatus: 'VERIFIED',
 });
 const creatorToken = token({
-  id: "creator-1",
-  email: "creator@example.com",
-  role: "CREATOR",
-  verificationStatus: "VERIFIED",
+  id: 'creator-1',
+  email: 'creator@example.com',
+  role: 'CREATOR',
+  verificationStatus: 'VERIFIED',
 });
 const adminToken = token({
-  id: "admin-1",
-  email: "admin@example.com",
-  role: "ADMIN",
-  verificationStatus: "VERIFIED",
+  id: 'admin-1',
+  email: 'admin@example.com',
+  role: 'ADMIN',
+  verificationStatus: 'VERIFIED',
 });
 const consumerToken = token({
-  id: "consumer-1",
-  email: "consumer@example.com",
-  role: "CONSUMER",
-  verificationStatus: "VERIFIED",
+  id: 'consumer-1',
+  email: 'consumer@example.com',
+  role: 'CONSUMER',
+  verificationStatus: 'VERIFIED',
 });
 
-describe("Core integration rules", () => {
+describe('Core integration rules', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("covers register -> verify -> login -> refresh -> logout auth flow", async () => {
-    const hashedPassword = await argon2.hash("password123");
+  it('covers register -> verify -> login -> refresh -> logout auth flow', async () => {
+    const hashedPassword = await argon2.hash('password123');
 
     mockPrisma.user.findUnique
       .mockResolvedValueOnce(null)
       .mockResolvedValueOnce({
-        id: "auth-user-1",
-        name: "Auth User",
-        email: "auth@example.com",
+        id: 'auth-user-1',
+        name: 'Auth User',
+        email: 'auth@example.com',
         password: hashedPassword,
-        role: "CREATOR",
-        verificationStatus: "VERIFIED",
+        role: 'CREATOR',
+        verificationStatus: 'VERIFIED',
       })
       .mockResolvedValueOnce({
-        id: "auth-user-1",
-        name: "Auth User",
-        email: "auth@example.com",
+        id: 'auth-user-1',
+        name: 'Auth User',
+        email: 'auth@example.com',
         password: hashedPassword,
-        role: "CREATOR",
-        verificationStatus: "VERIFIED",
+        role: 'CREATOR',
+        verificationStatus: 'VERIFIED',
       });
     mockPrisma.user.create.mockResolvedValue({
-      id: "auth-user-1",
-      name: "Auth User",
-      email: "auth@example.com",
+      id: 'auth-user-1',
+      name: 'Auth User',
+      email: 'auth@example.com',
       password: hashedPassword,
-      role: "CREATOR",
-      verificationStatus: "PENDING",
+      role: 'CREATOR',
+      verificationStatus: 'PENDING',
     });
     mockPrisma.user.update.mockResolvedValue({
-      id: "auth-user-1",
-      name: "Auth User",
-      email: "auth@example.com",
+      id: 'auth-user-1',
+      name: 'Auth User',
+      email: 'auth@example.com',
       password: hashedPassword,
-      role: "CREATOR",
-      verificationStatus: "VERIFIED",
+      role: 'CREATOR',
+      verificationStatus: 'VERIFIED',
     });
 
     await request(app)
-      .post("/api/v1/auth/register")
+      .post('/api/v1/auth/register')
       .send({
-        name: "Auth User",
-        email: "auth@example.com",
-        password: "password123",
-        role: "CREATOR",
+        name: 'Auth User',
+        email: 'auth@example.com',
+        password: 'password123',
+        role: 'CREATOR',
       })
       .expect(201);
 
-    await request(app)
-      .patch("/api/v1/auth/verify")
-      .send({ email: "auth@example.com" })
-      .expect(200);
+    await request(app).patch('/api/v1/auth/verify').send({ email: 'auth@example.com' }).expect(200);
 
     const login = await request(app)
-      .post("/api/v1/auth/login")
-      .send({ email: "auth@example.com", password: "password123" })
+      .post('/api/v1/auth/login')
+      .send({ email: 'auth@example.com', password: 'password123' })
       .expect(200);
     expect(login.body.accessToken).toBeTruthy();
     expect(login.body.refreshToken).toBeTruthy();
 
     const refreshed = await request(app)
-      .post("/api/v1/auth/refresh")
+      .post('/api/v1/auth/refresh')
       .send({ refreshToken: login.body.refreshToken })
       .expect(200);
     expect(refreshed.body.accessToken).toBeTruthy();
 
     await request(app)
-      .post("/api/v1/auth/logout")
+      .post('/api/v1/auth/logout')
       .send({ refreshToken: refreshed.body.refreshToken })
       .expect(204);
   });
 
-  it("enforces roles on protected route categories", async () => {
+  it('enforces roles on protected route categories', async () => {
     await request(app)
-      .post("/api/v1/content")
-      .set("Authorization", `Bearer ${businessToken}`)
+      .post('/api/v1/content')
+      .set('Authorization', `Bearer ${businessToken}`)
       .send({})
       .expect(403);
 
     await request(app)
-      .post("/api/v1/campaigns")
-      .set("Authorization", `Bearer ${creatorToken}`)
+      .post('/api/v1/campaigns')
+      .set('Authorization', `Bearer ${creatorToken}`)
       .send({})
       .expect(403);
 
     await request(app)
-      .post("/api/v1/payments/withdraw")
-      .set("Authorization", `Bearer ${businessToken}`)
+      .post('/api/v1/payments/withdraw')
+      .set('Authorization', `Bearer ${businessToken}`)
       .send({ amount: 100 })
       .expect(403);
   });
 
-  
-
-  it("enforces campaign budget integrity and status transition guards", async () => {
+  it('enforces campaign budget integrity and status transition guards', async () => {
     await request(app)
-      .post("/api/v1/campaigns")
-      .set("Authorization", `Bearer ${businessToken}`)
+      .post('/api/v1/campaigns')
+      .set('Authorization', `Bearer ${businessToken}`)
       .send({
-        title: "Tiny budget",
+        title: 'Tiny budget',
         budget: 1,
-        niche_filter: "fashion",
+        niche_filter: 'fashion',
         min_audience_size: 0,
         max_creators: 2,
-        startDate: "2026-06-01T00:00:00.000Z",
-        endDate: "2026-06-30T00:00:00.000Z",
+        startDate: '2026-06-01T00:00:00.000Z',
+        endDate: '2026-06-30T00:00:00.000Z',
       })
       .expect(400)
       .expect(({ body }) => {
-        expect(body.error).toBe("CAMPAIGN_BUDGET_TOO_LOW");
+        expect(body.error).toBe('CAMPAIGN_BUDGET_TOO_LOW');
       });
 
     mockPrisma.campaign.findFirst
       .mockResolvedValueOnce({
-        id: "campaign-1",
-        businessId: "business-1",
-        status: "DRAFT",
+        id: 'campaign-1',
+        businessId: 'business-1',
+        status: 'DRAFT',
       })
       .mockResolvedValueOnce({
-        id: "campaign-1",
-        businessId: "business-1",
-        status: "CANCELLED",
+        id: 'campaign-1',
+        businessId: 'business-1',
+        status: 'CANCELLED',
       });
     mockPrisma.campaign.update.mockResolvedValue({
-      id: "campaign-1",
-      status: "ACTIVE",
+      id: 'campaign-1',
+      status: 'ACTIVE',
     });
 
     await request(app)
-      .patch("/api/v1/campaigns/campaign-1/status")
-      .set("Authorization", `Bearer ${businessToken}`)
-      .send({ status: "COMPLETED" })
+      .patch('/api/v1/campaigns/campaign-1/status')
+      .set('Authorization', `Bearer ${businessToken}`)
+      .send({ status: 'COMPLETED' })
       .expect(400)
       .expect(({ body }) => {
-        expect(body.error).toBe("INVALID_CAMPAIGN_STATUS_TRANSITION");
+        expect(body.error).toBe('INVALID_CAMPAIGN_STATUS_TRANSITION');
       });
 
     await request(app)
-      .patch("/api/v1/campaigns/campaign-1/status")
-      .set("Authorization", `Bearer ${businessToken}`)
-      .send({ status: "ACTIVE" })
+      .patch('/api/v1/campaigns/campaign-1/status')
+      .set('Authorization', `Bearer ${businessToken}`)
+      .send({ status: 'ACTIVE' })
       .expect(400)
       .expect(({ body }) => {
-        expect(body.error).toBe("CAMPAIGN_STATUS_TERMINAL");
+        expect(body.error).toBe('CAMPAIGN_STATUS_TERMINAL');
       });
   });
 
-  it("replays idempotency keys for in-progress and completed campaign disbursements", async () => {
+  it('replays idempotency keys for in-progress and completed campaign disbursements', async () => {
     mockPrisma.campaign.findUnique.mockResolvedValue({
-      id: "campaign-1",
-      businessId: "business-1",
-      status: "IN_PROGRESS",
+      id: 'campaign-1',
+      businessId: 'business-1',
+      status: 'IN_PROGRESS',
       budget: 100,
-      applications: [{ creatorId: "creator-1", creator: { creatorProfile: { payout_account: "momo" } } }],
+      applications: [
+        { creatorId: 'creator-1', creator: { creatorProfile: { payout_account: 'momo' } } },
+      ],
     });
 
     mockPrisma.paymentTransaction.findMany
       .mockResolvedValueOnce([
         {
-          id: "tx-pending",
-          paymentStatus: "PENDING",
-          idempotencyKey: "same-key",
+          id: 'tx-pending',
+          paymentStatus: 'PENDING',
+          idempotencyKey: 'same-key',
         },
       ])
       .mockResolvedValueOnce([
         {
-          id: "tx-completed",
-          paymentStatus: "COMPLETED",
-          idempotencyKey: "same-key",
+          id: 'tx-completed',
+          paymentStatus: 'COMPLETED',
+          idempotencyKey: 'same-key',
         },
       ]);
 
     await request(app)
-      .post("/api/v1/campaigns/campaign-1/disburse")
-      .set("Authorization", `Bearer ${businessToken}`)
-      .set("idempotency-key", "same-key")
+      .post('/api/v1/campaigns/campaign-1/disburse')
+      .set('Authorization', `Bearer ${businessToken}`)
+      .set('idempotency-key', 'same-key')
       .send({})
       .expect(202);
 
     await request(app)
-      .post("/api/v1/campaigns/campaign-1/disburse")
-      .set("Authorization", `Bearer ${businessToken}`)
-      .set("idempotency-key", "same-key")
+      .post('/api/v1/campaigns/campaign-1/disburse')
+      .set('Authorization', `Bearer ${businessToken}`)
+      .set('idempotency-key', 'same-key')
       .send({})
       .expect(200);
   });
 
-  it("blocks withdrawals when creator payout_account is missing", async () => {
+  it('blocks withdrawals when creator payout_account is missing', async () => {
     mockPrisma.creatorProfile.findUnique.mockResolvedValue({
-      userId: "creator-1",
+      userId: 'creator-1',
       payout_account: null,
     });
 
     await request(app)
-      .post("/api/v1/payments/withdraw")
-      .set("Authorization", `Bearer ${creatorToken}`)
+      .post('/api/v1/payments/withdraw')
+      .set('Authorization', `Bearer ${creatorToken}`)
       .send({ amount: 1000 })
       .expect(400)
       .expect(({ body }) => {
-        expect(body.error).toBe("PAYOUT_ACCOUNT_MISSING");
+        expect(body.error).toBe('PAYOUT_ACCOUNT_MISSING');
       });
   });
 
-  it("blocks consumers from initiating messages", async () => {
+  it('blocks consumers from initiating messages', async () => {
     await request(app)
-      .post("/api/v1/messages")
-      .set("Authorization", `Bearer ${consumerToken}`)
-      .send({ recipientId: "creator-1", message: "Hello" })
+      .post('/api/v1/messages')
+      .set('Authorization', `Bearer ${consumerToken}`)
+      .send({ recipientId: 'creator-1', message: 'Hello' })
       .expect(403)
       .expect(({ body }) => {
-        expect(body.error).toBe("CONSUMER_CANNOT_INITIATE");
+        expect(body.error).toBe('CONSUMER_CANNOT_INITIATE');
       });
   });
 });
