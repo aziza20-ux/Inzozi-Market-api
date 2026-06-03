@@ -41,10 +41,7 @@ const messageRouter = express.Router();
  *       201:
  *         description: Message created
  */
-<<<<<<< HEAD
-messageRouter.post("/", authenticate, createMessage);
-=======
-router.post('/', authenticate, createMessage);
+ messageRouter .post('/', authenticate, createMessage);
 
 // GET /v1/messages
 /**
@@ -71,8 +68,7 @@ router.post('/', authenticate, createMessage);
  *       200:
  *         description: Message list
  */
-router.get('/', authenticate, getMessages);
->>>>>>> facc8304788f6ce43a2cc834e7417930d49b0848
+ messageRouter .get('/', authenticate, getMessages);
 
 // GET /v1/messages/conversations
 /**
@@ -88,11 +84,7 @@ router.get('/', authenticate, getMessages);
  *       200:
  *         description: Conversation list
  */
-<<<<<<< HEAD
-messageRouter.get("/conversations", authenticate, listConversations);
-=======
-router.get('/conversations', authenticate, listConversations);
->>>>>>> facc8304788f6ce43a2cc834e7417930d49b0848
+ messageRouter .get('/conversations', authenticate, listConversations);
 
 // GET /v1/messages/conversations/:convId
 /**
@@ -114,11 +106,7 @@ router.get('/conversations', authenticate, listConversations);
  *       200:
  *         description: Conversation thread
  */
-<<<<<<< HEAD
-messageRouter.get("/conversations/:convId", authenticate, getConversationThread);
-=======
-router.get('/conversations/:convId', authenticate, getConversationThread);
->>>>>>> facc8304788f6ce43a2cc834e7417930d49b0848
+ messageRouter .get('/conversations/:convId', authenticate, getConversationThread);
 
 // PATCH /v1/messages/:id/read
 /**
@@ -141,11 +129,7 @@ router.get('/conversations/:convId', authenticate, getConversationThread);
  *       200:
  *         description: Updated message
  */
-<<<<<<< HEAD
-messageRouter.patch("/:id/read", authenticate, markMessageRead);
-=======
-router.patch('/:id/read', authenticate, markMessageRead);
->>>>>>> facc8304788f6ce43a2cc834e7417930d49b0848
+ messageRouter .patch('/:id/read', authenticate, markMessageRead);
 
 // DELETE /v1/messages/:id
 /**
@@ -168,10 +152,6 @@ router.patch('/:id/read', authenticate, markMessageRead);
  *       200:
  *         description: Updated message
  */
-<<<<<<< HEAD
-messageRouter.delete("/:id", authenticate, deleteMessage);
-=======
-router.delete('/:id', authenticate, deleteMessage);
->>>>>>> facc8304788f6ce43a2cc834e7417930d49b0848
+ messageRouter .delete('/:id', authenticate, deleteMessage);
 
 export default messageRouter;
