@@ -33,7 +33,8 @@ function getMediaUrl(body) {
 async function resolveContentMedia(req) {
     const file = req.file;
     if (file) {
-        const uploaded = await (0, cloudinary_js_1.uploadToCloudinary)(file.buffer, "inzozi/content");
+        const resourceType = file.mimetype.startsWith("video/") ? "video" : "auto";
+        const uploaded = await (0, cloudinary_js_1.uploadToCloudinary)(file.buffer, "inzozi/content", resourceType);
         return uploaded.url;
     }
     return getMediaUrl(req.body);
@@ -79,6 +80,9 @@ async function createContent(req, res) {
                 });
             }
         }
+        const creatorProfile = await prisma_js_1.default.creatorProfile.findUnique({
+            where: { userId },
+        });
         const created = await prisma_js_1.default.content.create({
             data: {
                 title,
@@ -90,11 +94,13 @@ async function createContent(req, res) {
                 price: visibility === "paid" ? Number(price) : null,
                 currency: visibility === "paid" ? String(currency) : null,
                 creatorId: userId,
+                ...(creatorProfile ? { creatorProfileId: creatorProfile.id } : {}),
             },
         });
         res.status(201).json(created);
     }
     catch (e) {
+        console.error("createContent error:", e);
         res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
     }
 }
@@ -131,7 +137,7 @@ async function getContent(req, res) {
         // Public endpoint: no moderation gating configured.
         if (isPaidContent(content.visibility)) {
             // Requires completed premium purchase.
-            const user = req.user;
+            const user = await prisma_js_1.default.user.findFirst({ where: { id: req.userId } });
             // If no user, deny.
             if (!user) {
                 return res.status(403).json({ error: "CONTENT_ACCESS_DENIED" });
@@ -204,8 +210,11 @@ async function patchContent(req, res) {
 }
 async function deleteContent(req, res) {
     try {
-        const user = req.user;
+        const user = await prisma_js_1.default.user.findFirst({ where: { id: req.userId } });
         const { id } = req.params;
+        if (!user) {
+            return res.status(401).json({ error: "UNAUTHORIZED" });
+        }
         const content = await prisma_js_1.default.content.findFirst({
             where: { id: String(id), deletedAt: null },
         });
@@ -218,7 +227,7 @@ async function deleteContent(req, res) {
             where: { id: String(id) },
             data: { deletedAt: new Date() },
         });
-        res.status(204).send();
+        res.status(204).json({ message: "deleted successfully", id: id });
     }
     catch (e) {
         res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });

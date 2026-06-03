@@ -10,6 +10,9 @@ const mockPrisma = {
         findMany: jest.fn(),
         update: jest.fn(),
     },
+    subscription: {
+        findFirst: jest.fn(),
+    },
 };
 jest.mock("../config/prisma.js", () => ({
     __esModule: true,
@@ -26,7 +29,13 @@ describe("Messages", () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
-    it("blocks consumers from initiating messages", async () => {
+    it("blocks fans from messaging paid creators without an active subscription", async () => {
+        mockPrisma.user.findUnique.mockResolvedValue({
+            id: "creator-1",
+            role: "CREATOR",
+            creatorProfile: { subscriptionFee: 10 },
+        });
+        mockPrisma.subscription.findFirst.mockResolvedValue(null);
         const req = {
             user: { id: "consumer-1", role: "CONSUMER" },
             body: { recipientId: "creator-1", message: "Hello" },
@@ -35,9 +44,62 @@ describe("Messages", () => {
         await (0, message_controller_js_1.createMessage)(req, res);
         expect(res.status).toHaveBeenCalledWith(403);
         expect(res.json).toHaveBeenCalledWith({
-            error: "CONSUMER_CANNOT_INITIATE",
+            error: "FAN_MUST_SUBSCRIBE_TO_MESSAGE",
         });
         expect(mockPrisma.message.create).not.toHaveBeenCalled();
+    });
+    it("allows fans to message free creators", async () => {
+        mockPrisma.user.findUnique.mockResolvedValue({
+            id: "creator-1",
+            role: "CREATOR",
+            creatorProfile: { subscriptionFee: 0 },
+        });
+        mockPrisma.message.create.mockResolvedValue({
+            id: "message-1",
+            senderId: "consumer-1",
+            receiverId: "creator-1",
+            conversationId: (0, message_controller_js_1.deriveConversationId)("consumer-1", "creator-1"),
+            message: "Hello",
+        });
+        const req = {
+            user: { id: "consumer-1", role: "CONSUMER" },
+            body: { recipientId: "creator-1", message: "Hello" },
+        };
+        const res = createResponse();
+        await (0, message_controller_js_1.createMessage)(req, res);
+        expect(mockPrisma.subscription.findFirst).not.toHaveBeenCalled();
+        expect(mockPrisma.message.create).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(201);
+    });
+    it("allows fans to message paid creators with an active subscription", async () => {
+        mockPrisma.user.findUnique.mockResolvedValue({
+            id: "creator-1",
+            role: "CREATOR",
+            creatorProfile: { subscriptionFee: 10 },
+        });
+        mockPrisma.subscription.findFirst.mockResolvedValue({ id: "sub-1" });
+        mockPrisma.message.create.mockResolvedValue({
+            id: "message-1",
+            senderId: "consumer-1",
+            receiverId: "creator-1",
+            conversationId: (0, message_controller_js_1.deriveConversationId)("consumer-1", "creator-1"),
+            message: "Hello",
+        });
+        const req = {
+            user: { id: "consumer-1", role: "CONSUMER" },
+            body: { recipientId: "creator-1", message: "Hello" },
+        };
+        const res = createResponse();
+        await (0, message_controller_js_1.createMessage)(req, res);
+        expect(mockPrisma.subscription.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+            where: expect.objectContaining({
+                subscriberId: "consumer-1",
+                creatorId: "creator-1",
+                status: "ACTIVE",
+            }),
+        }));
+        expect(mockPrisma.message.create).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(201);
     });
     it("derives a deterministic conversation ID by sorting and hashing user IDs", () => {
         const fromA = (0, message_controller_js_1.deriveConversationId)("user-b", "user-a");
@@ -46,7 +108,11 @@ describe("Messages", () => {
         expect(fromA).toMatch(/^[a-f0-9]{32}$/);
     });
     it("creates messages with the derived conversation ID", async () => {
-        mockPrisma.user.findUnique.mockResolvedValue({ id: "user-b" });
+        mockPrisma.user.findUnique.mockResolvedValue({
+            id: "user-b",
+            role: "BUSINESS",
+            creatorProfile: null,
+        });
         mockPrisma.message.create.mockResolvedValue({
             id: "message-1",
             senderId: "user-a",

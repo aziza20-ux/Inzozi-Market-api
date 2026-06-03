@@ -22,8 +22,8 @@ export const authenticate= async (req:AuthRequest,res:Response, next:NextFunctio
     }
     const token = header.split(" ")[1]
     try{
-        const decoded = jwt.verify(token!, JWT_SECRET) as { userId: string; role: string }
-        req.userId=decoded.userId;
+        const decoded = jwt.verify(token!, JWT_SECRET) as { userId?: string; id?: string; role: string }
+        req.userId = decoded.userId ?? decoded.id;
         if (isAuthRole(decoded.role)) {
             req.role = decoded.role;
         }
