@@ -19,7 +19,7 @@ const authenticate = async (req, res, next) => {
     const token = header.split(" ")[1];
     try {
         const decoded = jsonwebtoken_1.default.verify(token, JWT_SECRET);
-        req.userId = decoded.userId;
+        req.userId = decoded.userId ?? decoded.id;
         if (isAuthRole(decoded.role)) {
             req.role = decoded.role;
         }

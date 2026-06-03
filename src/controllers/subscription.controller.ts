@@ -1,13 +1,14 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import prisma from '../config/prisma';
 import { AuthRequest } from '../middleware/auth';
 
 export const subscribeToCreator = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const subscriberId = req.userId;
-    const { creatorId } = req.params;
+    const rawCreatorId = req.params.creatorId;
+    const creatorId = Array.isArray(rawCreatorId) ? rawCreatorId[0] : rawCreatorId;
 
-    if (!subscriberId) {
+    if (!subscriberId || !creatorId) {
       res.status(401).json({ error: 'Unauthorized' });
       return;
     }

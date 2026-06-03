@@ -32,6 +32,9 @@ const mockPrisma = {
   message: {
     create: jest.fn(),
   },
+  subscription: {
+    findFirst: jest.fn(),
+  },
 };
 
 jest.mock("../config/prisma.js", () => ({
@@ -288,14 +291,21 @@ describe("Core integration rules", () => {
       });
   });
 
-  it("blocks consumers from initiating messages", async () => {
+  it("blocks fans from messaging paid creators without an active subscription", async () => {
+    mockPrisma.user.findUnique.mockResolvedValue({
+      id: "creator-1",
+      role: "CREATOR",
+      creatorProfile: { subscriptionFee: 10 },
+    });
+    mockPrisma.subscription.findFirst.mockResolvedValue(null);
+
     await request(app)
       .post("/api/v1/messages")
       .set("Authorization", `Bearer ${consumerToken}`)
       .send({ recipientId: "creator-1", message: "Hello" })
       .expect(403)
       .expect(({ body }) => {
-        expect(body.error).toBe("CONSUMER_CANNOT_INITIATE");
+        expect(body.error).toBe("FAN_MUST_SUBSCRIBE_TO_MESSAGE");
       });
   });
 });

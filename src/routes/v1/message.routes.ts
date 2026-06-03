@@ -1,12 +1,13 @@
-import express from "express";
-import { authenticate } from "../../middleware/auth.js";
+import express from 'express';
+import { authenticate } from '../../middleware/auth.js';
 import {
   createMessage,
   deleteMessage,
   getConversationThread,
+  getMessages,
   listConversations,
   markMessageRead,
-} from "../../controllers/message.controller.js";
+} from '../../controllers/message.controller.js';
 
 const router = express.Router();
 
@@ -40,7 +41,34 @@ const router = express.Router();
  *       201:
  *         description: Message created
  */
-router.post("/", authenticate, createMessage);
+router.post('/', authenticate, createMessage);
+
+// GET /v1/messages
+/**
+ * @openapi
+ * /messages:
+ *   get:
+ *     tags:
+ *       - Messages
+ *     summary: List messages for the authenticated user
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 25
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *     responses:
+ *       200:
+ *         description: Message list
+ */
+router.get('/', authenticate, getMessages);
 
 // GET /v1/messages/conversations
 /**
@@ -56,7 +84,7 @@ router.post("/", authenticate, createMessage);
  *       200:
  *         description: Conversation list
  */
-router.get("/conversations", authenticate, listConversations);
+router.get('/conversations', authenticate, listConversations);
 
 // GET /v1/messages/conversations/:convId
 /**
@@ -78,7 +106,7 @@ router.get("/conversations", authenticate, listConversations);
  *       200:
  *         description: Conversation thread
  */
-router.get("/conversations/:convId", authenticate, getConversationThread);
+router.get('/conversations/:convId', authenticate, getConversationThread);
 
 // PATCH /v1/messages/:id/read
 /**
@@ -101,7 +129,7 @@ router.get("/conversations/:convId", authenticate, getConversationThread);
  *       200:
  *         description: Updated message
  */
-router.patch("/:id/read", authenticate, markMessageRead);
+router.patch('/:id/read', authenticate, markMessageRead);
 
 // DELETE /v1/messages/:id
 /**
@@ -124,6 +152,6 @@ router.patch("/:id/read", authenticate, markMessageRead);
  *       200:
  *         description: Updated message
  */
-router.delete("/:id", authenticate, deleteMessage);
+router.delete('/:id', authenticate, deleteMessage);
 
 export default router;
