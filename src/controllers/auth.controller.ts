@@ -3,7 +3,13 @@ import argon2 from 'argon2';
 import prisma from '../config/prisma';
 import { redis } from '../services/redis.service';
 import { generateAccessToken, generateRefreshToken, verifyToken } from '../services/token.service';
-import { registerSchema, loginSchema, verifySchema, refreshSchema } from '../validators/schema.validators';
+import {
+  registerSchema,
+  loginSchema,
+  verifySchema,
+  resendOtpSchema,
+  refreshSchema,
+} from '../validators/schema.validators';
 import { sendEmail } from '../config/email.js';
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -16,10 +22,20 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const existing = await prisma.user.findUnique({ where: { email: identifier } });
-    if (existing) {
-      res.status(409).json({ error: 'Email already in use' });
-      return;
+    if (data.email) {
+      const existingByEmail = await prisma.user.findUnique({ where: { email: data.email } });
+      if (existingByEmail) {
+        res.status(409).json({ error: 'Email already in use' });
+        return;
+      }
+    }
+
+    if (data.phone) {
+      const existingByPhone = await prisma.user.findUnique({ where: { phone: data.phone } });
+      if (existingByPhone) {
+        res.status(409).json({ error: 'Phone already in use' });
+        return;
+      }
     }
 
     const password_hash = await argon2.hash(data.password);
@@ -27,10 +43,11 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     const user = await prisma.user.create({
       data: {
         name: data.name,
-        email: identifier,
+        email: data.email ?? null,
+        phone: data.phone ?? null,
         password: password_hash,
-        role: data.role
-      }
+        role: data.role,
+      },
     });
     // generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -78,7 +95,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const user = await prisma.user.findUnique({ where: { email: identifier } });
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [{ email: identifier }, { phone: identifier }],
+      },
+    });
 
     if (!user) {
       res.status(401).json({ error: 'Invalid credentials' });
@@ -104,15 +125,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 export const verify = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { otp, email, userId } = verifySchema.parse(req.body) as {
+    const { otp, email, phone, userId } = verifySchema.parse(req.body) as {
       otp: string;
       email?: string;
+      phone?: string;
       userId?: string;
     };
 
     const user = userId
       ? await prisma.user.findUnique({ where: { id: userId } })
-      : await prisma.user.findUnique({ where: { email: email! } });
+      : email
+        ? await prisma.user.findUnique({ where: { email } })
+        : await prisma.user.findUnique({ where: { phone: phone! } });
 
     if (!user) {
       res.status(404).json({ error: 'User not found' });
@@ -134,6 +158,59 @@ export const verify = async (req: Request, res: Response): Promise<void> => {
     await prisma.user.update({ where: { id: user.id }, data: { verificationStatus: 'VERIFIED' } });
     await redis.del(`otp:${user.id}`);
     res.status(200).json({ message: 'User verified' });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message || err.errors });
+  }
+};
+
+export const resendOtp = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, phone, userId } = resendOtpSchema.parse(req.body) as {
+      email?: string;
+      phone?: string;
+      userId?: string;
+    };
+
+    const user = userId
+      ? await prisma.user.findUnique({ where: { id: userId } })
+      : email
+        ? await prisma.user.findUnique({ where: { email } })
+        : await prisma.user.findUnique({ where: { phone: phone! } });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    try {
+      await redis.set(`otp:${user.id}`, otp, 'EX', 60 * 5);
+    } catch (e) {
+      console.error('Failed to store OTP in redis', e);
+    }
+
+    if (user.email) {
+      try {
+        await sendEmail(
+          user.email,
+          'Your Inzozi Market verification code',
+          `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111;">
+              <h2>Your verification code</h2>
+              <p>Use the code below to verify your account. It expires in 5 minutes.</p>
+              <p style="font-size: 28px; font-weight: 700; letter-spacing: 4px;">${otp}</p>
+            </div>
+          `,
+        );
+      } catch (e) {
+        console.error('Failed to send OTP email', e);
+        console.log(`OTP for ${user.email}: ${otp}`);
+      }
+    } else if (user.phone) {
+      console.log(`Resent OTP for ${user.phone}: ${otp}`);
+    }
+
+    res.status(200).json({ message: 'OTP resent' });
   } catch (err: any) {
     res.status(400).json({ error: err.message || err.errors });
   }

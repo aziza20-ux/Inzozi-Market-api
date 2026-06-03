@@ -1,8 +1,43 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const multer_js_1 = __importDefault(require("../../config/multer.js"));
 const users_controller_1 = require("../../controllers/users.controller");
+const auth_1 = require("../../middleware/auth");
+const upload_controllers_js_1 = require("../../controllers/upload.controllers.js");
 const userRoutes = (0, express_1.Router)();
+/**
+ * @openapi
+ * /users/profile-picture:
+ *   post:
+ *     tags:
+ *       - Users
+ *     summary: Upload or replace the authenticated user's profile picture
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [profilePicture]
+ *             properties:
+ *               profilePicture:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Profile picture uploaded successfully
+ *       400:
+ *         description: No file uploaded
+ *       401:
+ *         description: Unauthorized
+ */
+userRoutes.post("/profile-picture", auth_1.authenticate, multer_js_1.default.single("profilePicture"), upload_controllers_js_1.uploadProfilePicture);
 /**
  * @openapi
  * /users:

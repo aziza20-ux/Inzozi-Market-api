@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticate = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-const allowedRoles = ["ADMIN", "CREATOR", "BUSINESS", "CONSUMER", "SYSTEM"];
+const allowedRoles = ['ADMIN', 'CREATOR', 'BUSINESS', 'CONSUMER', 'SYSTEM'];
 function isAuthRole(role) {
     return allowedRoles.includes(role);
 }
@@ -16,12 +16,13 @@ const authenticate = async (req, res, next) => {
         res.status(401).json({ error: 'Invalid token' });
         return;
     }
-    const token = header.split(" ")[1];
+    const token = header.split(' ')[1];
     try {
         const decoded = jsonwebtoken_1.default.verify(token, JWT_SECRET);
         req.userId = decoded.userId;
         if (isAuthRole(decoded.role)) {
             req.role = decoded.role;
+            req.user = { id: decoded.userId, role: decoded.role };
         }
         next();
     }

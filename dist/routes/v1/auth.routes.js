@@ -91,6 +91,8 @@ router.post('/login', auth_controller_1.login); //done
  *               email:
  *                 type: string
  *                 format: email
+ *               phone:
+ *                 type: string
  *               otp:
  *                 type: string
  *     responses:
@@ -100,6 +102,39 @@ router.post('/login', auth_controller_1.login); //done
  *         description: Invalid or expired OTP
  */
 router.post('/verify', auth_controller_1.verify);
+/**
+ * @openapi
+ * /auth/resend-otp:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Resend an OTP to a registered user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 format: uuid
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               phone:
+ *                 type: string
+ *             oneOf:
+ *               - required: [userId]
+ *               - required: [email]
+ *               - required: [phone]
+ *     responses:
+ *       200:
+ *         description: OTP resent successfully
+ *       404:
+ *         description: User not found
+ */
+router.post('/resend-otp', auth_controller_1.resendOtp);
 /**
  * @openapi
  * /auth/refresh:

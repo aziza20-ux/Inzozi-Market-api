@@ -33,6 +33,7 @@ export const authenticate = async (
     req.userId = decoded.userId;
     if (isAuthRole(decoded.role)) {
       req.role = decoded.role;
+      req.user = { id: decoded.userId, role: decoded.role };
     }
     next();
   } catch {

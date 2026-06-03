@@ -1,5 +1,12 @@
 import { Router } from 'express';
-import { register, login, verify, refresh, logout } from '../../controllers/auth.controller';
+import {
+  register,
+  login,
+  verify,
+  resendOtp,
+  refresh,
+  logout,
+} from '../../controllers/auth.controller';
 
 const router = Router();
 
@@ -93,6 +100,8 @@ router.post('/login', login); //done
  *               email:
  *                 type: string
  *                 format: email
+ *               phone:
+ *                 type: string
  *               otp:
  *                 type: string
  *     responses:
@@ -102,6 +111,40 @@ router.post('/login', login); //done
  *         description: Invalid or expired OTP
  */
 router.post('/verify', verify);
+
+/**
+ * @openapi
+ * /auth/resend-otp:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Resend an OTP to a registered user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 format: uuid
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               phone:
+ *                 type: string
+ *             oneOf:
+ *               - required: [userId]
+ *               - required: [email]
+ *               - required: [phone]
+ *     responses:
+ *       200:
+ *         description: OTP resent successfully
+ *       404:
+ *         description: User not found
+ */
+router.post('/resend-otp', resendOtp);
 
 /**
  * @openapi
