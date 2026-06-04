@@ -1,9 +1,10 @@
 import type { Request, Response } from "express";
+import { file as MulterFile } from "multer";
 import prisma from "../config/prisma.js";
+import { storageService} from "../services/storage.service.js";
+import { uploadToCloudinary} from "../config/cloudinary.js";
+import { AuthRequest } from "../middleware/auth.js";
 
-<<<<<<< HEAD
-export const createContent = async (req: Request, res: Response) => {
-=======
 type Visibility = "public" | "paid";
 
 async function hasCompletedPremiumPurchase(userId: string, contentId: string) {
@@ -37,7 +38,6 @@ async function resolveContentMedia(req: Request) {
 }
 
 export async function generateContentUploadUrl(req: Request, res: Response) {
->>>>>>> origin/espy
   try {
     const user = req.user;
 

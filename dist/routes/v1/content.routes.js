@@ -8,7 +8,6 @@ const multer_js_1 = require("../../config/multer.js");
 const auth_js_1 = require("../../middleware/auth.js");
 const requireVerified_js_1 = require("../../middleware/requireVerified.js");
 const requireRole_js_1 = require("../../middleware/requireRole.js");
-<<<<<<< HEAD
 const content_controller_js_1 = require("../../controllers/content.controller.js");
 const upload_controllers_js_1 = require("../../controllers/upload.controllers.js");
 const router = express_1.default.Router();
@@ -110,17 +109,6 @@ router.post('/media', auth_js_1.authenticate, requireVerified_js_1.requireVerifi
  *         description: Invalid request body
  */
 router.post('/', auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)('CREATOR'), multer_js_1.mediaUpload.single('media'), content_controller_js_1.createContent);
-=======
-const content_controllers_js_1 = require("../../controllers/content.controllers.js");
-const upload_controllers_js_1 = require("../../controllers/upload.controllers.js");
-const router = express_1.default.Router();
-// POST /v1/content/upload-url
-router.post("/upload-url", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)("CREATOR"), content_controllers_js_1.generateContentUploadUrl);
-// POST /v1/content/media
-router.post("/media", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)("CREATOR"), multer_js_1.mediaUpload.single("media"), upload_controllers_js_1.uploadCreatorMedia);
-// POST /v1/content
-router.post("/", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)("CREATOR"), multer_js_1.mediaUpload.single("media"), content_controllers_js_1.createContent);
->>>>>>> origin/espy
 // GET /v1/content
 /**
  * @openapi

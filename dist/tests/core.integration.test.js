@@ -160,17 +160,10 @@ describe('Core integration rules', () => {
             .send({ amount: 100 })
             .expect(403);
     });
-<<<<<<< HEAD
     it('enforces campaign budget integrity and status transition guards', async () => {
         await (0, supertest_1.default)(index_js_1.default)
             .post('/api/v1/campaigns')
             .set('Authorization', `Bearer ${businessToken}`)
-=======
-    it("enforces campaign budget integrity and status transition guards", async () => {
-        await (0, supertest_1.default)(app_js_1.default)
-            .post("/api/v1/campaigns")
-            .set("Authorization", `Bearer ${businessToken}`)
->>>>>>> origin/espy
             .send({
             title: 'Tiny budget',
             budget: 1,

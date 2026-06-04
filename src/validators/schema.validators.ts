@@ -39,10 +39,6 @@ export const userCreateSchema = z.object({
 });
 
 export const registerSchema = z
-<<<<<<< HEAD
-  .object({
-    name: z.string().min(1).optional(),
-=======
     .object({
         name: z.string().min(1).optional(),
         email: z.string().email().optional(),
@@ -53,19 +49,10 @@ export const registerSchema = z
     .refine((data) => data.email || data.phone, { message: "Either email or phone is required" });
 
 export const loginSchema = z.object({
->>>>>>> origin/espy
-    email: z.string().email().optional(),
-    phone: z.string().optional(),
-    password: z.string().min(8),
-    role: roleEnum,
-  })
-  .refine((data) => data.email || data.phone, { message: 'Either email or phone is required' });
-
-export const loginSchema = z.object({
   email: z.string().email().optional(),
   phone: z.string().optional(),
-  password: z.string(),
-});
+  password: z.string().min(8),
+}).refine((data) => data.email || data.phone, { message: 'Either email or phone is required' });
 
 export const verifySchema = z
   .object({
@@ -120,16 +107,6 @@ export const campaignStatusUpdateSchema = z.object({
 });
 
 export const creatorProfileCreateSchema = z.object({
-<<<<<<< HEAD
-  bio: z.string().optional(),
-  specialization: z.string().optional(),
-  socialLinks: z.string().optional(),
-  location: z.string().optional(),
-  payout_account: z.string().optional(),
-  payout_network: z.string().optional(),
-  earnings: z.number().optional(),
-  followers: z.number().int().optional(),
-=======
     bio: z.string().optional(),
     specialization: z.string().optional(),
     socialLinks: z.string().optional(),
@@ -140,7 +117,6 @@ export const creatorProfileCreateSchema = z.object({
     earnings: z.number().optional(),
     followers: z.number().int().optional(),
     subscriptionFee: z.number().optional(),
->>>>>>> origin/espy
 });
 
 export const creatorProfileUpdateSchema = creatorProfileCreateSchema.partial();
@@ -150,17 +126,6 @@ export const creatorProfileStatusSchema = z.object({
 });
 
 export const creatorProfileSchema = z.object({
-<<<<<<< HEAD
-  userId: uuidString(),
-  bio: z.string().optional(),
-  specialization: z.string().optional(),
-  socialLinks: z.string().optional(),
-  earnings: z.number().optional(),
-  followers: z.number().int().optional(),
-  location: z.string().optional(),
-  payout_account: z.string().optional(),
-  payout_network: z.string().optional(),
-=======
     userId: uuidString(),
     bio: z.string().optional(),
     specialization: z.string().optional(),
@@ -172,7 +137,6 @@ export const creatorProfileSchema = z.object({
     location: z.string().optional(),
     payout_account: z.string().optional(),
     payout_network: z.string().optional(),
->>>>>>> origin/espy
 });
 
 export const contentSchema = z
@@ -180,22 +144,12 @@ export const contentSchema = z
     creatorId: uuidString().optional(),
     title: z.string().min(3, 'Title must be at least 3 characters'),
     description: z.string().optional(),
-<<<<<<< HEAD
-    contentType: z.string().min(1, 'Content type is required').optional(),
-    type: z.string().min(1, 'Content type is required').optional(),
-    media_url: httpsUrl('Invalid media URL').optional(),
-    mediaUrl: httpsUrl('Invalid media URL').optional(),
-    contentUrl: httpsUrl('Invalid media URL').optional(),
-    // moderationStatus removed
-    visibility: z.union([z.boolean(), z.enum(['public', 'paid'])]).optional(),
-=======
     contentType: z.string().min(1, "Content type is required").optional(),
     type: z.string().min(1, "Content type is required").optional(),
     media_url: httpsUrl("Invalid media URL").optional(),
     mediaUrl: httpsUrl("Invalid media URL").optional(),
     contentUrl: httpsUrl("Invalid media URL").optional(),
     visibility: z.union([z.boolean(), z.enum(["public", "paid"])]).optional(),
->>>>>>> origin/espy
     creatorProfileId: z.uuid().optional(),
   })
   .superRefine((value, ctx) => {
@@ -256,25 +210,6 @@ export type PaymentTransaction = z.infer<typeof paymentTransactionSchema>;
 export type Message = z.infer<typeof messageSchema>;
 
 export const validators = {
-<<<<<<< HEAD
-  registerSchema,
-  loginSchema,
-  verifySchema,
-  refreshSchema,
-  campaignCreateSchema,
-  campaignUpdateSchema,
-  campaignStatusUpdateSchema,
-  creatorProfileCreateSchema,
-  creatorProfileUpdateSchema,
-  creatorProfileStatusSchema,
-  paymentTransactionCreateSchema,
-  userCreateSchema,
-  creatorProfileSchema,
-  contentSchema,
-  campaignSchema,
-  paymentTransactionSchema,
-  messageSchema,
-=======
     registerSchema,
     loginSchema,
     verifySchema,
@@ -294,5 +229,4 @@ export const validators = {
     campaignSchema,
     paymentTransactionSchema,
     messageSchema,
->>>>>>> origin/espy
 };

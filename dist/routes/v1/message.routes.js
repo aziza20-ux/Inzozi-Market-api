@@ -8,7 +8,6 @@ const auth_js_1 = require("../../middleware/auth.js");
 const message_controller_js_1 = require("../../controllers/message.controller.js");
 const router = express_1.default.Router();
 // POST /v1/messages
-<<<<<<< HEAD
 /**
  * @openapi
  * /messages:
@@ -118,15 +117,5 @@ router.patch("/:id/read", auth_js_1.authenticate, message_controller_js_1.markMe
  *       200:
  *         description: Updated message
  */
-=======
-router.post("/", auth_js_1.authenticate, message_controller_js_1.createMessage);
-// GET /v1/messages/conversations
-router.get("/conversations", auth_js_1.authenticate, message_controller_js_1.listConversations);
-// GET /v1/messages/conversations/:convId
-router.get("/conversations/:convId", auth_js_1.authenticate, message_controller_js_1.getConversationThread);
-// PATCH /v1/messages/:id/read
-router.patch("/:id/read", auth_js_1.authenticate, message_controller_js_1.markMessageRead);
-// DELETE /v1/messages/:id
->>>>>>> origin/espy
 router.delete("/:id", auth_js_1.authenticate, message_controller_js_1.deleteMessage);
 exports.default = router;

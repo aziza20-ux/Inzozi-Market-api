@@ -1,20 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-<<<<<<< HEAD
-exports.validators = exports.messageSchema = exports.paymentTransactionCreateSchema = exports.paymentTransactionSchema = exports.campaignSchema = exports.contentSchema = exports.creatorProfileSchema = exports.creatorProfileStatusSchema = exports.creatorProfileUpdateSchema = exports.creatorProfileCreateSchema = exports.campaignStatusUpdateSchema = exports.campaignUpdateSchema = exports.campaignCreateSchema = exports.refreshSchema = exports.resendOtpSchema = exports.verifySchema = exports.loginSchema = exports.registerSchema = exports.userCreateSchema = exports.paymentStatusEnum = exports.paymentTypeEnum = exports.campaignStatusEnum = exports.verificationStatusEnum = exports.roleEnum = void 0;
+exports.validators = exports.messageSchema = exports.paymentTransactionCreateSchema = exports.paymentTransactionSchema = exports.campaignSchema = exports.contentSchema = exports.creatorProfileSchema = exports.creatorProfileStatusSchema = exports.creatorProfileUpdateSchema = exports.creatorProfileCreateSchema = exports.campaignStatusUpdateSchema = exports.campaignUpdateSchema = exports.campaignCreateSchema = exports.refreshSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.resendOtpSchema = exports.verifySchema = exports.loginSchema = exports.registerSchema = exports.userCreateSchema = exports.paymentStatusEnum = exports.paymentTypeEnum = exports.campaignStatusEnum = exports.verificationStatusEnum = exports.roleEnum = void 0;
 const zod_1 = require("zod");
 exports.roleEnum = zod_1.z.enum(['CREATOR', 'BUSINESS', 'CONSUMER', 'ADMIN']);
 exports.verificationStatusEnum = zod_1.z.enum(['PENDING', 'VERIFIED', 'REJECTED']);
-=======
-exports.validators = exports.messageSchema = exports.paymentTransactionCreateSchema = exports.paymentTransactionSchema = exports.campaignSchema = exports.contentSchema = exports.creatorProfileSchema = exports.creatorProfileStatusSchema = exports.creatorProfileUpdateSchema = exports.creatorProfileCreateSchema = exports.campaignStatusUpdateSchema = exports.campaignUpdateSchema = exports.campaignCreateSchema = exports.refreshSchema = exports.verifySchema = exports.loginSchema = exports.registerSchema = exports.userCreateSchema = exports.paymentStatusEnum = exports.paymentTypeEnum = exports.campaignStatusEnum = exports.verificationStatusEnum = exports.roleEnum = void 0;
-const zod_1 = require("zod");
-exports.roleEnum = zod_1.z.enum(["CREATOR", "BUSINESS", "CONSUMER", "ADMIN"]);
-exports.verificationStatusEnum = zod_1.z.enum([
-    "PENDING",
-    "VERIFIED",
-    "REJECTED",
-]);
->>>>>>> origin/espy
 exports.campaignStatusEnum = zod_1.z.enum([
     'DRAFT',
     'ACTIVE',
@@ -49,28 +38,18 @@ exports.userCreateSchema = zod_1.z.object({
 });
 exports.registerSchema = zod_1.z
     .object({
-<<<<<<< HEAD
     name: zod_1.z.string().min(1).optional(),
-    email: zod_1.z.string().email().optional(),
-    phone: zod_1.z.string().optional(),
-    password: zod_1.z.string().min(8),
-    role: exports.roleEnum,
-})
-    .refine((data) => data.email || data.phone, { message: 'Either email or phone is required' });
-=======
     email: zod_1.z.string().email().optional(),
     phone: zod_1.z.string().optional(),
     password: zod_1.z.string().min(8),
     role: exports.roleEnum
 })
     .refine((data) => data.email || data.phone, { message: "Either email or phone is required" });
->>>>>>> origin/espy
 exports.loginSchema = zod_1.z.object({
     email: zod_1.z.string().email().optional(),
     phone: zod_1.z.string().optional(),
-    password: zod_1.z.string(),
-});
-<<<<<<< HEAD
+    password: zod_1.z.string().min(8),
+}).refine((data) => data.email || data.phone, { message: 'Either email or phone is required' });
 exports.verifySchema = zod_1.z
     .object({
     otp: zod_1.z.string().length(6),
@@ -89,30 +68,25 @@ exports.resendOtpSchema = zod_1.z
 })
     .refine((data) => data.email || data.phone || data.userId, {
     message: 'Either email, phone, or userId is required',
-=======
-exports.verifySchema = zod_1.z.object({
+});
+exports.forgotPasswordSchema = zod_1.z.object({
+    email: zod_1.z.string().email(),
+});
+exports.resetPasswordSchema = zod_1.z.object({
+    email: zod_1.z.string().email(),
     otp: zod_1.z.string().length(6),
->>>>>>> origin/espy
+    password: zod_1.z.string().min(8),
 });
 exports.refreshSchema = zod_1.z.object({
     refreshToken: zod_1.z.string(),
 });
 exports.campaignCreateSchema = zod_1.z.object({
-<<<<<<< HEAD
     title: zod_1.z.string().min(1, 'Title is required'),
     description: zod_1.z.string().optional(),
     budget: zod_1.z.number().nonnegative('Budget must be >= 0'),
     startDate: dateStringToDate,
     endDate: dateStringToDate,
     niche_filter: zod_1.z.string().min(1, 'niche_filter is required'),
-=======
-    title: zod_1.z.string().min(1, "Title is required"),
-    description: zod_1.z.string().optional(),
-    budget: zod_1.z.number().nonnegative("Budget must be >= 0"),
-    startDate: dateStringToDate,
-    endDate: dateStringToDate,
-    niche_filter: zod_1.z.string().min(1, "niche_filter is required"),
->>>>>>> origin/espy
     min_audience_size: zod_1.z.number().int().nonnegative(),
     max_creators: zod_1.z.number().int().positive(),
 });
@@ -124,23 +98,17 @@ exports.creatorProfileCreateSchema = zod_1.z.object({
     bio: zod_1.z.string().optional(),
     specialization: zod_1.z.string().optional(),
     socialLinks: zod_1.z.string().optional(),
-<<<<<<< HEAD
-=======
     avatar: zod_1.z.url().optional(),
->>>>>>> origin/espy
     location: zod_1.z.string().optional(),
     payout_account: zod_1.z.string().optional(),
     payout_network: zod_1.z.string().optional(),
     earnings: zod_1.z.number().optional(),
     followers: zod_1.z.number().int().optional(),
+    subscriptionFee: zod_1.z.number().optional(),
 });
 exports.creatorProfileUpdateSchema = exports.creatorProfileCreateSchema.partial();
 exports.creatorProfileStatusSchema = zod_1.z.object({
-<<<<<<< HEAD
     profile_status: zod_1.z.enum(['active', 'suspended']),
-=======
-    profile_status: zod_1.z.enum(["active", "suspended"]),
->>>>>>> origin/espy
 });
 exports.creatorProfileSchema = zod_1.z.object({
     userId: uuidString(),
@@ -149,10 +117,8 @@ exports.creatorProfileSchema = zod_1.z.object({
     socialLinks: zod_1.z.string().optional(),
     earnings: zod_1.z.number().optional(),
     followers: zod_1.z.number().int().optional(),
-<<<<<<< HEAD
-=======
+    subscriptionFee: zod_1.z.number().optional(),
     avatar: zod_1.z.string().optional(),
->>>>>>> origin/espy
     location: zod_1.z.string().optional(),
     payout_account: zod_1.z.string().optional(),
     payout_network: zod_1.z.string().optional(),
@@ -162,23 +128,12 @@ exports.contentSchema = zod_1.z
     creatorId: uuidString().optional(),
     title: zod_1.z.string().min(3, 'Title must be at least 3 characters'),
     description: zod_1.z.string().optional(),
-<<<<<<< HEAD
-    contentType: zod_1.z.string().min(1, 'Content type is required').optional(),
-    type: zod_1.z.string().min(1, 'Content type is required').optional(),
-    media_url: httpsUrl('Invalid media URL').optional(),
-    mediaUrl: httpsUrl('Invalid media URL').optional(),
-    contentUrl: httpsUrl('Invalid media URL').optional(),
-    // moderationStatus removed
-    visibility: zod_1.z.union([zod_1.z.boolean(), zod_1.z.enum(['public', 'paid'])]).optional(),
-=======
     contentType: zod_1.z.string().min(1, "Content type is required").optional(),
     type: zod_1.z.string().min(1, "Content type is required").optional(),
     media_url: httpsUrl("Invalid media URL").optional(),
     mediaUrl: httpsUrl("Invalid media URL").optional(),
     contentUrl: httpsUrl("Invalid media URL").optional(),
-    // moderationStatus removed
     visibility: zod_1.z.union([zod_1.z.boolean(), zod_1.z.enum(["public", "paid"])]).optional(),
->>>>>>> origin/espy
     creatorProfileId: zod_1.z.uuid().optional(),
 })
     .superRefine((value, ctx) => {
@@ -230,6 +185,8 @@ exports.validators = {
     registerSchema: exports.registerSchema,
     loginSchema: exports.loginSchema,
     verifySchema: exports.verifySchema,
+    forgotPasswordSchema: exports.forgotPasswordSchema,
+    resetPasswordSchema: exports.resetPasswordSchema,
     refreshSchema: exports.refreshSchema,
     campaignCreateSchema: exports.campaignCreateSchema,
     campaignUpdateSchema: exports.campaignUpdateSchema,

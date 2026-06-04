@@ -3,13 +3,10 @@ import userRoutes from './users.routes.js';
 import authRoutes from './auth.routes.js';
 import campaignRoutes from './campaign.routes.js';
 import contentRoutes from './content.routes.js';
-<<<<<<< HEAD
 import creatorProfileRoutes from './creator-profile.routes.js';
 import messageRoutes from './message.routes.js';
 import paymentRoutes from './payment.routes.js';
-=======
 import subscriptionRoutes from './subscription.routes.js';
->>>>>>> origin/espy
 
 const v1Routes = Router();
 
@@ -17,12 +14,9 @@ v1Routes.use('/users', userRoutes);
 v1Routes.use('/auth', authRoutes);
 v1Routes.use('/campaigns', campaignRoutes);
 v1Routes.use('/content', contentRoutes);
-<<<<<<< HEAD
 v1Routes.use('/creator-profile', creatorProfileRoutes);
 v1Routes.use('/messages', messageRoutes);
 v1Routes.use('/payments', paymentRoutes);
-=======
 v1Routes.use('/subscriptions', subscriptionRoutes);
->>>>>>> origin/espy
 
 export default v1Routes;

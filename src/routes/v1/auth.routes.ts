@@ -1,16 +1,5 @@
 import { Router } from 'express';
-<<<<<<< HEAD
-import {
-  register,
-  login,
-  verify,
-  resendOtp,
-  refresh,
-  logout,
-} from '../../controllers/auth.controller';
-=======
-import { forgotPassword, login, logout, refresh, register, resetPassword, verify } from '../../controllers/auth.controller';
->>>>>>> origin/espy
+import { forgotPassword, login, logout, refresh, register, resetPassword, resendOtp, verify } from '../../controllers/auth.controller';
 
 const router = Router();
 
@@ -118,26 +107,16 @@ router.post('/verify', verify);
 
 /**
  * @openapi
-<<<<<<< HEAD
  * /auth/resend-otp:
  *   post:
  *     tags:
  *       - Auth
  *     summary: Resend an OTP to a registered user
-=======
- * /auth/forgot-password:
- *   post:
- *     tags:
- *       - Auth
- *     summary: Send a password reset code to a user's email
->>>>>>> origin/espy
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
-<<<<<<< HEAD
  *             properties:
  *               userId:
  *                 type: string
@@ -158,7 +137,19 @@ router.post('/verify', verify);
  *         description: User not found
  */
 router.post('/resend-otp', resendOtp);
-=======
+
+/**
+ * @openapi
+ * /auth/forgot-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Send a password reset code to a user's email
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
  *             required: [email]
  *             properties:
  *               email:
@@ -206,7 +197,6 @@ router.post('/forgot-password', forgotPassword);
  *         description: User not found
  */
 router.post('/reset-password', resetPassword);
->>>>>>> origin/espy
 
 /**
  * @openapi

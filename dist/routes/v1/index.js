@@ -7,28 +7,16 @@ const express_1 = require("express");
 const users_routes_js_1 = __importDefault(require("./users.routes.js"));
 const auth_routes_js_1 = __importDefault(require("./auth.routes.js"));
 const campaign_routes_js_1 = __importDefault(require("./campaign.routes.js"));
-<<<<<<< HEAD
 const content_routes_js_1 = __importDefault(require("./content.routes.js"));
 const creator_profile_routes_js_1 = __importDefault(require("./creator-profile.routes.js"));
 const message_routes_js_1 = __importDefault(require("./message.routes.js"));
 const payment_routes_js_1 = __importDefault(require("./payment.routes.js"));
-=======
-const creator_profile_routes_js_1 = __importDefault(require("./creator-profile.routes.js"));
-const payment_routes_js_1 = __importDefault(require("./payment.routes.js"));
-const content_routes_js_1 = __importDefault(require("./content.routes.js"));
->>>>>>> origin/espy
 const v1Routes = (0, express_1.Router)();
 v1Routes.use('/users', users_routes_js_1.default);
 v1Routes.use('/auth', auth_routes_js_1.default);
 v1Routes.use('/campaigns', campaign_routes_js_1.default);
-<<<<<<< HEAD
 v1Routes.use('/content', content_routes_js_1.default);
 v1Routes.use('/creator-profile', creator_profile_routes_js_1.default);
 v1Routes.use('/messages', message_routes_js_1.default);
 v1Routes.use('/payments', payment_routes_js_1.default);
-=======
-v1Routes.use('/creator-profile', creator_profile_routes_js_1.default);
-v1Routes.use('/payments', payment_routes_js_1.default);
-v1Routes.use('/content', content_routes_js_1.default);
->>>>>>> origin/espy
 exports.default = v1Routes;

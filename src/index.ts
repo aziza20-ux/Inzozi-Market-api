@@ -23,14 +23,11 @@ app.get('/health', (_req, res) => {
 app.use('/api/v1', v1Routes);
 setupSwagger(app);
 
-<<<<<<< HEAD
-export default app;
-app.listen(3000, () => {
-  console.log(`Server is running on port http://localhost:3000`);
-=======
 const PORT = Number(process.env.PORT) || 4000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);
->>>>>>> origin/espy
 });
+
+export default app;
+

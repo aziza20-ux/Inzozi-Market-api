@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const auth_controller_1 = require("../../controllers/auth.controller");
 const router = (0, express_1.Router)();
-<<<<<<< HEAD
 /**
  * @openapi
  * /auth/register:
@@ -105,17 +104,26 @@ router.post('/login', auth_controller_1.login); //done
 router.post('/verify', auth_controller_1.verify);
 /**
  * @openapi
+<<<<<<< HEAD
  * /auth/resend-otp:
  *   post:
  *     tags:
  *       - Auth
  *     summary: Resend an OTP to a registered user
+=======
+ * /auth/forgot-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Send a password reset code to a user's email
+>>>>>>> origin/espy
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+<<<<<<< HEAD
  *             properties:
  *               userId:
  *                 type: string
@@ -136,29 +144,6 @@ router.post('/verify', auth_controller_1.verify);
  *         description: User not found
  */
 router.post('/resend-otp', auth_controller_1.resendOtp);
-/**
- * @openapi
- * /auth/refresh:
- *   post:
- *     tags:
- *       - Auth
- *     summary: Exchange a refresh token for a new token pair
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required: [refreshToken]
- *             properties:
- *               refreshToken:
- *                 type: string
- *     responses:
- *       200:
- *         description: Rotated access and refresh tokens
- *       401:
- *         description: Invalid or expired refresh token
- */
 router.post('/refresh', auth_controller_1.refresh);
 /**
  * @openapi
@@ -180,11 +165,5 @@ router.post('/refresh', auth_controller_1.refresh);
  *       200:
  *         description: Logged out
  */
-=======
-router.post('/register', auth_controller_1.register); //done
-router.post('/login', auth_controller_1.login); //done
-router.post('/verify', auth_controller_1.verify);
-router.post('/refresh', auth_controller_1.refresh);
->>>>>>> origin/espy
 router.post('/logout', auth_controller_1.logout);
 exports.default = router;

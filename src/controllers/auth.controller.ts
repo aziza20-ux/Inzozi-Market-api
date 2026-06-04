@@ -4,20 +4,13 @@ import prisma from '../config/prisma';
 import { redis } from '../services/redis.service';
 import { generateAccessToken, generateRefreshToken, verifyToken } from '../services/token.service';
 import {
-<<<<<<< HEAD
-  registerSchema,
-  loginSchema,
-  verifySchema,
-  resendOtpSchema,
-  refreshSchema,
-=======
   forgotPasswordSchema,
   loginSchema,
   refreshSchema,
   registerSchema,
+  resendOtpSchema,
   resetPasswordSchema,
   verifySchema,
->>>>>>> origin/espy
 } from '../validators/schema.validators';
 import { sendEmail } from '../config/email.js';
 
@@ -51,14 +44,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const user = await prisma.user.create({
       data: {
-<<<<<<< HEAD
-        name: data.name,
-        email: data.email ?? null,
-        phone: data.phone ?? null,
-=======
         name: data.name ?? identifier,
         email: identifier,
->>>>>>> origin/espy
         password: password_hash,
         role: data.role,
       },
@@ -182,7 +169,6 @@ export const verify = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-<<<<<<< HEAD
 export const resendOtp = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, phone, userId } = resendOtpSchema.parse(req.body) as {
@@ -194,24 +180,16 @@ export const resendOtp = async (req: Request, res: Response): Promise<void> => {
     const user = userId
       ? await prisma.user.findUnique({ where: { id: userId } })
       : email
-        ? await prisma.user.findUnique({ where: { email } })
-        : await prisma.user.findUnique({ where: { phone: phone! } });
+      ? await prisma.user.findUnique({ where: { email } })
+      : await prisma.user.findUnique({ where: { phone: phone! } });
 
-=======
-export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { email } = forgotPasswordSchema.parse(req.body);
-    const normalizedEmail = email.trim().toLowerCase();
-
-    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
->>>>>>> origin/espy
     if (!user) {
       res.status(404).json({ error: 'User not found' });
       return;
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-<<<<<<< HEAD
+
     try {
       await redis.set(`otp:${user.id}`, otp, 'EX', 60 * 5);
     } catch (e) {
@@ -240,7 +218,23 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
     }
 
     res.status(200).json({ message: 'OTP resent' });
-=======
+  } catch (err: any) {
+    res.status(400).json({ error: err.message || err.errors });
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email } = forgotPasswordSchema.parse(req.body);
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     try {
       await redis.set(`password-reset:${user.id}`, otp, 'EX', 60 * 5);
@@ -303,7 +297,6 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
     await redis.del(`password-reset:${user.id}`);
 
     res.status(200).json({ message: 'Password reset successfully' });
->>>>>>> origin/espy
   } catch (err: any) {
     res.status(400).json({ error: err.message || err.errors });
   }
