@@ -180,8 +180,8 @@ export const resendOtp = async (req: Request, res: Response): Promise<void> => {
     const user = userId
       ? await prisma.user.findUnique({ where: { id: userId } })
       : email
-      ? await prisma.user.findUnique({ where: { email } })
-      : await prisma.user.findUnique({ where: { phone: phone! } });
+        ? await prisma.user.findUnique({ where: { email } })
+        : await prisma.user.findUnique({ where: { phone: phone! } });
 
     if (!user) {
       res.status(404).json({ error: 'User not found' });
