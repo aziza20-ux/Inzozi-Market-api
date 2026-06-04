@@ -64,15 +64,29 @@ export async function createMessage(req: Request, res: Response) {
       select: {
         id: true,
         role: true,
+        creatorProfile: {
+          select: {
+            subscriptionFee: true,
+          },
+        },
       },
-    });
+    }) as any;
     if (!receiver) return res.status(404).json({ error: 'RECIPIENT_NOT_FOUND' });
 
-    //if (user.role === 'CONSUMER') {
-     // if (receiver.role !== 'CREATOR') {
-     //   return res.status(403).json({ error: 'FAN_CAN_ONLY_MESSAGE_CREATORS' });
-    //  }
-   // }
+    if (user.role === 'CONSUMER' && receiver.role === 'CREATOR') {
+      if (receiver.creatorProfile && (receiver.creatorProfile.subscriptionFee ?? 0) > 0) {
+        const activeSub = await prisma.subscription.findFirst({
+          where: {
+            fanId: user.id,
+            creatorId: receiver.id,
+            status: 'ACTIVE',
+          },
+        });
+        if (!activeSub) {
+          return res.status(403).json({ error: 'FAN_MUST_SUBSCRIBE_TO_MESSAGE' });
+        }
+      }
+    }
 
     const conversationId = deriveConversationId(user.id, receiver.id);
     const created = await prisma.message.create({

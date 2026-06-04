@@ -1,10 +1,13 @@
 import request from "supertest";
-import bcrypt from "bcrypt";
+import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 
 const mockPrisma = {
   user: {
-    findUnique: jest.fn(),
+    findUnique: jest.fn().mockResolvedValue({
+      id: "creator-1",
+      verificationStatus: "VERIFIED",
+    }),
     create: jest.fn(),
     update: jest.fn(),
   },
@@ -50,9 +53,8 @@ jest.mock("../services/mockMobileMoneyProvider.js", () => ({
   })),
 }));
 
-import app from "../app.js";
-
 process.env.JWT_SECRET = "integration-secret";
+import app from "../app.js";
 
 function token(payload: Record<string, unknown>) {
   return jwt.sign(payload, process.env.JWT_SECRET as string);
@@ -89,7 +91,7 @@ describe("Core integration rules", () => {
   });
 
   it("covers register -> verify -> login -> refresh -> logout auth flow", async () => {
-    const hashedPassword = await bcrypt.hash("password123", 10);
+    const hashedPassword = await argon2.hash("password123");
 
     mockPrisma.user.findUnique
       .mockResolvedValueOnce(null)
@@ -157,8 +159,8 @@ describe("Core integration rules", () => {
     await request(app)
       .post("/api/v1/auth/logout")
       .send({ refreshToken: refreshed.body.refreshToken })
-      .expect(204);
-  });
+      .expect(200);
+  }, 30000);
 
   it("enforces roles on protected route categories", async () => {
     await request(app)

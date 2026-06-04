@@ -1,0 +1,30 @@
+import { Router } from 'express';
+import {
+  inviteCreators,
+  getCampaignApplications,
+  getCreatorInvites,
+  respondToInvite,
+} from '../controllers/application.controller';
+import { authenticate } from '../middleware/auth'; // adjust import path to match your project
+
+const router = Router();
+
+// ── Business: invite creators to a campaign ──────────────────────────────────
+// POST /campaigns/:id/invite
+// Body: { creatorIds: string[] }
+router.post('/campaigns/:id/invite', authenticate, inviteCreators);
+
+// ── Business / Admin: view all invites for a campaign ────────────────────────
+// GET /campaigns/:id/applications?includeDeclined=true
+router.get('/campaigns/:id/applications', authenticate, getCampaignApplications);
+
+// ── Creator: view their own invites ──────────────────────────────────────────
+// GET /creators/invites?status=INVITED&cursor=...&limit=10
+router.get('/creators/invites', authenticate, getCreatorInvites);
+
+// ── Creator: accept or decline an invite ─────────────────────────────────────
+// PATCH /applications/:id/respond
+// Body: { response: "ACCEPT" | "DECLINE" }
+router.patch('/applications/:id/respond', authenticate, respondToInvite);
+
+export default router;

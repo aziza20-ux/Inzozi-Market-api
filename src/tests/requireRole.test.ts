@@ -9,7 +9,7 @@ function createResponse() {
 
 describe("requireRole", () => {
   it("allows users with an accepted role", () => {
-    const req = { user: { role: "CREATOR" } } as any;
+    const req = { userId: "creator-1", role: "CREATOR" } as any;
     const res = createResponse();
     const next = jest.fn();
 
@@ -20,7 +20,7 @@ describe("requireRole", () => {
   });
 
   it("rejects users without an accepted role", () => {
-    const req = { user: { role: "CONSUMER" } } as any;
+    const req = { userId: "consumer-1", role: "CONSUMER" } as any;
     const res = createResponse();
     const next = jest.fn();
 

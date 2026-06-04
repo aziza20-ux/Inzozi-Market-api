@@ -232,6 +232,14 @@ export const getUserCampaigns = async (
 
   const campaigns = await prisma.campaign.findMany({
     where: { businessId: id },
+    include: {
+      applications: {
+        include: {
+          creator: true
+        }
+      },
+      business: true
+    },
     orderBy: { startDate: "desc" },
   });
   res.status(200).json({ data: campaigns });

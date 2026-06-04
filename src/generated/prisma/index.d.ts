@@ -141,6 +141,15 @@ export const PaymentStatus: {
 
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
+
+export const OfferStatus: {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED'
+};
+
+export type OfferStatus = (typeof OfferStatus)[keyof typeof OfferStatus]
+
 }
 
 export type Role = $Enums.Role
@@ -174,6 +183,10 @@ export const SubscriptionStatus: typeof $Enums.SubscriptionStatus
 export type PaymentStatus = $Enums.PaymentStatus
 
 export const PaymentStatus: typeof $Enums.PaymentStatus
+
+export type OfferStatus = $Enums.OfferStatus
+
+export const OfferStatus: typeof $Enums.OfferStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -4563,9 +4576,9 @@ export namespace Prisma {
     currency: string | null
     deletedAt: Date | null
     creatorId: string | null
+    creatorProfileId: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    creatorProfileId: string | null
   }
 
   export type ContentMaxAggregateOutputType = {
@@ -4580,9 +4593,9 @@ export namespace Prisma {
     currency: string | null
     deletedAt: Date | null
     creatorId: string | null
+    creatorProfileId: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    creatorProfileId: string | null
   }
 
   export type ContentCountAggregateOutputType = {
@@ -4597,9 +4610,9 @@ export namespace Prisma {
     currency: number
     deletedAt: number
     creatorId: number
+    creatorProfileId: number
     createdAt: number
     updatedAt: number
-    creatorProfileId: number
     _all: number
   }
 
@@ -4624,9 +4637,9 @@ export namespace Prisma {
     currency?: true
     deletedAt?: true
     creatorId?: true
+    creatorProfileId?: true
     createdAt?: true
     updatedAt?: true
-    creatorProfileId?: true
   }
 
   export type ContentMaxAggregateInputType = {
@@ -4641,9 +4654,9 @@ export namespace Prisma {
     currency?: true
     deletedAt?: true
     creatorId?: true
+    creatorProfileId?: true
     createdAt?: true
     updatedAt?: true
-    creatorProfileId?: true
   }
 
   export type ContentCountAggregateInputType = {
@@ -4658,9 +4671,9 @@ export namespace Prisma {
     currency?: true
     deletedAt?: true
     creatorId?: true
+    creatorProfileId?: true
     createdAt?: true
     updatedAt?: true
-    creatorProfileId?: true
     _all?: true
   }
 
@@ -4762,9 +4775,9 @@ export namespace Prisma {
     currency: string | null
     deletedAt: Date | null
     creatorId: string
+    creatorProfileId: string | null
     createdAt: Date
     updatedAt: Date
-    creatorProfileId: string | null
     _count: ContentCountAggregateOutputType | null
     _avg: ContentAvgAggregateOutputType | null
     _sum: ContentSumAggregateOutputType | null
@@ -4798,9 +4811,9 @@ export namespace Prisma {
     currency?: boolean
     deletedAt?: boolean
     creatorId?: boolean
+    creatorProfileId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    creatorProfileId?: boolean
     creator?: boolean | UserDefaultArgs<ExtArgs>
     creatorProfile?: boolean | Content$creatorProfileArgs<ExtArgs>
     premiumPurchases?: boolean | Content$premiumPurchasesArgs<ExtArgs>
@@ -4819,9 +4832,9 @@ export namespace Prisma {
     currency?: boolean
     deletedAt?: boolean
     creatorId?: boolean
+    creatorProfileId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    creatorProfileId?: boolean
     creator?: boolean | UserDefaultArgs<ExtArgs>
     creatorProfile?: boolean | Content$creatorProfileArgs<ExtArgs>
   }, ExtArgs["result"]["content"]>
@@ -4838,9 +4851,9 @@ export namespace Prisma {
     currency?: boolean
     deletedAt?: boolean
     creatorId?: boolean
+    creatorProfileId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    creatorProfileId?: boolean
     creator?: boolean | UserDefaultArgs<ExtArgs>
     creatorProfile?: boolean | Content$creatorProfileArgs<ExtArgs>
   }, ExtArgs["result"]["content"]>
@@ -4857,12 +4870,12 @@ export namespace Prisma {
     currency?: boolean
     deletedAt?: boolean
     creatorId?: boolean
+    creatorProfileId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    creatorProfileId?: boolean
   }
 
-  export type ContentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "contentUrl" | "thumbnailUrl" | "type" | "visibility" | "price" | "currency" | "deletedAt" | "creatorId" | "createdAt" | "updatedAt" | "creatorProfileId", ExtArgs["result"]["content"]>
+  export type ContentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "contentUrl" | "thumbnailUrl" | "type" | "visibility" | "price" | "currency" | "deletedAt" | "creatorId" | "creatorProfileId" | "createdAt" | "updatedAt", ExtArgs["result"]["content"]>
   export type ContentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creator?: boolean | UserDefaultArgs<ExtArgs>
     creatorProfile?: boolean | Content$creatorProfileArgs<ExtArgs>
@@ -4897,9 +4910,9 @@ export namespace Prisma {
       currency: string | null
       deletedAt: Date | null
       creatorId: string
+      creatorProfileId: string | null
       createdAt: Date
       updatedAt: Date
-      creatorProfileId: string | null
     }, ExtArgs["result"]["content"]>
     composites: {}
   }
@@ -5337,9 +5350,9 @@ export namespace Prisma {
     readonly currency: FieldRef<"Content", 'String'>
     readonly deletedAt: FieldRef<"Content", 'DateTime'>
     readonly creatorId: FieldRef<"Content", 'String'>
+    readonly creatorProfileId: FieldRef<"Content", 'String'>
     readonly createdAt: FieldRef<"Content", 'DateTime'>
     readonly updatedAt: FieldRef<"Content", 'DateTime'>
-    readonly creatorProfileId: FieldRef<"Content", 'String'>
   }
     
 
@@ -7055,7 +7068,8 @@ export namespace Prisma {
     id: string | null
     campaignId: string | null
     creatorId: string | null
-    status: string | null
+    proposal: string | null
+    status: $Enums.OfferStatus | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7064,7 +7078,8 @@ export namespace Prisma {
     id: string | null
     campaignId: string | null
     creatorId: string | null
-    status: string | null
+    proposal: string | null
+    status: $Enums.OfferStatus | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7073,6 +7088,7 @@ export namespace Prisma {
     id: number
     campaignId: number
     creatorId: number
+    proposal: number
     status: number
     createdAt: number
     updatedAt: number
@@ -7084,6 +7100,7 @@ export namespace Prisma {
     id?: true
     campaignId?: true
     creatorId?: true
+    proposal?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -7093,6 +7110,7 @@ export namespace Prisma {
     id?: true
     campaignId?: true
     creatorId?: true
+    proposal?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -7102,6 +7120,7 @@ export namespace Prisma {
     id?: true
     campaignId?: true
     creatorId?: true
+    proposal?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -7184,7 +7203,8 @@ export namespace Prisma {
     id: string
     campaignId: string
     creatorId: string
-    status: string
+    proposal: string | null
+    status: $Enums.OfferStatus
     createdAt: Date
     updatedAt: Date
     _count: ApplicationCountAggregateOutputType | null
@@ -7210,6 +7230,7 @@ export namespace Prisma {
     id?: boolean
     campaignId?: boolean
     creatorId?: boolean
+    proposal?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7221,6 +7242,7 @@ export namespace Prisma {
     id?: boolean
     campaignId?: boolean
     creatorId?: boolean
+    proposal?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7232,6 +7254,7 @@ export namespace Prisma {
     id?: boolean
     campaignId?: boolean
     creatorId?: boolean
+    proposal?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7243,12 +7266,13 @@ export namespace Prisma {
     id?: boolean
     campaignId?: boolean
     creatorId?: boolean
+    proposal?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campaignId" | "creatorId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
+  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campaignId" | "creatorId" | "proposal" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
   export type ApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
@@ -7272,7 +7296,8 @@ export namespace Prisma {
       id: string
       campaignId: string
       creatorId: string
-      status: string
+      proposal: string | null
+      status: $Enums.OfferStatus
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["application"]>
@@ -7703,7 +7728,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Application", 'String'>
     readonly campaignId: FieldRef<"Application", 'String'>
     readonly creatorId: FieldRef<"Application", 'String'>
-    readonly status: FieldRef<"Application", 'String'>
+    readonly proposal: FieldRef<"Application", 'String'>
+    readonly status: FieldRef<"Application", 'OfferStatus'>
     readonly createdAt: FieldRef<"Application", 'DateTime'>
     readonly updatedAt: FieldRef<"Application", 'DateTime'>
   }
@@ -12725,9 +12751,9 @@ export namespace Prisma {
     currency: 'currency',
     deletedAt: 'deletedAt',
     creatorId: 'creatorId',
+    creatorProfileId: 'creatorProfileId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    creatorProfileId: 'creatorProfileId'
+    updatedAt: 'updatedAt'
   };
 
   export type ContentScalarFieldEnum = (typeof ContentScalarFieldEnum)[keyof typeof ContentScalarFieldEnum]
@@ -12756,6 +12782,7 @@ export namespace Prisma {
     id: 'id',
     campaignId: 'campaignId',
     creatorId: 'creatorId',
+    proposal: 'proposal',
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -12975,6 +13002,20 @@ export namespace Prisma {
    * Reference to a field of type 'CampaignStatus[]'
    */
   export type ListEnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'OfferStatus'
+   */
+  export type EnumOfferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OfferStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'OfferStatus[]'
+   */
+  export type ListEnumOfferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OfferStatus[]'>
     
 
 
@@ -13252,9 +13293,9 @@ export namespace Prisma {
     currency?: StringNullableFilter<"Content"> | string | null
     deletedAt?: DateTimeNullableFilter<"Content"> | Date | string | null
     creatorId?: StringFilter<"Content"> | string
+    creatorProfileId?: StringNullableFilter<"Content"> | string | null
     createdAt?: DateTimeFilter<"Content"> | Date | string
     updatedAt?: DateTimeFilter<"Content"> | Date | string
-    creatorProfileId?: StringNullableFilter<"Content"> | string | null
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     creatorProfile?: XOR<CreatorProfileNullableScalarRelationFilter, CreatorProfileWhereInput> | null
     premiumPurchases?: PremiumPurchaseListRelationFilter
@@ -13272,9 +13313,9 @@ export namespace Prisma {
     currency?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     creatorId?: SortOrder
+    creatorProfileId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    creatorProfileId?: SortOrderInput | SortOrder
     creator?: UserOrderByWithRelationInput
     creatorProfile?: CreatorProfileOrderByWithRelationInput
     premiumPurchases?: PremiumPurchaseOrderByRelationAggregateInput
@@ -13295,9 +13336,9 @@ export namespace Prisma {
     currency?: StringNullableFilter<"Content"> | string | null
     deletedAt?: DateTimeNullableFilter<"Content"> | Date | string | null
     creatorId?: StringFilter<"Content"> | string
+    creatorProfileId?: StringNullableFilter<"Content"> | string | null
     createdAt?: DateTimeFilter<"Content"> | Date | string
     updatedAt?: DateTimeFilter<"Content"> | Date | string
-    creatorProfileId?: StringNullableFilter<"Content"> | string | null
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     creatorProfile?: XOR<CreatorProfileNullableScalarRelationFilter, CreatorProfileWhereInput> | null
     premiumPurchases?: PremiumPurchaseListRelationFilter
@@ -13315,9 +13356,9 @@ export namespace Prisma {
     currency?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     creatorId?: SortOrder
+    creatorProfileId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    creatorProfileId?: SortOrderInput | SortOrder
     _count?: ContentCountOrderByAggregateInput
     _avg?: ContentAvgOrderByAggregateInput
     _max?: ContentMaxOrderByAggregateInput
@@ -13340,9 +13381,9 @@ export namespace Prisma {
     currency?: StringNullableWithAggregatesFilter<"Content"> | string | null
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Content"> | Date | string | null
     creatorId?: StringWithAggregatesFilter<"Content"> | string
+    creatorProfileId?: StringNullableWithAggregatesFilter<"Content"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Content"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Content"> | Date | string
-    creatorProfileId?: StringNullableWithAggregatesFilter<"Content"> | string | null
   }
 
   export type CampaignWhereInput = {
@@ -13452,7 +13493,8 @@ export namespace Prisma {
     id?: StringFilter<"Application"> | string
     campaignId?: StringFilter<"Application"> | string
     creatorId?: StringFilter<"Application"> | string
-    status?: StringFilter<"Application"> | string
+    proposal?: StringNullableFilter<"Application"> | string | null
+    status?: EnumOfferStatusFilter<"Application"> | $Enums.OfferStatus
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
@@ -13463,6 +13505,7 @@ export namespace Prisma {
     id?: SortOrder
     campaignId?: SortOrder
     creatorId?: SortOrder
+    proposal?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13478,7 +13521,8 @@ export namespace Prisma {
     NOT?: ApplicationWhereInput | ApplicationWhereInput[]
     campaignId?: StringFilter<"Application"> | string
     creatorId?: StringFilter<"Application"> | string
-    status?: StringFilter<"Application"> | string
+    proposal?: StringNullableFilter<"Application"> | string | null
+    status?: EnumOfferStatusFilter<"Application"> | $Enums.OfferStatus
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
@@ -13489,6 +13533,7 @@ export namespace Prisma {
     id?: SortOrder
     campaignId?: SortOrder
     creatorId?: SortOrder
+    proposal?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13504,7 +13549,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Application"> | string
     campaignId?: StringWithAggregatesFilter<"Application"> | string
     creatorId?: StringWithAggregatesFilter<"Application"> | string
-    status?: StringWithAggregatesFilter<"Application"> | string
+    proposal?: StringNullableWithAggregatesFilter<"Application"> | string | null
+    status?: EnumOfferStatusWithAggregatesFilter<"Application"> | $Enums.OfferStatus
     createdAt?: DateTimeWithAggregatesFilter<"Application"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Application"> | Date | string
   }
@@ -14095,9 +14141,9 @@ export namespace Prisma {
     currency?: string | null
     deletedAt?: Date | string | null
     creatorId: string
+    creatorProfileId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    creatorProfileId?: string | null
     premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutContentInput
   }
 
@@ -14131,9 +14177,9 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutContentNestedInput
   }
 
@@ -14149,9 +14195,9 @@ export namespace Prisma {
     currency?: string | null
     deletedAt?: Date | string | null
     creatorId: string
+    creatorProfileId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    creatorProfileId?: string | null
   }
 
   export type ContentUpdateManyMutationInput = {
@@ -14181,9 +14227,9 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CampaignCreateInput = {
@@ -14303,7 +14349,8 @@ export namespace Prisma {
 
   export type ApplicationCreateInput = {
     id?: string
-    status?: string
+    proposal?: string | null
+    status?: $Enums.OfferStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     campaign: CampaignCreateNestedOneWithoutApplicationsInput
@@ -14314,14 +14361,16 @@ export namespace Prisma {
     id?: string
     campaignId: string
     creatorId: string
-    status?: string
+    proposal?: string | null
+    status?: $Enums.OfferStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ApplicationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    proposal?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: CampaignUpdateOneRequiredWithoutApplicationsNestedInput
@@ -14332,7 +14381,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     creatorId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    proposal?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14341,14 +14391,16 @@ export namespace Prisma {
     id?: string
     campaignId: string
     creatorId: string
-    status?: string
+    proposal?: string | null
+    status?: $Enums.OfferStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ApplicationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    proposal?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14357,7 +14409,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     creatorId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    proposal?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15095,9 +15148,9 @@ export namespace Prisma {
     currency?: SortOrder
     deletedAt?: SortOrder
     creatorId?: SortOrder
+    creatorProfileId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    creatorProfileId?: SortOrder
   }
 
   export type ContentAvgOrderByAggregateInput = {
@@ -15116,9 +15169,9 @@ export namespace Prisma {
     currency?: SortOrder
     deletedAt?: SortOrder
     creatorId?: SortOrder
+    creatorProfileId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    creatorProfileId?: SortOrder
   }
 
   export type ContentMinOrderByAggregateInput = {
@@ -15133,9 +15186,9 @@ export namespace Prisma {
     currency?: SortOrder
     deletedAt?: SortOrder
     creatorId?: SortOrder
+    creatorProfileId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    creatorProfileId?: SortOrder
   }
 
   export type ContentSumOrderByAggregateInput = {
@@ -15269,6 +15322,13 @@ export namespace Prisma {
     _max?: NestedEnumCampaignStatusFilter<$PrismaModel>
   }
 
+  export type EnumOfferStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OfferStatus | EnumOfferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOfferStatusFilter<$PrismaModel> | $Enums.OfferStatus
+  }
+
   export type CampaignScalarRelationFilter = {
     is?: CampaignWhereInput
     isNot?: CampaignWhereInput
@@ -15283,6 +15343,7 @@ export namespace Prisma {
     id?: SortOrder
     campaignId?: SortOrder
     creatorId?: SortOrder
+    proposal?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15292,6 +15353,7 @@ export namespace Prisma {
     id?: SortOrder
     campaignId?: SortOrder
     creatorId?: SortOrder
+    proposal?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15301,9 +15363,20 @@ export namespace Prisma {
     id?: SortOrder
     campaignId?: SortOrder
     creatorId?: SortOrder
+    proposal?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumOfferStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OfferStatus | EnumOfferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOfferStatusWithAggregatesFilter<$PrismaModel> | $Enums.OfferStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOfferStatusFilter<$PrismaModel>
+    _max?: NestedEnumOfferStatusFilter<$PrismaModel>
   }
 
   export type EnumPaymentTypeFilter<$PrismaModel = never> = {
@@ -16209,6 +16282,10 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type EnumOfferStatusFieldUpdateOperationsInput = {
+    set?: $Enums.OfferStatus
+  }
+
   export type CampaignUpdateOneRequiredWithoutApplicationsNestedInput = {
     create?: XOR<CampaignCreateWithoutApplicationsInput, CampaignUncheckedCreateWithoutApplicationsInput>
     connectOrCreate?: CampaignCreateOrConnectWithoutApplicationsInput
@@ -16628,6 +16705,23 @@ export namespace Prisma {
     _max?: NestedEnumCampaignStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumOfferStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OfferStatus | EnumOfferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOfferStatusFilter<$PrismaModel> | $Enums.OfferStatus
+  }
+
+  export type NestedEnumOfferStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OfferStatus | EnumOfferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOfferStatusWithAggregatesFilter<$PrismaModel> | $Enums.OfferStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOfferStatusFilter<$PrismaModel>
+    _max?: NestedEnumOfferStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumPaymentTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentType | EnumPaymentTypeFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentType[] | ListEnumPaymentTypeFieldRefInput<$PrismaModel>
@@ -16759,9 +16853,9 @@ export namespace Prisma {
     price?: number | null
     currency?: string | null
     deletedAt?: Date | string | null
+    creatorProfileId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    creatorProfileId?: string | null
     premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutContentInput
   }
 
@@ -16947,7 +17041,8 @@ export namespace Prisma {
 
   export type ApplicationCreateWithoutCreatorInput = {
     id?: string
-    status?: string
+    proposal?: string | null
+    status?: $Enums.OfferStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     campaign: CampaignCreateNestedOneWithoutApplicationsInput
@@ -16956,7 +17051,8 @@ export namespace Prisma {
   export type ApplicationUncheckedCreateWithoutCreatorInput = {
     id?: string
     campaignId: string
-    status?: string
+    proposal?: string | null
+    status?: $Enums.OfferStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17111,9 +17207,9 @@ export namespace Prisma {
     currency?: StringNullableFilter<"Content"> | string | null
     deletedAt?: DateTimeNullableFilter<"Content"> | Date | string | null
     creatorId?: StringFilter<"Content"> | string
+    creatorProfileId?: StringNullableFilter<"Content"> | string | null
     createdAt?: DateTimeFilter<"Content"> | Date | string
     updatedAt?: DateTimeFilter<"Content"> | Date | string
-    creatorProfileId?: StringNullableFilter<"Content"> | string | null
   }
 
   export type CampaignUpsertWithWhereUniqueWithoutBusinessInput = {
@@ -17282,7 +17378,8 @@ export namespace Prisma {
     id?: StringFilter<"Application"> | string
     campaignId?: StringFilter<"Application"> | string
     creatorId?: StringFilter<"Application"> | string
-    status?: StringFilter<"Application"> | string
+    proposal?: StringNullableFilter<"Application"> | string | null
+    status?: EnumOfferStatusFilter<"Application"> | $Enums.OfferStatus
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
   }
@@ -17767,7 +17864,8 @@ export namespace Prisma {
 
   export type ApplicationCreateWithoutCampaignInput = {
     id?: string
-    status?: string
+    proposal?: string | null
+    status?: $Enums.OfferStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     creator: UserCreateNestedOneWithoutApplicationsInput
@@ -17776,7 +17874,8 @@ export namespace Prisma {
   export type ApplicationUncheckedCreateWithoutCampaignInput = {
     id?: string
     creatorId: string
-    status?: string
+    proposal?: string | null
+    status?: $Enums.OfferStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18416,9 +18515,9 @@ export namespace Prisma {
     currency?: string | null
     deletedAt?: Date | string | null
     creatorId: string
+    creatorProfileId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    creatorProfileId?: string | null
   }
 
   export type ContentCreateOrConnectWithoutPremiumPurchasesInput = {
@@ -18519,9 +18618,9 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserCreateWithoutSubscriptionsInput = {
@@ -18735,9 +18834,9 @@ export namespace Prisma {
     price?: number | null
     currency?: string | null
     deletedAt?: Date | string | null
+    creatorProfileId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    creatorProfileId?: string | null
   }
 
   export type CampaignCreateManyBusinessInput = {
@@ -18802,7 +18901,8 @@ export namespace Prisma {
   export type ApplicationCreateManyCreatorInput = {
     id?: string
     campaignId: string
-    status?: string
+    proposal?: string | null
+    status?: $Enums.OfferStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18857,9 +18957,9 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutContentNestedInput
   }
 
@@ -18874,9 +18974,9 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CampaignUpdateWithoutBusinessInput = {
@@ -19060,7 +19160,8 @@ export namespace Prisma {
 
   export type ApplicationUpdateWithoutCreatorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    proposal?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: CampaignUpdateOneRequiredWithoutApplicationsNestedInput
@@ -19069,7 +19170,8 @@ export namespace Prisma {
   export type ApplicationUncheckedUpdateWithoutCreatorInput = {
     id?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    proposal?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19077,7 +19179,8 @@ export namespace Prisma {
   export type ApplicationUncheckedUpdateManyWithoutCreatorInput = {
     id?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    proposal?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19245,14 +19348,16 @@ export namespace Prisma {
   export type ApplicationCreateManyCampaignInput = {
     id?: string
     creatorId: string
-    status?: string
+    proposal?: string | null
+    status?: $Enums.OfferStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ApplicationUpdateWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    proposal?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutApplicationsNestedInput
@@ -19261,7 +19366,8 @@ export namespace Prisma {
   export type ApplicationUncheckedUpdateWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
     creatorId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    proposal?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19269,7 +19375,8 @@ export namespace Prisma {
   export type ApplicationUncheckedUpdateManyWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
     creatorId?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
+    proposal?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

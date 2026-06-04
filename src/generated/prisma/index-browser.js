@@ -161,9 +161,9 @@ exports.Prisma.ContentScalarFieldEnum = {
   currency: 'currency',
   deletedAt: 'deletedAt',
   creatorId: 'creatorId',
+  creatorProfileId: 'creatorProfileId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  creatorProfileId: 'creatorProfileId'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.CampaignScalarFieldEnum = {
@@ -186,6 +186,7 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
   creatorId: 'creatorId',
+  proposal: 'proposal',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -283,6 +284,12 @@ exports.CampaignStatus = exports.$Enums.CampaignStatus = {
   IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
+};
+
+exports.OfferStatus = exports.$Enums.OfferStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED'
 };
 
 exports.PaymentType = exports.$Enums.PaymentType = {

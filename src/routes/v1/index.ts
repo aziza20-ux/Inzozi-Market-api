@@ -7,7 +7,7 @@ import paymentRoutes from './payment.routes.js';
 import contentRoutes from './content.routes.js';
 import subscriptionRoutes from './subscription.routes.js';
 import messageRoutes from './message.routes.js';
-
+import applicationRoutes from './application.routes.js';
 const v1Routes = Router();
 
 v1Routes.use('/users', userRoutes);
@@ -18,5 +18,7 @@ v1Routes.use('/payments', paymentRoutes);
 v1Routes.use('/content', contentRoutes);
 v1Routes.use('/subscriptions', subscriptionRoutes);
 v1Routes.use('/messages', messageRoutes);
+v1Routes.use('/applications', applicationRoutes);
 
 export default v1Routes;
+

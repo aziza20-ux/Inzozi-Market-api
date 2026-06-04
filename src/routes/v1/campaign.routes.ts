@@ -6,6 +6,9 @@ import {
 	getCampaigns,
 	updateCampaign,
 	updateCampaignStatus,
+	createApplication,
+	updateApplicationStatus,
+	getApplications,
 } from "../../controllers/campaign.controller.js";
 import { disburseCampaign } from "../../controllers/payment.controllers.js";
 import { authenticate } from "../../middleware/auth.js";
@@ -230,5 +233,9 @@ router.post("/:id/disburse", authenticate, disburseCampaign);
  *         description: Campaign deleted
  */
 router.delete("/:id", authenticate, deleteCampaign);
+
+router.get("/my/applications", authenticate, getApplications);
+router.post("/:id/applications", authenticate, createApplication);
+router.patch("/:id/applications", authenticate, updateApplicationStatus);
 
 export default router;

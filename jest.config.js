@@ -17,6 +17,7 @@ module.exports = {
     "^\\./(.*\\.routes)\\.js$": "<rootDir>/src/routes/v1/$1.ts",
     "^(?:\\.\\./)+(middleware|controllers|config|services|routes|validators)/(.*)\\.js$":
       "<rootDir>/src/$1/$2.ts",
+    "^\\./(config|routes|controllers|middleware|services|validators)/(.*)\\.js$": "<rootDir>/src/$1/$2.ts",
   },
   transformIgnorePatterns,
   testEnvironment: "node",

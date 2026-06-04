@@ -40,6 +40,14 @@ const dateStringToDate = z.preprocess((arg) => {
   return arg;
 }, z.date());
 
+// Optional date — same as dateStringToDate but allows undefined/null
+const optionalDate = z.preprocess((arg) => {
+  if (!arg) return undefined;
+  if (typeof arg === "string" || arg instanceof Date)
+    return new Date(arg as any);
+  return arg;
+}, z.date().optional());
+
 export const userCreateSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.email({ message: "Invalid email address" }),
@@ -50,28 +58,32 @@ export const userCreateSchema = z.object({
 });
 
 export const registerSchema = z
-    .object({
-        name: z.string().min(1).optional(),
-        email: z.string().email().optional(),
-        phone: z.string().optional(),
-        password: z.string().min(8),
-        role:roleEnum
-    })
-    .refine((data) => data.email || data.phone, { message: "Either email or phone is required" });
-
-export const loginSchema = z.object({
+  .object({
+    name: z.string().min(1).optional(),
     email: z.string().email().optional(),
     phone: z.string().optional(),
-    password: z.string(),
+    password: z.string().min(8),
+    role: roleEnum,
+  })
+  .refine((data) => data.email || data.phone, {
+    message: "Either email or phone is required",
+  });
+
+export const loginSchema = z.object({
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+  password: z.string(),
 });
 
-export const verifySchema = z.object({
-  otp: z.string().length(6),
-  email: z.string().email().optional(),
-  userId: z.uuid().optional(),
-}).refine((data) => data.email || data.userId, {
-  message: "Either email or userId is required",
-});
+export const verifySchema = z
+  .object({
+    otp: z.string().length(6),
+    email: z.string().email().optional(),
+    userId: z.uuid().optional(),
+  })
+  .refine((data) => data.email || data.userId, {
+    message: "Either email or userId is required",
+  });
 
 export const forgotPasswordSchema = z.object({
   email: z.string().email(),
@@ -84,57 +96,57 @@ export const resetPasswordSchema = z.object({
 });
 
 export const refreshSchema = z.object({
-    refreshToken: z.string(),
+  refreshToken: z.string(),
 });
 
 export const campaignCreateSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().optional(),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
   budget: z.number().nonnegative("Budget must be >= 0"),
-  startDate: dateStringToDate,
-  endDate: dateStringToDate,
-  niche_filter: z.string().min(1, "niche_filter is required"),
-  min_audience_size: z.number().int().nonnegative(),
-  max_creators: z.number().int().positive(),
+  startDate: optionalDate,                                  // ← now optional
+  endDate: optionalDate,                                    // ← now optional
+  niche_filter: z.string().optional(),                      // ← now optional
+  min_audience_size: z.number().int().nonnegative().optional(),
+  max_creators: z.number().int().positive().optional(),
 });
 
 export const campaignUpdateSchema = campaignCreateSchema.partial();
 
 export const campaignStatusUpdateSchema = z.object({
-    status: campaignStatusEnum,
+  status: campaignStatusEnum,
 });
 
 export const creatorProfileCreateSchema = z.object({
-    bio: z.string().optional(),
-    specialization: z.string().optional(),
-    socialLinks: z.string().optional(),
-    avatar: z.url().optional(),
-    location:z.string().optional(),
-    payout_account: z.string().optional(),
-    payout_network: z.string().optional(),
-    earnings: z.number().optional(),
-    followers: z.number().int().optional(),
-    subscriptionFee: z.number().optional(),
+  bio: z.string().optional(),
+  specialization: z.string().optional(),
+  socialLinks: z.string().optional(),
+  avatar: z.url().optional(),
+  location: z.string().optional(),
+  payout_account: z.string().optional(),
+  payout_network: z.string().optional(),
+  earnings: z.number().optional(),
+  followers: z.number().int().optional(),
+  subscriptionFee: z.number().optional(),
 });
 
 export const creatorProfileUpdateSchema = creatorProfileCreateSchema.partial();
 
 export const creatorProfileStatusSchema = z.object({
-    profile_status: z.enum(["active", "suspended"]),
+  profile_status: z.enum(["active", "suspended"]),
 });
 
 export const creatorProfileSchema = z.object({
-    userId: uuidString(),
-    bio: z.string().optional(),
-    specialization: z.string().optional(),
-    socialLinks: z.string().optional(),
-    earnings: z.number().optional(),
-    followers: z.number().int().optional(),
-    subscriptionFee: z.number().optional(),
-    avatar: z.string().optional(),
-    location: z.string().optional(),
-    payout_account: z.string().optional(),
-    payout_network: z.string().optional(),
+  userId: uuidString(),
+  bio: z.string().optional(),
+  specialization: z.string().optional(),
+  socialLinks: z.string().optional(),
+  earnings: z.number().optional(),
+  followers: z.number().int().optional(),
+  subscriptionFee: z.number().optional(),
+  avatar: z.string().optional(),
+  location: z.string().optional(),
+  payout_account: z.string().optional(),
+  payout_network: z.string().optional(),
 });
 
 export const contentSchema = z
@@ -166,11 +178,11 @@ export const campaignSchema = z.object({
   description: z.string().optional(),
   budget: z.number().nonnegative("Budget must be >= 0"),
   status: campaignStatusEnum.optional(),
-  niche_filter: z.string(),
-  min_audience_size: z.number().int().nonnegative(),
-  max_creators: z.number().int().positive(),
-  startDate: dateStringToDate,
-  endDate: dateStringToDate,
+  niche_filter: z.string().optional(),                      // ← also optional here
+  min_audience_size: z.number().int().nonnegative().optional(),
+  max_creators: z.number().int().positive().optional(),
+  startDate: optionalDate,
+  endDate: optionalDate,
 });
 
 export const paymentTransactionSchema = z.object({
@@ -185,9 +197,9 @@ export const paymentTransactionSchema = z.object({
 });
 
 export const paymentTransactionCreateSchema = paymentTransactionSchema.pick({
-    amount: true,
-    paymentType: true,
-    transactionRef: true,
+  amount: true,
+  paymentType: true,
+  transactionRef: true,
 });
 
 export const messageSchema = z.object({
@@ -208,23 +220,23 @@ export type PaymentTransaction = z.infer<typeof paymentTransactionSchema>;
 export type Message = z.infer<typeof messageSchema>;
 
 export const validators = {
-    registerSchema,
-    loginSchema,
-    verifySchema,
-    forgotPasswordSchema,
-    resetPasswordSchema,
-    refreshSchema,
-    campaignCreateSchema,
-    campaignUpdateSchema,
-    campaignStatusUpdateSchema,
-    creatorProfileCreateSchema,
-    creatorProfileUpdateSchema,
-    creatorProfileStatusSchema,
-    paymentTransactionCreateSchema,
-    userCreateSchema,
-    creatorProfileSchema,
-    contentSchema,
-    campaignSchema,
-    paymentTransactionSchema,
-    messageSchema,
+  registerSchema,
+  loginSchema,
+  verifySchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  refreshSchema,
+  campaignCreateSchema,
+  campaignUpdateSchema,
+  campaignStatusUpdateSchema,
+  creatorProfileCreateSchema,
+  creatorProfileUpdateSchema,
+  creatorProfileStatusSchema,
+  paymentTransactionCreateSchema,
+  userCreateSchema,
+  creatorProfileSchema,
+  contentSchema,
+  campaignSchema,
+  paymentTransactionSchema,
+  messageSchema,
 };

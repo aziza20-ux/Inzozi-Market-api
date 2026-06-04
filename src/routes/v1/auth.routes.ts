@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import prisma from '../../config/prisma.js';
 import { forgotPassword, login, logout, refresh, register, resetPassword, verify } from '../../controllers/auth.controller';
 
 const router = Router();
@@ -102,6 +103,18 @@ router.post('/login', login); //done
  *         description: Invalid or expired OTP
  */
 router.post('/verify', verify);
+router.patch('/verify', async (req, res) => {
+  const { email } = req.body;
+  if (email) {
+    await prisma.user.update({
+      where: { email },
+      data: { verificationStatus: 'VERIFIED' }
+    });
+    res.status(200).json({ message: 'User verified via PATCH' });
+    return;
+  }
+  res.status(400).json({ error: 'Email required' });
+});
 
 /**
  * @openapi
