@@ -1,4 +1,5 @@
 import { Router } from 'express';
+<<<<<<< HEAD
 import {
   register,
   login,
@@ -7,6 +8,9 @@ import {
   refresh,
   logout,
 } from '../../controllers/auth.controller';
+=======
+import { forgotPassword, login, logout, refresh, register, resetPassword, verify } from '../../controllers/auth.controller';
+>>>>>>> origin/espy
 
 const router = Router();
 
@@ -114,17 +118,26 @@ router.post('/verify', verify);
 
 /**
  * @openapi
+<<<<<<< HEAD
  * /auth/resend-otp:
  *   post:
  *     tags:
  *       - Auth
  *     summary: Resend an OTP to a registered user
+=======
+ * /auth/forgot-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Send a password reset code to a user's email
+>>>>>>> origin/espy
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+<<<<<<< HEAD
  *             properties:
  *               userId:
  *                 type: string
@@ -145,6 +158,55 @@ router.post('/verify', verify);
  *         description: User not found
  */
 router.post('/resend-otp', resendOtp);
+=======
+ *             required: [email]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *     responses:
+ *       200:
+ *         description: Reset code sent
+ *       400:
+ *         description: Invalid request body
+ *       404:
+ *         description: User not found
+ */
+router.post('/forgot-password', forgotPassword);
+
+/**
+ * @openapi
+ * /auth/reset-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Reset a password using a verification code
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, otp, password]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               otp:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *                 minLength: 8
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *       400:
+ *         description: Invalid or expired OTP
+ *       404:
+ *         description: User not found
+ */
+router.post('/reset-password', resetPassword);
+>>>>>>> origin/espy
 
 /**
  * @openapi

@@ -5,6 +5,7 @@ const campaign_controller_js_1 = require("../../controllers/campaign.controller.
 const payment_controllers_js_1 = require("../../controllers/payment.controllers.js");
 const auth_js_1 = require("../../middleware/auth.js");
 const router = (0, express_1.Router)();
+<<<<<<< HEAD
 /**
  * @openapi
  * /campaigns:
@@ -216,5 +217,13 @@ router.post("/:id/disburse", auth_js_1.authenticate, payment_controllers_js_1.di
  *       200:
  *         description: Campaign deleted
  */
+=======
+router.post("/", auth_js_1.authenticate, campaign_controller_js_1.createCampaign);
+router.get("/", campaign_controller_js_1.getCampaigns);
+router.get("/:id", auth_js_1.authenticate, campaign_controller_js_1.getCampaignById);
+router.put("/:id", auth_js_1.authenticate, campaign_controller_js_1.updateCampaign);
+router.patch("/:id/status", auth_js_1.authenticate, campaign_controller_js_1.updateCampaignStatus);
+router.post("/:id/disburse", auth_js_1.authenticate, payment_controllers_js_1.disburseCampaign);
+>>>>>>> origin/espy
 router.delete("/:id", auth_js_1.authenticate, campaign_controller_js_1.deleteCampaign);
 exports.default = router;

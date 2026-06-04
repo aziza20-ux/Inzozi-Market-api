@@ -5,15 +5,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const express_1 = __importDefault(require("express"));
+<<<<<<< HEAD
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const index_js_1 = __importDefault(require("./routes/v1/index.js"));
 const swagger_1 = require("../src/config/swagger");
+=======
+const helmet_1 = __importDefault(require("helmet"));
+const cors_1 = __importDefault(require("cors"));
+const index_js_1 = __importDefault(require("./routes/v1/index.js"));
+const swagger_js_1 = require("./config/swagger.js");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+>>>>>>> origin/espy
 const app = (0, express_1.default)();
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+<<<<<<< HEAD
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
@@ -25,4 +35,14 @@ app.use("/api/v1", index_js_1.default);
 exports.default = app;
 app.listen(3000, () => {
     console.log(`Server is running on port http://localhost:3000`);
+=======
+app.get('/health', (_req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+app.use('/api/v1', index_js_1.default);
+(0, swagger_js_1.setupSwagger)(app);
+const PORT = Number(process.env.PORT) || 4000;
+app.listen(PORT, () => {
+    console.log(`Server running on port http://localhost:${PORT}`);
+>>>>>>> origin/espy
 });

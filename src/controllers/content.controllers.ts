@@ -1,7 +1,43 @@
 import type { Request, Response } from "express";
 import prisma from "../config/prisma.js";
 
+<<<<<<< HEAD
 export const createContent = async (req: Request, res: Response) => {
+=======
+type Visibility = "public" | "paid";
+
+async function hasCompletedPremiumPurchase(userId: string, contentId: string) {
+  const purchase = await prisma.premiumPurchase.findFirst({
+    where: {
+      userId,
+      contentId,
+      status: { in: ["SUCCESS", "COMPLETED", "paid", "completed"] },
+    },
+  });
+  return !!purchase;
+}
+
+function isPaidContent(contentVisibility: Visibility) {
+  return contentVisibility === "paid";
+}
+
+function getMediaUrl(body: any) {
+  return body?.media_url ?? body?.mediaUrl ?? body?.contentUrl;
+}
+
+async function resolveContentMedia(req: Request) {
+  const file = (req as Request & { file?: MulterFile }).file;
+  if (file) {
+    const resourceType = file.mimetype.startsWith("video/") ? "video" : "auto";
+    const uploaded = await uploadToCloudinary(file.buffer, "inzozi/content", resourceType);
+    return uploaded.url;
+  }
+
+  return getMediaUrl(req.body);
+}
+
+export async function generateContentUploadUrl(req: Request, res: Response) {
+>>>>>>> origin/espy
   try {
     const user = req.user;
 

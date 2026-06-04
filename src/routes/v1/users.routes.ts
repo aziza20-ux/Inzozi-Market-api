@@ -10,7 +10,9 @@ import {
 	getUserCampaigns,
 	getUserMessages,
 	usersStats,
+	uploadMyProfileImage,
 } from "../../controllers/users.controller";
+import upload from "../../config/multer";
 import { authenticate } from "../../middleware/auth";
 import { uploadProfilePicture } from "../../controllers/upload.controllers.js";
 
@@ -87,6 +89,37 @@ userRoutes.get("/", getUsers);//test done
  *         description: User statistics grouped by role
  */
 userRoutes.get("/stats", usersStats); //test done
+
+/**
+ * @openapi
+ * /users/me/profile-image:
+ *   put:
+ *     tags:
+ *       - Users
+ *     summary: Upload the authenticated user's profile picture
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [profileImage]
+ *             properties:
+ *               profileImage:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Profile image uploaded
+ */
+userRoutes.put(
+	"/me/profile-image",
+	authenticate,
+	upload.single("profileImage"),
+	uploadMyProfileImage,
+);
 
 /**
  * @openapi

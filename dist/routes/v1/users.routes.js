@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+<<<<<<< HEAD
 const multer_js_1 = __importDefault(require("../../config/multer.js"));
 const users_controller_1 = require("../../controllers/users.controller");
 const auth_1 = require("../../middleware/auth");
@@ -256,5 +257,17 @@ userRoutes.get("/:id/campaigns", users_controller_1.getUserCampaigns); //test do
  *       200:
  *         description: User messages
  */
+=======
+const users_controller_1 = require("../../controllers/users.controller");
+const userRoutes = (0, express_1.Router)();
+userRoutes.get("/", users_controller_1.getUsers); //test done
+userRoutes.get("/stats", users_controller_1.usersStats); //test done
+userRoutes.post("/", users_controller_1.createUser); //test done
+userRoutes.get("/:id", users_controller_1.getUserById); //test done
+userRoutes.put("/:id", users_controller_1.updateUser); //test done
+userRoutes.delete("/:id", users_controller_1.deleteUser); // test done
+userRoutes.get("/:id/contents", users_controller_1.getUserContents); //test done
+userRoutes.get("/:id/campaigns", users_controller_1.getUserCampaigns); //test done
+>>>>>>> origin/espy
 userRoutes.get("/:id/messages", users_controller_1.getUserMessages); //test done
 exports.default = userRoutes;

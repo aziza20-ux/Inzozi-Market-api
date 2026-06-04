@@ -4,6 +4,7 @@ const express_1 = require("express");
 const auth_js_1 = require("../../middleware/auth.js");
 const requireRole_js_1 = require("../../middleware/requireRole.js");
 const requireVerified_js_1 = require("../../middleware/requireVerified.js");
+<<<<<<< HEAD
 const payment_controller_js_1 = require("../../controllers/payment.controller.js");
 const router = (0, express_1.Router)();
 /**
@@ -141,4 +142,13 @@ router.post("/withdraw", auth_js_1.authenticate, requireVerified_js_1.requireVer
  *         description: Matching payments updated
  */
 router.post("/mock-provider/callback", payment_controller_js_1.mockProviderCallback);
+=======
+const payment_controllers_js_1 = require("../../controllers/payment.controllers.js");
+const router = (0, express_1.Router)();
+router.post("/", auth_js_1.authenticate, payment_controllers_js_1.createPayment);
+router.get("/", auth_js_1.authenticate, payment_controllers_js_1.getPayments);
+router.get("/:id", auth_js_1.authenticate, payment_controllers_js_1.getPaymentById);
+router.post("/withdraw", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (0, requireRole_js_1.requireRole)("CREATOR"), payment_controllers_js_1.withdraw);
+router.post("/mock-provider/callback", payment_controllers_js_1.mockProviderCallback);
+>>>>>>> origin/espy
 exports.default = router;

@@ -6,11 +6,8 @@
 
 */
 -- AlterTable
-ALTER TABLE "Content" DROP COLUMN IF EXISTS "moderationStatus",
-DROP COLUMN IF EXISTS "rejectionReason";
-
--- AlterTable
-ALTER TABLE "User" ALTER COLUMN "name" DROP NOT NULL;
+ALTER TABLE "Content" DROP COLUMN "moderationStatus",
+DROP COLUMN "rejectionReason";
 
 -- DropEnum
-DROP TYPE IF EXISTS "ModerationStatus";
+DROP TYPE "ModerationStatus";
