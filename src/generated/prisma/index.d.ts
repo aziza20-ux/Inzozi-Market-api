@@ -58,6 +58,16 @@ export type PremiumPurchase = $Result.DefaultSelection<Prisma.$PremiumPurchasePa
  * 
  */
 export type Subscription = $Result.DefaultSelection<Prisma.$SubscriptionPayload>
+/**
+ * Model ContentLike
+ * 
+ */
+export type ContentLike = $Result.DefaultSelection<Prisma.$ContentLikePayload>
+/**
+ * Model ContentComment
+ * 
+ */
+export type ContentComment = $Result.DefaultSelection<Prisma.$ContentCommentPayload>
 
 /**
  * Enums
@@ -398,6 +408,26 @@ export class PrismaClient<
     * ```
     */
   get subscription(): Prisma.SubscriptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.contentLike`: Exposes CRUD operations for the **ContentLike** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ContentLikes
+    * const contentLikes = await prisma.contentLike.findMany()
+    * ```
+    */
+  get contentLike(): Prisma.ContentLikeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.contentComment`: Exposes CRUD operations for the **ContentComment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ContentComments
+    * const contentComments = await prisma.contentComment.findMany()
+    * ```
+    */
+  get contentComment(): Prisma.ContentCommentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -840,7 +870,9 @@ export namespace Prisma {
     PaymentTransaction: 'PaymentTransaction',
     Message: 'Message',
     PremiumPurchase: 'PremiumPurchase',
-    Subscription: 'Subscription'
+    Subscription: 'Subscription',
+    ContentLike: 'ContentLike',
+    ContentComment: 'ContentComment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -856,7 +888,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "creatorProfile" | "content" | "campaign" | "application" | "paymentTransaction" | "message" | "premiumPurchase" | "subscription"
+      modelProps: "user" | "creatorProfile" | "content" | "campaign" | "application" | "paymentTransaction" | "message" | "premiumPurchase" | "subscription" | "contentLike" | "contentComment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1526,6 +1558,154 @@ export namespace Prisma {
           }
         }
       }
+      ContentLike: {
+        payload: Prisma.$ContentLikePayload<ExtArgs>
+        fields: Prisma.ContentLikeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ContentLikeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ContentLikeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload>
+          }
+          findFirst: {
+            args: Prisma.ContentLikeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ContentLikeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload>
+          }
+          findMany: {
+            args: Prisma.ContentLikeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload>[]
+          }
+          create: {
+            args: Prisma.ContentLikeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload>
+          }
+          createMany: {
+            args: Prisma.ContentLikeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ContentLikeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload>[]
+          }
+          delete: {
+            args: Prisma.ContentLikeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload>
+          }
+          update: {
+            args: Prisma.ContentLikeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload>
+          }
+          deleteMany: {
+            args: Prisma.ContentLikeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ContentLikeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ContentLikeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload>[]
+          }
+          upsert: {
+            args: Prisma.ContentLikeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentLikePayload>
+          }
+          aggregate: {
+            args: Prisma.ContentLikeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContentLike>
+          }
+          groupBy: {
+            args: Prisma.ContentLikeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContentLikeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ContentLikeCountArgs<ExtArgs>
+            result: $Utils.Optional<ContentLikeCountAggregateOutputType> | number
+          }
+        }
+      }
+      ContentComment: {
+        payload: Prisma.$ContentCommentPayload<ExtArgs>
+        fields: Prisma.ContentCommentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ContentCommentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ContentCommentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload>
+          }
+          findFirst: {
+            args: Prisma.ContentCommentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ContentCommentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload>
+          }
+          findMany: {
+            args: Prisma.ContentCommentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload>[]
+          }
+          create: {
+            args: Prisma.ContentCommentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload>
+          }
+          createMany: {
+            args: Prisma.ContentCommentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ContentCommentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload>[]
+          }
+          delete: {
+            args: Prisma.ContentCommentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload>
+          }
+          update: {
+            args: Prisma.ContentCommentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload>
+          }
+          deleteMany: {
+            args: Prisma.ContentCommentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ContentCommentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ContentCommentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload>[]
+          }
+          upsert: {
+            args: Prisma.ContentCommentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentCommentPayload>
+          }
+          aggregate: {
+            args: Prisma.ContentCommentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContentComment>
+          }
+          groupBy: {
+            args: Prisma.ContentCommentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContentCommentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ContentCommentCountArgs<ExtArgs>
+            result: $Utils.Optional<ContentCommentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1643,6 +1823,8 @@ export namespace Prisma {
     message?: MessageOmit
     premiumPurchase?: PremiumPurchaseOmit
     subscription?: SubscriptionOmit
+    contentLike?: ContentLikeOmit
+    contentComment?: ContentCommentOmit
   }
 
   /* Types for Logging */
@@ -1732,6 +1914,8 @@ export namespace Prisma {
     applications: number
     subscriptions: number
     creatorSubscriptions: number
+    likes: number
+    comments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1744,6 +1928,8 @@ export namespace Prisma {
     applications?: boolean | UserCountOutputTypeCountApplicationsArgs
     subscriptions?: boolean | UserCountOutputTypeCountSubscriptionsArgs
     creatorSubscriptions?: boolean | UserCountOutputTypeCountCreatorSubscriptionsArgs
+    likes?: boolean | UserCountOutputTypeCountLikesArgs
+    comments?: boolean | UserCountOutputTypeCountCommentsArgs
   }
 
   // Custom InputTypes
@@ -1820,6 +2006,20 @@ export namespace Prisma {
     where?: SubscriptionWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLikesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContentLikeWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContentCommentWhereInput
+  }
+
 
   /**
    * Count Type CreatorProfileCountOutputType
@@ -1858,10 +2058,14 @@ export namespace Prisma {
 
   export type ContentCountOutputType = {
     premiumPurchases: number
+    likes: number
+    comments: number
   }
 
   export type ContentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     premiumPurchases?: boolean | ContentCountOutputTypeCountPremiumPurchasesArgs
+    likes?: boolean | ContentCountOutputTypeCountLikesArgs
+    comments?: boolean | ContentCountOutputTypeCountCommentsArgs
   }
 
   // Custom InputTypes
@@ -1880,6 +2084,20 @@ export namespace Prisma {
    */
   export type ContentCountOutputTypeCountPremiumPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PremiumPurchaseWhereInput
+  }
+
+  /**
+   * ContentCountOutputType without action
+   */
+  export type ContentCountOutputTypeCountLikesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContentLikeWhereInput
+  }
+
+  /**
+   * ContentCountOutputType without action
+   */
+  export type ContentCountOutputTypeCountCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContentCommentWhereInput
   }
 
 
@@ -2124,6 +2342,8 @@ export namespace Prisma {
     applications?: boolean | User$applicationsArgs<ExtArgs>
     subscriptions?: boolean | User$subscriptionsArgs<ExtArgs>
     creatorSubscriptions?: boolean | User$creatorSubscriptionsArgs<ExtArgs>
+    likes?: boolean | User$likesArgs<ExtArgs>
+    comments?: boolean | User$commentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2175,6 +2395,8 @@ export namespace Prisma {
     applications?: boolean | User$applicationsArgs<ExtArgs>
     subscriptions?: boolean | User$subscriptionsArgs<ExtArgs>
     creatorSubscriptions?: boolean | User$creatorSubscriptionsArgs<ExtArgs>
+    likes?: boolean | User$likesArgs<ExtArgs>
+    comments?: boolean | User$commentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2193,6 +2415,8 @@ export namespace Prisma {
       applications: Prisma.$ApplicationPayload<ExtArgs>[]
       subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
       creatorSubscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
+      likes: Prisma.$ContentLikePayload<ExtArgs>[]
+      comments: Prisma.$ContentCommentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2608,6 +2832,8 @@ export namespace Prisma {
     applications<T extends User$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     subscriptions<T extends User$subscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, User$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     creatorSubscriptions<T extends User$creatorSubscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, User$creatorSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    likes<T extends User$likesArgs<ExtArgs> = {}>(args?: Subset<T, User$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    comments<T extends User$commentsArgs<ExtArgs> = {}>(args?: Subset<T, User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3271,6 +3497,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SubscriptionScalarFieldEnum | SubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * User.likes
+   */
+  export type User$likesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    where?: ContentLikeWhereInput
+    orderBy?: ContentLikeOrderByWithRelationInput | ContentLikeOrderByWithRelationInput[]
+    cursor?: ContentLikeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContentLikeScalarFieldEnum | ContentLikeScalarFieldEnum[]
+  }
+
+  /**
+   * User.comments
+   */
+  export type User$commentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    where?: ContentCommentWhereInput
+    orderBy?: ContentCommentOrderByWithRelationInput | ContentCommentOrderByWithRelationInput[]
+    cursor?: ContentCommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContentCommentScalarFieldEnum | ContentCommentScalarFieldEnum[]
   }
 
   /**
@@ -4817,6 +5091,8 @@ export namespace Prisma {
     creator?: boolean | UserDefaultArgs<ExtArgs>
     creatorProfile?: boolean | Content$creatorProfileArgs<ExtArgs>
     premiumPurchases?: boolean | Content$premiumPurchasesArgs<ExtArgs>
+    likes?: boolean | Content$likesArgs<ExtArgs>
+    comments?: boolean | Content$commentsArgs<ExtArgs>
     _count?: boolean | ContentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["content"]>
 
@@ -4880,6 +5156,8 @@ export namespace Prisma {
     creator?: boolean | UserDefaultArgs<ExtArgs>
     creatorProfile?: boolean | Content$creatorProfileArgs<ExtArgs>
     premiumPurchases?: boolean | Content$premiumPurchasesArgs<ExtArgs>
+    likes?: boolean | Content$likesArgs<ExtArgs>
+    comments?: boolean | Content$commentsArgs<ExtArgs>
     _count?: boolean | ContentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ContentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4897,6 +5175,8 @@ export namespace Prisma {
       creator: Prisma.$UserPayload<ExtArgs>
       creatorProfile: Prisma.$CreatorProfilePayload<ExtArgs> | null
       premiumPurchases: Prisma.$PremiumPurchasePayload<ExtArgs>[]
+      likes: Prisma.$ContentLikePayload<ExtArgs>[]
+      comments: Prisma.$ContentCommentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5310,6 +5590,8 @@ export namespace Prisma {
     creator<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     creatorProfile<T extends Content$creatorProfileArgs<ExtArgs> = {}>(args?: Subset<T, Content$creatorProfileArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     premiumPurchases<T extends Content$premiumPurchasesArgs<ExtArgs> = {}>(args?: Subset<T, Content$premiumPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PremiumPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    likes<T extends Content$likesArgs<ExtArgs> = {}>(args?: Subset<T, Content$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    comments<T extends Content$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Content$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5794,6 +6076,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PremiumPurchaseScalarFieldEnum | PremiumPurchaseScalarFieldEnum[]
+  }
+
+  /**
+   * Content.likes
+   */
+  export type Content$likesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    where?: ContentLikeWhereInput
+    orderBy?: ContentLikeOrderByWithRelationInput | ContentLikeOrderByWithRelationInput[]
+    cursor?: ContentLikeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContentLikeScalarFieldEnum | ContentLikeScalarFieldEnum[]
+  }
+
+  /**
+   * Content.comments
+   */
+  export type Content$commentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    where?: ContentCommentWhereInput
+    orderBy?: ContentCommentOrderByWithRelationInput | ContentCommentOrderByWithRelationInput[]
+    cursor?: ContentCommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContentCommentScalarFieldEnum | ContentCommentScalarFieldEnum[]
   }
 
   /**
@@ -12691,6 +13021,2135 @@ export namespace Prisma {
 
 
   /**
+   * Model ContentLike
+   */
+
+  export type AggregateContentLike = {
+    _count: ContentLikeCountAggregateOutputType | null
+    _min: ContentLikeMinAggregateOutputType | null
+    _max: ContentLikeMaxAggregateOutputType | null
+  }
+
+  export type ContentLikeMinAggregateOutputType = {
+    id: string | null
+    contentId: string | null
+    userId: string | null
+    createdAt: Date | null
+  }
+
+  export type ContentLikeMaxAggregateOutputType = {
+    id: string | null
+    contentId: string | null
+    userId: string | null
+    createdAt: Date | null
+  }
+
+  export type ContentLikeCountAggregateOutputType = {
+    id: number
+    contentId: number
+    userId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ContentLikeMinAggregateInputType = {
+    id?: true
+    contentId?: true
+    userId?: true
+    createdAt?: true
+  }
+
+  export type ContentLikeMaxAggregateInputType = {
+    id?: true
+    contentId?: true
+    userId?: true
+    createdAt?: true
+  }
+
+  export type ContentLikeCountAggregateInputType = {
+    id?: true
+    contentId?: true
+    userId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ContentLikeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContentLike to aggregate.
+     */
+    where?: ContentLikeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentLikes to fetch.
+     */
+    orderBy?: ContentLikeOrderByWithRelationInput | ContentLikeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ContentLikeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentLikes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentLikes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ContentLikes
+    **/
+    _count?: true | ContentLikeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ContentLikeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ContentLikeMaxAggregateInputType
+  }
+
+  export type GetContentLikeAggregateType<T extends ContentLikeAggregateArgs> = {
+        [P in keyof T & keyof AggregateContentLike]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateContentLike[P]>
+      : GetScalarType<T[P], AggregateContentLike[P]>
+  }
+
+
+
+
+  export type ContentLikeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContentLikeWhereInput
+    orderBy?: ContentLikeOrderByWithAggregationInput | ContentLikeOrderByWithAggregationInput[]
+    by: ContentLikeScalarFieldEnum[] | ContentLikeScalarFieldEnum
+    having?: ContentLikeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ContentLikeCountAggregateInputType | true
+    _min?: ContentLikeMinAggregateInputType
+    _max?: ContentLikeMaxAggregateInputType
+  }
+
+  export type ContentLikeGroupByOutputType = {
+    id: string
+    contentId: string
+    userId: string
+    createdAt: Date
+    _count: ContentLikeCountAggregateOutputType | null
+    _min: ContentLikeMinAggregateOutputType | null
+    _max: ContentLikeMaxAggregateOutputType | null
+  }
+
+  type GetContentLikeGroupByPayload<T extends ContentLikeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ContentLikeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ContentLikeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ContentLikeGroupByOutputType[P]>
+            : GetScalarType<T[P], ContentLikeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ContentLikeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contentId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contentLike"]>
+
+  export type ContentLikeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contentId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contentLike"]>
+
+  export type ContentLikeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contentId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contentLike"]>
+
+  export type ContentLikeSelectScalar = {
+    id?: boolean
+    contentId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+  }
+
+  export type ContentLikeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contentId" | "userId" | "createdAt", ExtArgs["result"]["contentLike"]>
+  export type ContentLikeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ContentLikeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ContentLikeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ContentLikePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ContentLike"
+    objects: {
+      content: Prisma.$ContentPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      contentId: string
+      userId: string
+      createdAt: Date
+    }, ExtArgs["result"]["contentLike"]>
+    composites: {}
+  }
+
+  type ContentLikeGetPayload<S extends boolean | null | undefined | ContentLikeDefaultArgs> = $Result.GetResult<Prisma.$ContentLikePayload, S>
+
+  type ContentLikeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContentLikeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ContentLikeCountAggregateInputType | true
+    }
+
+  export interface ContentLikeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContentLike'], meta: { name: 'ContentLike' } }
+    /**
+     * Find zero or one ContentLike that matches the filter.
+     * @param {ContentLikeFindUniqueArgs} args - Arguments to find a ContentLike
+     * @example
+     * // Get one ContentLike
+     * const contentLike = await prisma.contentLike.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ContentLikeFindUniqueArgs>(args: SelectSubset<T, ContentLikeFindUniqueArgs<ExtArgs>>): Prisma__ContentLikeClient<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ContentLike that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ContentLikeFindUniqueOrThrowArgs} args - Arguments to find a ContentLike
+     * @example
+     * // Get one ContentLike
+     * const contentLike = await prisma.contentLike.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ContentLikeFindUniqueOrThrowArgs>(args: SelectSubset<T, ContentLikeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContentLikeClient<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContentLike that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentLikeFindFirstArgs} args - Arguments to find a ContentLike
+     * @example
+     * // Get one ContentLike
+     * const contentLike = await prisma.contentLike.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ContentLikeFindFirstArgs>(args?: SelectSubset<T, ContentLikeFindFirstArgs<ExtArgs>>): Prisma__ContentLikeClient<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContentLike that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentLikeFindFirstOrThrowArgs} args - Arguments to find a ContentLike
+     * @example
+     * // Get one ContentLike
+     * const contentLike = await prisma.contentLike.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ContentLikeFindFirstOrThrowArgs>(args?: SelectSubset<T, ContentLikeFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContentLikeClient<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ContentLikes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentLikeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ContentLikes
+     * const contentLikes = await prisma.contentLike.findMany()
+     * 
+     * // Get first 10 ContentLikes
+     * const contentLikes = await prisma.contentLike.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const contentLikeWithIdOnly = await prisma.contentLike.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ContentLikeFindManyArgs>(args?: SelectSubset<T, ContentLikeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ContentLike.
+     * @param {ContentLikeCreateArgs} args - Arguments to create a ContentLike.
+     * @example
+     * // Create one ContentLike
+     * const ContentLike = await prisma.contentLike.create({
+     *   data: {
+     *     // ... data to create a ContentLike
+     *   }
+     * })
+     * 
+     */
+    create<T extends ContentLikeCreateArgs>(args: SelectSubset<T, ContentLikeCreateArgs<ExtArgs>>): Prisma__ContentLikeClient<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ContentLikes.
+     * @param {ContentLikeCreateManyArgs} args - Arguments to create many ContentLikes.
+     * @example
+     * // Create many ContentLikes
+     * const contentLike = await prisma.contentLike.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ContentLikeCreateManyArgs>(args?: SelectSubset<T, ContentLikeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ContentLikes and returns the data saved in the database.
+     * @param {ContentLikeCreateManyAndReturnArgs} args - Arguments to create many ContentLikes.
+     * @example
+     * // Create many ContentLikes
+     * const contentLike = await prisma.contentLike.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ContentLikes and only return the `id`
+     * const contentLikeWithIdOnly = await prisma.contentLike.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ContentLikeCreateManyAndReturnArgs>(args?: SelectSubset<T, ContentLikeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ContentLike.
+     * @param {ContentLikeDeleteArgs} args - Arguments to delete one ContentLike.
+     * @example
+     * // Delete one ContentLike
+     * const ContentLike = await prisma.contentLike.delete({
+     *   where: {
+     *     // ... filter to delete one ContentLike
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ContentLikeDeleteArgs>(args: SelectSubset<T, ContentLikeDeleteArgs<ExtArgs>>): Prisma__ContentLikeClient<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ContentLike.
+     * @param {ContentLikeUpdateArgs} args - Arguments to update one ContentLike.
+     * @example
+     * // Update one ContentLike
+     * const contentLike = await prisma.contentLike.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ContentLikeUpdateArgs>(args: SelectSubset<T, ContentLikeUpdateArgs<ExtArgs>>): Prisma__ContentLikeClient<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ContentLikes.
+     * @param {ContentLikeDeleteManyArgs} args - Arguments to filter ContentLikes to delete.
+     * @example
+     * // Delete a few ContentLikes
+     * const { count } = await prisma.contentLike.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ContentLikeDeleteManyArgs>(args?: SelectSubset<T, ContentLikeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContentLikes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentLikeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ContentLikes
+     * const contentLike = await prisma.contentLike.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ContentLikeUpdateManyArgs>(args: SelectSubset<T, ContentLikeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContentLikes and returns the data updated in the database.
+     * @param {ContentLikeUpdateManyAndReturnArgs} args - Arguments to update many ContentLikes.
+     * @example
+     * // Update many ContentLikes
+     * const contentLike = await prisma.contentLike.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ContentLikes and only return the `id`
+     * const contentLikeWithIdOnly = await prisma.contentLike.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ContentLikeUpdateManyAndReturnArgs>(args: SelectSubset<T, ContentLikeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ContentLike.
+     * @param {ContentLikeUpsertArgs} args - Arguments to update or create a ContentLike.
+     * @example
+     * // Update or create a ContentLike
+     * const contentLike = await prisma.contentLike.upsert({
+     *   create: {
+     *     // ... data to create a ContentLike
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ContentLike we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ContentLikeUpsertArgs>(args: SelectSubset<T, ContentLikeUpsertArgs<ExtArgs>>): Prisma__ContentLikeClient<$Result.GetResult<Prisma.$ContentLikePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ContentLikes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentLikeCountArgs} args - Arguments to filter ContentLikes to count.
+     * @example
+     * // Count the number of ContentLikes
+     * const count = await prisma.contentLike.count({
+     *   where: {
+     *     // ... the filter for the ContentLikes we want to count
+     *   }
+     * })
+    **/
+    count<T extends ContentLikeCountArgs>(
+      args?: Subset<T, ContentLikeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ContentLikeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ContentLike.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentLikeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ContentLikeAggregateArgs>(args: Subset<T, ContentLikeAggregateArgs>): Prisma.PrismaPromise<GetContentLikeAggregateType<T>>
+
+    /**
+     * Group by ContentLike.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentLikeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ContentLikeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ContentLikeGroupByArgs['orderBy'] }
+        : { orderBy?: ContentLikeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ContentLikeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContentLikeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ContentLike model
+   */
+  readonly fields: ContentLikeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ContentLike.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ContentLikeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    content<T extends ContentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContentDefaultArgs<ExtArgs>>): Prisma__ContentClient<$Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ContentLike model
+   */
+  interface ContentLikeFieldRefs {
+    readonly id: FieldRef<"ContentLike", 'String'>
+    readonly contentId: FieldRef<"ContentLike", 'String'>
+    readonly userId: FieldRef<"ContentLike", 'String'>
+    readonly createdAt: FieldRef<"ContentLike", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ContentLike findUnique
+   */
+  export type ContentLikeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentLike to fetch.
+     */
+    where: ContentLikeWhereUniqueInput
+  }
+
+  /**
+   * ContentLike findUniqueOrThrow
+   */
+  export type ContentLikeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentLike to fetch.
+     */
+    where: ContentLikeWhereUniqueInput
+  }
+
+  /**
+   * ContentLike findFirst
+   */
+  export type ContentLikeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentLike to fetch.
+     */
+    where?: ContentLikeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentLikes to fetch.
+     */
+    orderBy?: ContentLikeOrderByWithRelationInput | ContentLikeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContentLikes.
+     */
+    cursor?: ContentLikeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentLikes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentLikes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContentLikes.
+     */
+    distinct?: ContentLikeScalarFieldEnum | ContentLikeScalarFieldEnum[]
+  }
+
+  /**
+   * ContentLike findFirstOrThrow
+   */
+  export type ContentLikeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentLike to fetch.
+     */
+    where?: ContentLikeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentLikes to fetch.
+     */
+    orderBy?: ContentLikeOrderByWithRelationInput | ContentLikeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContentLikes.
+     */
+    cursor?: ContentLikeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentLikes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentLikes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContentLikes.
+     */
+    distinct?: ContentLikeScalarFieldEnum | ContentLikeScalarFieldEnum[]
+  }
+
+  /**
+   * ContentLike findMany
+   */
+  export type ContentLikeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentLikes to fetch.
+     */
+    where?: ContentLikeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentLikes to fetch.
+     */
+    orderBy?: ContentLikeOrderByWithRelationInput | ContentLikeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ContentLikes.
+     */
+    cursor?: ContentLikeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentLikes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentLikes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContentLikes.
+     */
+    distinct?: ContentLikeScalarFieldEnum | ContentLikeScalarFieldEnum[]
+  }
+
+  /**
+   * ContentLike create
+   */
+  export type ContentLikeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ContentLike.
+     */
+    data: XOR<ContentLikeCreateInput, ContentLikeUncheckedCreateInput>
+  }
+
+  /**
+   * ContentLike createMany
+   */
+  export type ContentLikeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ContentLikes.
+     */
+    data: ContentLikeCreateManyInput | ContentLikeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ContentLike createManyAndReturn
+   */
+  export type ContentLikeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * The data used to create many ContentLikes.
+     */
+    data: ContentLikeCreateManyInput | ContentLikeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContentLike update
+   */
+  export type ContentLikeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ContentLike.
+     */
+    data: XOR<ContentLikeUpdateInput, ContentLikeUncheckedUpdateInput>
+    /**
+     * Choose, which ContentLike to update.
+     */
+    where: ContentLikeWhereUniqueInput
+  }
+
+  /**
+   * ContentLike updateMany
+   */
+  export type ContentLikeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ContentLikes.
+     */
+    data: XOR<ContentLikeUpdateManyMutationInput, ContentLikeUncheckedUpdateManyInput>
+    /**
+     * Filter which ContentLikes to update
+     */
+    where?: ContentLikeWhereInput
+    /**
+     * Limit how many ContentLikes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContentLike updateManyAndReturn
+   */
+  export type ContentLikeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * The data used to update ContentLikes.
+     */
+    data: XOR<ContentLikeUpdateManyMutationInput, ContentLikeUncheckedUpdateManyInput>
+    /**
+     * Filter which ContentLikes to update
+     */
+    where?: ContentLikeWhereInput
+    /**
+     * Limit how many ContentLikes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContentLike upsert
+   */
+  export type ContentLikeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ContentLike to update in case it exists.
+     */
+    where: ContentLikeWhereUniqueInput
+    /**
+     * In case the ContentLike found by the `where` argument doesn't exist, create a new ContentLike with this data.
+     */
+    create: XOR<ContentLikeCreateInput, ContentLikeUncheckedCreateInput>
+    /**
+     * In case the ContentLike was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ContentLikeUpdateInput, ContentLikeUncheckedUpdateInput>
+  }
+
+  /**
+   * ContentLike delete
+   */
+  export type ContentLikeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+    /**
+     * Filter which ContentLike to delete.
+     */
+    where: ContentLikeWhereUniqueInput
+  }
+
+  /**
+   * ContentLike deleteMany
+   */
+  export type ContentLikeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContentLikes to delete
+     */
+    where?: ContentLikeWhereInput
+    /**
+     * Limit how many ContentLikes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContentLike without action
+   */
+  export type ContentLikeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentLike
+     */
+    select?: ContentLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentLike
+     */
+    omit?: ContentLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentLikeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ContentComment
+   */
+
+  export type AggregateContentComment = {
+    _count: ContentCommentCountAggregateOutputType | null
+    _min: ContentCommentMinAggregateOutputType | null
+    _max: ContentCommentMaxAggregateOutputType | null
+  }
+
+  export type ContentCommentMinAggregateOutputType = {
+    id: string | null
+    contentId: string | null
+    userId: string | null
+    text: string | null
+    createdAt: Date | null
+  }
+
+  export type ContentCommentMaxAggregateOutputType = {
+    id: string | null
+    contentId: string | null
+    userId: string | null
+    text: string | null
+    createdAt: Date | null
+  }
+
+  export type ContentCommentCountAggregateOutputType = {
+    id: number
+    contentId: number
+    userId: number
+    text: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ContentCommentMinAggregateInputType = {
+    id?: true
+    contentId?: true
+    userId?: true
+    text?: true
+    createdAt?: true
+  }
+
+  export type ContentCommentMaxAggregateInputType = {
+    id?: true
+    contentId?: true
+    userId?: true
+    text?: true
+    createdAt?: true
+  }
+
+  export type ContentCommentCountAggregateInputType = {
+    id?: true
+    contentId?: true
+    userId?: true
+    text?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ContentCommentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContentComment to aggregate.
+     */
+    where?: ContentCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentComments to fetch.
+     */
+    orderBy?: ContentCommentOrderByWithRelationInput | ContentCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ContentCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ContentComments
+    **/
+    _count?: true | ContentCommentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ContentCommentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ContentCommentMaxAggregateInputType
+  }
+
+  export type GetContentCommentAggregateType<T extends ContentCommentAggregateArgs> = {
+        [P in keyof T & keyof AggregateContentComment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateContentComment[P]>
+      : GetScalarType<T[P], AggregateContentComment[P]>
+  }
+
+
+
+
+  export type ContentCommentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContentCommentWhereInput
+    orderBy?: ContentCommentOrderByWithAggregationInput | ContentCommentOrderByWithAggregationInput[]
+    by: ContentCommentScalarFieldEnum[] | ContentCommentScalarFieldEnum
+    having?: ContentCommentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ContentCommentCountAggregateInputType | true
+    _min?: ContentCommentMinAggregateInputType
+    _max?: ContentCommentMaxAggregateInputType
+  }
+
+  export type ContentCommentGroupByOutputType = {
+    id: string
+    contentId: string
+    userId: string
+    text: string
+    createdAt: Date
+    _count: ContentCommentCountAggregateOutputType | null
+    _min: ContentCommentMinAggregateOutputType | null
+    _max: ContentCommentMaxAggregateOutputType | null
+  }
+
+  type GetContentCommentGroupByPayload<T extends ContentCommentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ContentCommentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ContentCommentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ContentCommentGroupByOutputType[P]>
+            : GetScalarType<T[P], ContentCommentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ContentCommentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contentId?: boolean
+    userId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contentComment"]>
+
+  export type ContentCommentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contentId?: boolean
+    userId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contentComment"]>
+
+  export type ContentCommentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contentId?: boolean
+    userId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contentComment"]>
+
+  export type ContentCommentSelectScalar = {
+    id?: boolean
+    contentId?: boolean
+    userId?: boolean
+    text?: boolean
+    createdAt?: boolean
+  }
+
+  export type ContentCommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contentId" | "userId" | "text" | "createdAt", ExtArgs["result"]["contentComment"]>
+  export type ContentCommentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ContentCommentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ContentCommentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ContentCommentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ContentComment"
+    objects: {
+      content: Prisma.$ContentPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      contentId: string
+      userId: string
+      text: string
+      createdAt: Date
+    }, ExtArgs["result"]["contentComment"]>
+    composites: {}
+  }
+
+  type ContentCommentGetPayload<S extends boolean | null | undefined | ContentCommentDefaultArgs> = $Result.GetResult<Prisma.$ContentCommentPayload, S>
+
+  type ContentCommentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContentCommentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ContentCommentCountAggregateInputType | true
+    }
+
+  export interface ContentCommentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContentComment'], meta: { name: 'ContentComment' } }
+    /**
+     * Find zero or one ContentComment that matches the filter.
+     * @param {ContentCommentFindUniqueArgs} args - Arguments to find a ContentComment
+     * @example
+     * // Get one ContentComment
+     * const contentComment = await prisma.contentComment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ContentCommentFindUniqueArgs>(args: SelectSubset<T, ContentCommentFindUniqueArgs<ExtArgs>>): Prisma__ContentCommentClient<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ContentComment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ContentCommentFindUniqueOrThrowArgs} args - Arguments to find a ContentComment
+     * @example
+     * // Get one ContentComment
+     * const contentComment = await prisma.contentComment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ContentCommentFindUniqueOrThrowArgs>(args: SelectSubset<T, ContentCommentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContentCommentClient<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContentComment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentCommentFindFirstArgs} args - Arguments to find a ContentComment
+     * @example
+     * // Get one ContentComment
+     * const contentComment = await prisma.contentComment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ContentCommentFindFirstArgs>(args?: SelectSubset<T, ContentCommentFindFirstArgs<ExtArgs>>): Prisma__ContentCommentClient<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContentComment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentCommentFindFirstOrThrowArgs} args - Arguments to find a ContentComment
+     * @example
+     * // Get one ContentComment
+     * const contentComment = await prisma.contentComment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ContentCommentFindFirstOrThrowArgs>(args?: SelectSubset<T, ContentCommentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContentCommentClient<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ContentComments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentCommentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ContentComments
+     * const contentComments = await prisma.contentComment.findMany()
+     * 
+     * // Get first 10 ContentComments
+     * const contentComments = await prisma.contentComment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const contentCommentWithIdOnly = await prisma.contentComment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ContentCommentFindManyArgs>(args?: SelectSubset<T, ContentCommentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ContentComment.
+     * @param {ContentCommentCreateArgs} args - Arguments to create a ContentComment.
+     * @example
+     * // Create one ContentComment
+     * const ContentComment = await prisma.contentComment.create({
+     *   data: {
+     *     // ... data to create a ContentComment
+     *   }
+     * })
+     * 
+     */
+    create<T extends ContentCommentCreateArgs>(args: SelectSubset<T, ContentCommentCreateArgs<ExtArgs>>): Prisma__ContentCommentClient<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ContentComments.
+     * @param {ContentCommentCreateManyArgs} args - Arguments to create many ContentComments.
+     * @example
+     * // Create many ContentComments
+     * const contentComment = await prisma.contentComment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ContentCommentCreateManyArgs>(args?: SelectSubset<T, ContentCommentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ContentComments and returns the data saved in the database.
+     * @param {ContentCommentCreateManyAndReturnArgs} args - Arguments to create many ContentComments.
+     * @example
+     * // Create many ContentComments
+     * const contentComment = await prisma.contentComment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ContentComments and only return the `id`
+     * const contentCommentWithIdOnly = await prisma.contentComment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ContentCommentCreateManyAndReturnArgs>(args?: SelectSubset<T, ContentCommentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ContentComment.
+     * @param {ContentCommentDeleteArgs} args - Arguments to delete one ContentComment.
+     * @example
+     * // Delete one ContentComment
+     * const ContentComment = await prisma.contentComment.delete({
+     *   where: {
+     *     // ... filter to delete one ContentComment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ContentCommentDeleteArgs>(args: SelectSubset<T, ContentCommentDeleteArgs<ExtArgs>>): Prisma__ContentCommentClient<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ContentComment.
+     * @param {ContentCommentUpdateArgs} args - Arguments to update one ContentComment.
+     * @example
+     * // Update one ContentComment
+     * const contentComment = await prisma.contentComment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ContentCommentUpdateArgs>(args: SelectSubset<T, ContentCommentUpdateArgs<ExtArgs>>): Prisma__ContentCommentClient<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ContentComments.
+     * @param {ContentCommentDeleteManyArgs} args - Arguments to filter ContentComments to delete.
+     * @example
+     * // Delete a few ContentComments
+     * const { count } = await prisma.contentComment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ContentCommentDeleteManyArgs>(args?: SelectSubset<T, ContentCommentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContentComments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentCommentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ContentComments
+     * const contentComment = await prisma.contentComment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ContentCommentUpdateManyArgs>(args: SelectSubset<T, ContentCommentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContentComments and returns the data updated in the database.
+     * @param {ContentCommentUpdateManyAndReturnArgs} args - Arguments to update many ContentComments.
+     * @example
+     * // Update many ContentComments
+     * const contentComment = await prisma.contentComment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ContentComments and only return the `id`
+     * const contentCommentWithIdOnly = await prisma.contentComment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ContentCommentUpdateManyAndReturnArgs>(args: SelectSubset<T, ContentCommentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ContentComment.
+     * @param {ContentCommentUpsertArgs} args - Arguments to update or create a ContentComment.
+     * @example
+     * // Update or create a ContentComment
+     * const contentComment = await prisma.contentComment.upsert({
+     *   create: {
+     *     // ... data to create a ContentComment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ContentComment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ContentCommentUpsertArgs>(args: SelectSubset<T, ContentCommentUpsertArgs<ExtArgs>>): Prisma__ContentCommentClient<$Result.GetResult<Prisma.$ContentCommentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ContentComments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentCommentCountArgs} args - Arguments to filter ContentComments to count.
+     * @example
+     * // Count the number of ContentComments
+     * const count = await prisma.contentComment.count({
+     *   where: {
+     *     // ... the filter for the ContentComments we want to count
+     *   }
+     * })
+    **/
+    count<T extends ContentCommentCountArgs>(
+      args?: Subset<T, ContentCommentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ContentCommentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ContentComment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentCommentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ContentCommentAggregateArgs>(args: Subset<T, ContentCommentAggregateArgs>): Prisma.PrismaPromise<GetContentCommentAggregateType<T>>
+
+    /**
+     * Group by ContentComment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentCommentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ContentCommentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ContentCommentGroupByArgs['orderBy'] }
+        : { orderBy?: ContentCommentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ContentCommentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContentCommentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ContentComment model
+   */
+  readonly fields: ContentCommentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ContentComment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ContentCommentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    content<T extends ContentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContentDefaultArgs<ExtArgs>>): Prisma__ContentClient<$Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ContentComment model
+   */
+  interface ContentCommentFieldRefs {
+    readonly id: FieldRef<"ContentComment", 'String'>
+    readonly contentId: FieldRef<"ContentComment", 'String'>
+    readonly userId: FieldRef<"ContentComment", 'String'>
+    readonly text: FieldRef<"ContentComment", 'String'>
+    readonly createdAt: FieldRef<"ContentComment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ContentComment findUnique
+   */
+  export type ContentCommentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentComment to fetch.
+     */
+    where: ContentCommentWhereUniqueInput
+  }
+
+  /**
+   * ContentComment findUniqueOrThrow
+   */
+  export type ContentCommentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentComment to fetch.
+     */
+    where: ContentCommentWhereUniqueInput
+  }
+
+  /**
+   * ContentComment findFirst
+   */
+  export type ContentCommentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentComment to fetch.
+     */
+    where?: ContentCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentComments to fetch.
+     */
+    orderBy?: ContentCommentOrderByWithRelationInput | ContentCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContentComments.
+     */
+    cursor?: ContentCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContentComments.
+     */
+    distinct?: ContentCommentScalarFieldEnum | ContentCommentScalarFieldEnum[]
+  }
+
+  /**
+   * ContentComment findFirstOrThrow
+   */
+  export type ContentCommentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentComment to fetch.
+     */
+    where?: ContentCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentComments to fetch.
+     */
+    orderBy?: ContentCommentOrderByWithRelationInput | ContentCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContentComments.
+     */
+    cursor?: ContentCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContentComments.
+     */
+    distinct?: ContentCommentScalarFieldEnum | ContentCommentScalarFieldEnum[]
+  }
+
+  /**
+   * ContentComment findMany
+   */
+  export type ContentCommentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentComments to fetch.
+     */
+    where?: ContentCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentComments to fetch.
+     */
+    orderBy?: ContentCommentOrderByWithRelationInput | ContentCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ContentComments.
+     */
+    cursor?: ContentCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContentComments.
+     */
+    distinct?: ContentCommentScalarFieldEnum | ContentCommentScalarFieldEnum[]
+  }
+
+  /**
+   * ContentComment create
+   */
+  export type ContentCommentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ContentComment.
+     */
+    data: XOR<ContentCommentCreateInput, ContentCommentUncheckedCreateInput>
+  }
+
+  /**
+   * ContentComment createMany
+   */
+  export type ContentCommentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ContentComments.
+     */
+    data: ContentCommentCreateManyInput | ContentCommentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ContentComment createManyAndReturn
+   */
+  export type ContentCommentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * The data used to create many ContentComments.
+     */
+    data: ContentCommentCreateManyInput | ContentCommentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContentComment update
+   */
+  export type ContentCommentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ContentComment.
+     */
+    data: XOR<ContentCommentUpdateInput, ContentCommentUncheckedUpdateInput>
+    /**
+     * Choose, which ContentComment to update.
+     */
+    where: ContentCommentWhereUniqueInput
+  }
+
+  /**
+   * ContentComment updateMany
+   */
+  export type ContentCommentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ContentComments.
+     */
+    data: XOR<ContentCommentUpdateManyMutationInput, ContentCommentUncheckedUpdateManyInput>
+    /**
+     * Filter which ContentComments to update
+     */
+    where?: ContentCommentWhereInput
+    /**
+     * Limit how many ContentComments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContentComment updateManyAndReturn
+   */
+  export type ContentCommentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * The data used to update ContentComments.
+     */
+    data: XOR<ContentCommentUpdateManyMutationInput, ContentCommentUncheckedUpdateManyInput>
+    /**
+     * Filter which ContentComments to update
+     */
+    where?: ContentCommentWhereInput
+    /**
+     * Limit how many ContentComments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContentComment upsert
+   */
+  export type ContentCommentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ContentComment to update in case it exists.
+     */
+    where: ContentCommentWhereUniqueInput
+    /**
+     * In case the ContentComment found by the `where` argument doesn't exist, create a new ContentComment with this data.
+     */
+    create: XOR<ContentCommentCreateInput, ContentCommentUncheckedCreateInput>
+    /**
+     * In case the ContentComment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ContentCommentUpdateInput, ContentCommentUncheckedUpdateInput>
+  }
+
+  /**
+   * ContentComment delete
+   */
+  export type ContentCommentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+    /**
+     * Filter which ContentComment to delete.
+     */
+    where: ContentCommentWhereUniqueInput
+  }
+
+  /**
+   * ContentComment deleteMany
+   */
+  export type ContentCommentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContentComments to delete
+     */
+    where?: ContentCommentWhereInput
+    /**
+     * Limit how many ContentComments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContentComment without action
+   */
+  export type ContentCommentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentComment
+     */
+    select?: ContentCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentComment
+     */
+    omit?: ContentCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentCommentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -12848,6 +15307,27 @@ export namespace Prisma {
   };
 
   export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+  export const ContentLikeScalarFieldEnum: {
+    id: 'id',
+    contentId: 'contentId',
+    userId: 'userId',
+    createdAt: 'createdAt'
+  };
+
+  export type ContentLikeScalarFieldEnum = (typeof ContentLikeScalarFieldEnum)[keyof typeof ContentLikeScalarFieldEnum]
+
+
+  export const ContentCommentScalarFieldEnum: {
+    id: 'id',
+    contentId: 'contentId',
+    userId: 'userId',
+    text: 'text',
+    createdAt: 'createdAt'
+  };
+
+  export type ContentCommentScalarFieldEnum = (typeof ContentCommentScalarFieldEnum)[keyof typeof ContentCommentScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -13094,6 +15574,8 @@ export namespace Prisma {
     applications?: ApplicationListRelationFilter
     subscriptions?: SubscriptionListRelationFilter
     creatorSubscriptions?: SubscriptionListRelationFilter
+    likes?: ContentLikeListRelationFilter
+    comments?: ContentCommentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -13116,6 +15598,8 @@ export namespace Prisma {
     applications?: ApplicationOrderByRelationAggregateInput
     subscriptions?: SubscriptionOrderByRelationAggregateInput
     creatorSubscriptions?: SubscriptionOrderByRelationAggregateInput
+    likes?: ContentLikeOrderByRelationAggregateInput
+    comments?: ContentCommentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -13141,6 +15625,8 @@ export namespace Prisma {
     applications?: ApplicationListRelationFilter
     subscriptions?: SubscriptionListRelationFilter
     creatorSubscriptions?: SubscriptionListRelationFilter
+    likes?: ContentLikeListRelationFilter
+    comments?: ContentCommentListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -13299,6 +15785,8 @@ export namespace Prisma {
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     creatorProfile?: XOR<CreatorProfileNullableScalarRelationFilter, CreatorProfileWhereInput> | null
     premiumPurchases?: PremiumPurchaseListRelationFilter
+    likes?: ContentLikeListRelationFilter
+    comments?: ContentCommentListRelationFilter
   }
 
   export type ContentOrderByWithRelationInput = {
@@ -13319,6 +15807,8 @@ export namespace Prisma {
     creator?: UserOrderByWithRelationInput
     creatorProfile?: CreatorProfileOrderByWithRelationInput
     premiumPurchases?: PremiumPurchaseOrderByRelationAggregateInput
+    likes?: ContentLikeOrderByRelationAggregateInput
+    comments?: ContentCommentOrderByRelationAggregateInput
   }
 
   export type ContentWhereUniqueInput = Prisma.AtLeast<{
@@ -13342,6 +15832,8 @@ export namespace Prisma {
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     creatorProfile?: XOR<CreatorProfileNullableScalarRelationFilter, CreatorProfileWhereInput> | null
     premiumPurchases?: PremiumPurchaseListRelationFilter
+    likes?: ContentLikeListRelationFilter
+    comments?: ContentCommentListRelationFilter
   }, "id">
 
   export type ContentOrderByWithAggregationInput = {
@@ -13865,6 +16357,118 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
   }
 
+  export type ContentLikeWhereInput = {
+    AND?: ContentLikeWhereInput | ContentLikeWhereInput[]
+    OR?: ContentLikeWhereInput[]
+    NOT?: ContentLikeWhereInput | ContentLikeWhereInput[]
+    id?: StringFilter<"ContentLike"> | string
+    contentId?: StringFilter<"ContentLike"> | string
+    userId?: StringFilter<"ContentLike"> | string
+    createdAt?: DateTimeFilter<"ContentLike"> | Date | string
+    content?: XOR<ContentScalarRelationFilter, ContentWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ContentLikeOrderByWithRelationInput = {
+    id?: SortOrder
+    contentId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    content?: ContentOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ContentLikeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    contentId_userId?: ContentLikeContentIdUserIdCompoundUniqueInput
+    AND?: ContentLikeWhereInput | ContentLikeWhereInput[]
+    OR?: ContentLikeWhereInput[]
+    NOT?: ContentLikeWhereInput | ContentLikeWhereInput[]
+    contentId?: StringFilter<"ContentLike"> | string
+    userId?: StringFilter<"ContentLike"> | string
+    createdAt?: DateTimeFilter<"ContentLike"> | Date | string
+    content?: XOR<ContentScalarRelationFilter, ContentWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "contentId_userId">
+
+  export type ContentLikeOrderByWithAggregationInput = {
+    id?: SortOrder
+    contentId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    _count?: ContentLikeCountOrderByAggregateInput
+    _max?: ContentLikeMaxOrderByAggregateInput
+    _min?: ContentLikeMinOrderByAggregateInput
+  }
+
+  export type ContentLikeScalarWhereWithAggregatesInput = {
+    AND?: ContentLikeScalarWhereWithAggregatesInput | ContentLikeScalarWhereWithAggregatesInput[]
+    OR?: ContentLikeScalarWhereWithAggregatesInput[]
+    NOT?: ContentLikeScalarWhereWithAggregatesInput | ContentLikeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ContentLike"> | string
+    contentId?: StringWithAggregatesFilter<"ContentLike"> | string
+    userId?: StringWithAggregatesFilter<"ContentLike"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ContentLike"> | Date | string
+  }
+
+  export type ContentCommentWhereInput = {
+    AND?: ContentCommentWhereInput | ContentCommentWhereInput[]
+    OR?: ContentCommentWhereInput[]
+    NOT?: ContentCommentWhereInput | ContentCommentWhereInput[]
+    id?: StringFilter<"ContentComment"> | string
+    contentId?: StringFilter<"ContentComment"> | string
+    userId?: StringFilter<"ContentComment"> | string
+    text?: StringFilter<"ContentComment"> | string
+    createdAt?: DateTimeFilter<"ContentComment"> | Date | string
+    content?: XOR<ContentScalarRelationFilter, ContentWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ContentCommentOrderByWithRelationInput = {
+    id?: SortOrder
+    contentId?: SortOrder
+    userId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    content?: ContentOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ContentCommentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ContentCommentWhereInput | ContentCommentWhereInput[]
+    OR?: ContentCommentWhereInput[]
+    NOT?: ContentCommentWhereInput | ContentCommentWhereInput[]
+    contentId?: StringFilter<"ContentComment"> | string
+    userId?: StringFilter<"ContentComment"> | string
+    text?: StringFilter<"ContentComment"> | string
+    createdAt?: DateTimeFilter<"ContentComment"> | Date | string
+    content?: XOR<ContentScalarRelationFilter, ContentWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type ContentCommentOrderByWithAggregationInput = {
+    id?: SortOrder
+    contentId?: SortOrder
+    userId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    _count?: ContentCommentCountOrderByAggregateInput
+    _max?: ContentCommentMaxOrderByAggregateInput
+    _min?: ContentCommentMinOrderByAggregateInput
+  }
+
+  export type ContentCommentScalarWhereWithAggregatesInput = {
+    AND?: ContentCommentScalarWhereWithAggregatesInput | ContentCommentScalarWhereWithAggregatesInput[]
+    OR?: ContentCommentScalarWhereWithAggregatesInput[]
+    NOT?: ContentCommentScalarWhereWithAggregatesInput | ContentCommentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ContentComment"> | string
+    contentId?: StringWithAggregatesFilter<"ContentComment"> | string
+    userId?: StringWithAggregatesFilter<"ContentComment"> | string
+    text?: StringWithAggregatesFilter<"ContentComment"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ContentComment"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -13885,6 +16489,8 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -13907,6 +16513,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -13929,6 +16537,8 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -13951,6 +16561,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -14127,6 +16739,8 @@ export namespace Prisma {
     creator: UserCreateNestedOneWithoutContentsInput
     creatorProfile?: CreatorProfileCreateNestedOneWithoutContentsInput
     premiumPurchases?: PremiumPurchaseCreateNestedManyWithoutContentInput
+    likes?: ContentLikeCreateNestedManyWithoutContentInput
+    comments?: ContentCommentCreateNestedManyWithoutContentInput
   }
 
   export type ContentUncheckedCreateInput = {
@@ -14145,6 +16759,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutContentInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutContentInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutContentInput
   }
 
   export type ContentUpdateInput = {
@@ -14163,6 +16779,8 @@ export namespace Prisma {
     creator?: UserUpdateOneRequiredWithoutContentsNestedInput
     creatorProfile?: CreatorProfileUpdateOneWithoutContentsNestedInput
     premiumPurchases?: PremiumPurchaseUpdateManyWithoutContentNestedInput
+    likes?: ContentLikeUpdateManyWithoutContentNestedInput
+    comments?: ContentCommentUpdateManyWithoutContentNestedInput
   }
 
   export type ContentUncheckedUpdateInput = {
@@ -14181,6 +16799,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutContentNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutContentNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutContentNestedInput
   }
 
   export type ContentCreateManyInput = {
@@ -14737,6 +17357,107 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ContentLikeCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    content: ContentCreateNestedOneWithoutLikesInput
+    user: UserCreateNestedOneWithoutLikesInput
+  }
+
+  export type ContentLikeUncheckedCreateInput = {
+    id?: string
+    contentId: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type ContentLikeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: ContentUpdateOneRequiredWithoutLikesNestedInput
+    user?: UserUpdateOneRequiredWithoutLikesNestedInput
+  }
+
+  export type ContentLikeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contentId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentLikeCreateManyInput = {
+    id?: string
+    contentId: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type ContentLikeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentLikeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contentId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentCommentCreateInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    content: ContentCreateNestedOneWithoutCommentsInput
+    user: UserCreateNestedOneWithoutCommentsInput
+  }
+
+  export type ContentCommentUncheckedCreateInput = {
+    id?: string
+    contentId: string
+    userId: string
+    text: string
+    createdAt?: Date | string
+  }
+
+  export type ContentCommentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: ContentUpdateOneRequiredWithoutCommentsNestedInput
+    user?: UserUpdateOneRequiredWithoutCommentsNestedInput
+  }
+
+  export type ContentCommentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contentId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentCommentCreateManyInput = {
+    id?: string
+    contentId: string
+    userId: string
+    text: string
+    createdAt?: Date | string
+  }
+
+  export type ContentCommentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentCommentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contentId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -14839,6 +17560,18 @@ export namespace Prisma {
     none?: SubscriptionWhereInput
   }
 
+  export type ContentLikeListRelationFilter = {
+    every?: ContentLikeWhereInput
+    some?: ContentLikeWhereInput
+    none?: ContentLikeWhereInput
+  }
+
+  export type ContentCommentListRelationFilter = {
+    every?: ContentCommentWhereInput
+    some?: ContentCommentWhereInput
+    none?: ContentCommentWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -14869,6 +17602,14 @@ export namespace Prisma {
   }
 
   export type SubscriptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ContentLikeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ContentCommentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15616,6 +18357,56 @@ export namespace Prisma {
     _max?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
   }
 
+  export type ContentLikeContentIdUserIdCompoundUniqueInput = {
+    contentId: string
+    userId: string
+  }
+
+  export type ContentLikeCountOrderByAggregateInput = {
+    id?: SortOrder
+    contentId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContentLikeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    contentId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContentLikeMinOrderByAggregateInput = {
+    id?: SortOrder
+    contentId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContentCommentCountOrderByAggregateInput = {
+    id?: SortOrder
+    contentId?: SortOrder
+    userId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContentCommentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    contentId?: SortOrder
+    userId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContentCommentMinOrderByAggregateInput = {
+    id?: SortOrder
+    contentId?: SortOrder
+    userId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type CreatorProfileCreateNestedOneWithoutUserInput = {
     create?: XOR<CreatorProfileCreateWithoutUserInput, CreatorProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: CreatorProfileCreateOrConnectWithoutUserInput
@@ -15685,6 +18476,20 @@ export namespace Prisma {
     connect?: SubscriptionWhereUniqueInput | SubscriptionWhereUniqueInput[]
   }
 
+  export type ContentLikeCreateNestedManyWithoutUserInput = {
+    create?: XOR<ContentLikeCreateWithoutUserInput, ContentLikeUncheckedCreateWithoutUserInput> | ContentLikeCreateWithoutUserInput[] | ContentLikeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ContentLikeCreateOrConnectWithoutUserInput | ContentLikeCreateOrConnectWithoutUserInput[]
+    createMany?: ContentLikeCreateManyUserInputEnvelope
+    connect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+  }
+
+  export type ContentCommentCreateNestedManyWithoutUserInput = {
+    create?: XOR<ContentCommentCreateWithoutUserInput, ContentCommentUncheckedCreateWithoutUserInput> | ContentCommentCreateWithoutUserInput[] | ContentCommentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ContentCommentCreateOrConnectWithoutUserInput | ContentCommentCreateOrConnectWithoutUserInput[]
+    createMany?: ContentCommentCreateManyUserInputEnvelope
+    connect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+  }
+
   export type CreatorProfileUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<CreatorProfileCreateWithoutUserInput, CreatorProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: CreatorProfileCreateOrConnectWithoutUserInput
@@ -15752,6 +18557,20 @@ export namespace Prisma {
     connectOrCreate?: SubscriptionCreateOrConnectWithoutCreatorInput | SubscriptionCreateOrConnectWithoutCreatorInput[]
     createMany?: SubscriptionCreateManyCreatorInputEnvelope
     connect?: SubscriptionWhereUniqueInput | SubscriptionWhereUniqueInput[]
+  }
+
+  export type ContentLikeUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ContentLikeCreateWithoutUserInput, ContentLikeUncheckedCreateWithoutUserInput> | ContentLikeCreateWithoutUserInput[] | ContentLikeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ContentLikeCreateOrConnectWithoutUserInput | ContentLikeCreateOrConnectWithoutUserInput[]
+    createMany?: ContentLikeCreateManyUserInputEnvelope
+    connect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+  }
+
+  export type ContentCommentUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ContentCommentCreateWithoutUserInput, ContentCommentUncheckedCreateWithoutUserInput> | ContentCommentCreateWithoutUserInput[] | ContentCommentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ContentCommentCreateOrConnectWithoutUserInput | ContentCommentCreateOrConnectWithoutUserInput[]
+    createMany?: ContentCommentCreateManyUserInputEnvelope
+    connect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -15910,6 +18729,34 @@ export namespace Prisma {
     deleteMany?: SubscriptionScalarWhereInput | SubscriptionScalarWhereInput[]
   }
 
+  export type ContentLikeUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ContentLikeCreateWithoutUserInput, ContentLikeUncheckedCreateWithoutUserInput> | ContentLikeCreateWithoutUserInput[] | ContentLikeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ContentLikeCreateOrConnectWithoutUserInput | ContentLikeCreateOrConnectWithoutUserInput[]
+    upsert?: ContentLikeUpsertWithWhereUniqueWithoutUserInput | ContentLikeUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ContentLikeCreateManyUserInputEnvelope
+    set?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    disconnect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    delete?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    connect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    update?: ContentLikeUpdateWithWhereUniqueWithoutUserInput | ContentLikeUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ContentLikeUpdateManyWithWhereWithoutUserInput | ContentLikeUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ContentLikeScalarWhereInput | ContentLikeScalarWhereInput[]
+  }
+
+  export type ContentCommentUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ContentCommentCreateWithoutUserInput, ContentCommentUncheckedCreateWithoutUserInput> | ContentCommentCreateWithoutUserInput[] | ContentCommentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ContentCommentCreateOrConnectWithoutUserInput | ContentCommentCreateOrConnectWithoutUserInput[]
+    upsert?: ContentCommentUpsertWithWhereUniqueWithoutUserInput | ContentCommentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ContentCommentCreateManyUserInputEnvelope
+    set?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    disconnect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    delete?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    connect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    update?: ContentCommentUpdateWithWhereUniqueWithoutUserInput | ContentCommentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ContentCommentUpdateManyWithWhereWithoutUserInput | ContentCommentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ContentCommentScalarWhereInput | ContentCommentScalarWhereInput[]
+  }
+
   export type CreatorProfileUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<CreatorProfileCreateWithoutUserInput, CreatorProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: CreatorProfileCreateOrConnectWithoutUserInput
@@ -16046,6 +18893,34 @@ export namespace Prisma {
     deleteMany?: SubscriptionScalarWhereInput | SubscriptionScalarWhereInput[]
   }
 
+  export type ContentLikeUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ContentLikeCreateWithoutUserInput, ContentLikeUncheckedCreateWithoutUserInput> | ContentLikeCreateWithoutUserInput[] | ContentLikeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ContentLikeCreateOrConnectWithoutUserInput | ContentLikeCreateOrConnectWithoutUserInput[]
+    upsert?: ContentLikeUpsertWithWhereUniqueWithoutUserInput | ContentLikeUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ContentLikeCreateManyUserInputEnvelope
+    set?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    disconnect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    delete?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    connect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    update?: ContentLikeUpdateWithWhereUniqueWithoutUserInput | ContentLikeUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ContentLikeUpdateManyWithWhereWithoutUserInput | ContentLikeUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ContentLikeScalarWhereInput | ContentLikeScalarWhereInput[]
+  }
+
+  export type ContentCommentUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ContentCommentCreateWithoutUserInput, ContentCommentUncheckedCreateWithoutUserInput> | ContentCommentCreateWithoutUserInput[] | ContentCommentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ContentCommentCreateOrConnectWithoutUserInput | ContentCommentCreateOrConnectWithoutUserInput[]
+    upsert?: ContentCommentUpsertWithWhereUniqueWithoutUserInput | ContentCommentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ContentCommentCreateManyUserInputEnvelope
+    set?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    disconnect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    delete?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    connect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    update?: ContentCommentUpdateWithWhereUniqueWithoutUserInput | ContentCommentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ContentCommentUpdateManyWithWhereWithoutUserInput | ContentCommentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ContentCommentScalarWhereInput | ContentCommentScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutCreatorProfileInput = {
     create?: XOR<UserCreateWithoutCreatorProfileInput, UserUncheckedCreateWithoutCreatorProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatorProfileInput
@@ -16137,11 +19012,39 @@ export namespace Prisma {
     connect?: PremiumPurchaseWhereUniqueInput | PremiumPurchaseWhereUniqueInput[]
   }
 
+  export type ContentLikeCreateNestedManyWithoutContentInput = {
+    create?: XOR<ContentLikeCreateWithoutContentInput, ContentLikeUncheckedCreateWithoutContentInput> | ContentLikeCreateWithoutContentInput[] | ContentLikeUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: ContentLikeCreateOrConnectWithoutContentInput | ContentLikeCreateOrConnectWithoutContentInput[]
+    createMany?: ContentLikeCreateManyContentInputEnvelope
+    connect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+  }
+
+  export type ContentCommentCreateNestedManyWithoutContentInput = {
+    create?: XOR<ContentCommentCreateWithoutContentInput, ContentCommentUncheckedCreateWithoutContentInput> | ContentCommentCreateWithoutContentInput[] | ContentCommentUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: ContentCommentCreateOrConnectWithoutContentInput | ContentCommentCreateOrConnectWithoutContentInput[]
+    createMany?: ContentCommentCreateManyContentInputEnvelope
+    connect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+  }
+
   export type PremiumPurchaseUncheckedCreateNestedManyWithoutContentInput = {
     create?: XOR<PremiumPurchaseCreateWithoutContentInput, PremiumPurchaseUncheckedCreateWithoutContentInput> | PremiumPurchaseCreateWithoutContentInput[] | PremiumPurchaseUncheckedCreateWithoutContentInput[]
     connectOrCreate?: PremiumPurchaseCreateOrConnectWithoutContentInput | PremiumPurchaseCreateOrConnectWithoutContentInput[]
     createMany?: PremiumPurchaseCreateManyContentInputEnvelope
     connect?: PremiumPurchaseWhereUniqueInput | PremiumPurchaseWhereUniqueInput[]
+  }
+
+  export type ContentLikeUncheckedCreateNestedManyWithoutContentInput = {
+    create?: XOR<ContentLikeCreateWithoutContentInput, ContentLikeUncheckedCreateWithoutContentInput> | ContentLikeCreateWithoutContentInput[] | ContentLikeUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: ContentLikeCreateOrConnectWithoutContentInput | ContentLikeCreateOrConnectWithoutContentInput[]
+    createMany?: ContentLikeCreateManyContentInputEnvelope
+    connect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+  }
+
+  export type ContentCommentUncheckedCreateNestedManyWithoutContentInput = {
+    create?: XOR<ContentCommentCreateWithoutContentInput, ContentCommentUncheckedCreateWithoutContentInput> | ContentCommentCreateWithoutContentInput[] | ContentCommentUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: ContentCommentCreateOrConnectWithoutContentInput | ContentCommentCreateOrConnectWithoutContentInput[]
+    createMany?: ContentCommentCreateManyContentInputEnvelope
+    connect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
   }
 
   export type EnumContentTypeFieldUpdateOperationsInput = {
@@ -16196,6 +19099,34 @@ export namespace Prisma {
     deleteMany?: PremiumPurchaseScalarWhereInput | PremiumPurchaseScalarWhereInput[]
   }
 
+  export type ContentLikeUpdateManyWithoutContentNestedInput = {
+    create?: XOR<ContentLikeCreateWithoutContentInput, ContentLikeUncheckedCreateWithoutContentInput> | ContentLikeCreateWithoutContentInput[] | ContentLikeUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: ContentLikeCreateOrConnectWithoutContentInput | ContentLikeCreateOrConnectWithoutContentInput[]
+    upsert?: ContentLikeUpsertWithWhereUniqueWithoutContentInput | ContentLikeUpsertWithWhereUniqueWithoutContentInput[]
+    createMany?: ContentLikeCreateManyContentInputEnvelope
+    set?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    disconnect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    delete?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    connect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    update?: ContentLikeUpdateWithWhereUniqueWithoutContentInput | ContentLikeUpdateWithWhereUniqueWithoutContentInput[]
+    updateMany?: ContentLikeUpdateManyWithWhereWithoutContentInput | ContentLikeUpdateManyWithWhereWithoutContentInput[]
+    deleteMany?: ContentLikeScalarWhereInput | ContentLikeScalarWhereInput[]
+  }
+
+  export type ContentCommentUpdateManyWithoutContentNestedInput = {
+    create?: XOR<ContentCommentCreateWithoutContentInput, ContentCommentUncheckedCreateWithoutContentInput> | ContentCommentCreateWithoutContentInput[] | ContentCommentUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: ContentCommentCreateOrConnectWithoutContentInput | ContentCommentCreateOrConnectWithoutContentInput[]
+    upsert?: ContentCommentUpsertWithWhereUniqueWithoutContentInput | ContentCommentUpsertWithWhereUniqueWithoutContentInput[]
+    createMany?: ContentCommentCreateManyContentInputEnvelope
+    set?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    disconnect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    delete?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    connect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    update?: ContentCommentUpdateWithWhereUniqueWithoutContentInput | ContentCommentUpdateWithWhereUniqueWithoutContentInput[]
+    updateMany?: ContentCommentUpdateManyWithWhereWithoutContentInput | ContentCommentUpdateManyWithWhereWithoutContentInput[]
+    deleteMany?: ContentCommentScalarWhereInput | ContentCommentScalarWhereInput[]
+  }
+
   export type PremiumPurchaseUncheckedUpdateManyWithoutContentNestedInput = {
     create?: XOR<PremiumPurchaseCreateWithoutContentInput, PremiumPurchaseUncheckedCreateWithoutContentInput> | PremiumPurchaseCreateWithoutContentInput[] | PremiumPurchaseUncheckedCreateWithoutContentInput[]
     connectOrCreate?: PremiumPurchaseCreateOrConnectWithoutContentInput | PremiumPurchaseCreateOrConnectWithoutContentInput[]
@@ -16208,6 +19139,34 @@ export namespace Prisma {
     update?: PremiumPurchaseUpdateWithWhereUniqueWithoutContentInput | PremiumPurchaseUpdateWithWhereUniqueWithoutContentInput[]
     updateMany?: PremiumPurchaseUpdateManyWithWhereWithoutContentInput | PremiumPurchaseUpdateManyWithWhereWithoutContentInput[]
     deleteMany?: PremiumPurchaseScalarWhereInput | PremiumPurchaseScalarWhereInput[]
+  }
+
+  export type ContentLikeUncheckedUpdateManyWithoutContentNestedInput = {
+    create?: XOR<ContentLikeCreateWithoutContentInput, ContentLikeUncheckedCreateWithoutContentInput> | ContentLikeCreateWithoutContentInput[] | ContentLikeUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: ContentLikeCreateOrConnectWithoutContentInput | ContentLikeCreateOrConnectWithoutContentInput[]
+    upsert?: ContentLikeUpsertWithWhereUniqueWithoutContentInput | ContentLikeUpsertWithWhereUniqueWithoutContentInput[]
+    createMany?: ContentLikeCreateManyContentInputEnvelope
+    set?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    disconnect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    delete?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    connect?: ContentLikeWhereUniqueInput | ContentLikeWhereUniqueInput[]
+    update?: ContentLikeUpdateWithWhereUniqueWithoutContentInput | ContentLikeUpdateWithWhereUniqueWithoutContentInput[]
+    updateMany?: ContentLikeUpdateManyWithWhereWithoutContentInput | ContentLikeUpdateManyWithWhereWithoutContentInput[]
+    deleteMany?: ContentLikeScalarWhereInput | ContentLikeScalarWhereInput[]
+  }
+
+  export type ContentCommentUncheckedUpdateManyWithoutContentNestedInput = {
+    create?: XOR<ContentCommentCreateWithoutContentInput, ContentCommentUncheckedCreateWithoutContentInput> | ContentCommentCreateWithoutContentInput[] | ContentCommentUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: ContentCommentCreateOrConnectWithoutContentInput | ContentCommentCreateOrConnectWithoutContentInput[]
+    upsert?: ContentCommentUpsertWithWhereUniqueWithoutContentInput | ContentCommentUpsertWithWhereUniqueWithoutContentInput[]
+    createMany?: ContentCommentCreateManyContentInputEnvelope
+    set?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    disconnect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    delete?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    connect?: ContentCommentWhereUniqueInput | ContentCommentWhereUniqueInput[]
+    update?: ContentCommentUpdateWithWhereUniqueWithoutContentInput | ContentCommentUpdateWithWhereUniqueWithoutContentInput[]
+    updateMany?: ContentCommentUpdateManyWithWhereWithoutContentInput | ContentCommentUpdateManyWithWhereWithoutContentInput[]
+    deleteMany?: ContentCommentScalarWhereInput | ContentCommentScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCampaignsInput = {
@@ -16414,6 +19373,62 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutCreatorSubscriptionsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatorSubscriptionsInput, UserUpdateWithoutCreatorSubscriptionsInput>, UserUncheckedUpdateWithoutCreatorSubscriptionsInput>
+  }
+
+  export type ContentCreateNestedOneWithoutLikesInput = {
+    create?: XOR<ContentCreateWithoutLikesInput, ContentUncheckedCreateWithoutLikesInput>
+    connectOrCreate?: ContentCreateOrConnectWithoutLikesInput
+    connect?: ContentWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutLikesInput = {
+    create?: XOR<UserCreateWithoutLikesInput, UserUncheckedCreateWithoutLikesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLikesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ContentUpdateOneRequiredWithoutLikesNestedInput = {
+    create?: XOR<ContentCreateWithoutLikesInput, ContentUncheckedCreateWithoutLikesInput>
+    connectOrCreate?: ContentCreateOrConnectWithoutLikesInput
+    upsert?: ContentUpsertWithoutLikesInput
+    connect?: ContentWhereUniqueInput
+    update?: XOR<XOR<ContentUpdateToOneWithWhereWithoutLikesInput, ContentUpdateWithoutLikesInput>, ContentUncheckedUpdateWithoutLikesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutLikesNestedInput = {
+    create?: XOR<UserCreateWithoutLikesInput, UserUncheckedCreateWithoutLikesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLikesInput
+    upsert?: UserUpsertWithoutLikesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLikesInput, UserUpdateWithoutLikesInput>, UserUncheckedUpdateWithoutLikesInput>
+  }
+
+  export type ContentCreateNestedOneWithoutCommentsInput = {
+    create?: XOR<ContentCreateWithoutCommentsInput, ContentUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: ContentCreateOrConnectWithoutCommentsInput
+    connect?: ContentWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCommentsInput = {
+    create?: XOR<UserCreateWithoutCommentsInput, UserUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCommentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ContentUpdateOneRequiredWithoutCommentsNestedInput = {
+    create?: XOR<ContentCreateWithoutCommentsInput, ContentUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: ContentCreateOrConnectWithoutCommentsInput
+    upsert?: ContentUpsertWithoutCommentsInput
+    connect?: ContentWhereUniqueInput
+    update?: XOR<XOR<ContentUpdateToOneWithWhereWithoutCommentsInput, ContentUpdateWithoutCommentsInput>, ContentUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCommentsNestedInput = {
+    create?: XOR<UserCreateWithoutCommentsInput, UserUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCommentsInput
+    upsert?: UserUpsertWithoutCommentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCommentsInput, UserUpdateWithoutCommentsInput>, UserUncheckedUpdateWithoutCommentsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -16840,6 +19855,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     creatorProfile?: CreatorProfileCreateNestedOneWithoutContentsInput
     premiumPurchases?: PremiumPurchaseCreateNestedManyWithoutContentInput
+    likes?: ContentLikeCreateNestedManyWithoutContentInput
+    comments?: ContentCommentCreateNestedManyWithoutContentInput
   }
 
   export type ContentUncheckedCreateWithoutCreatorInput = {
@@ -16857,6 +19874,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutContentInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutContentInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutContentInput
   }
 
   export type ContentCreateOrConnectWithoutCreatorInput = {
@@ -17128,6 +20147,52 @@ export namespace Prisma {
 
   export type SubscriptionCreateManyCreatorInputEnvelope = {
     data: SubscriptionCreateManyCreatorInput | SubscriptionCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ContentLikeCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    content: ContentCreateNestedOneWithoutLikesInput
+  }
+
+  export type ContentLikeUncheckedCreateWithoutUserInput = {
+    id?: string
+    contentId: string
+    createdAt?: Date | string
+  }
+
+  export type ContentLikeCreateOrConnectWithoutUserInput = {
+    where: ContentLikeWhereUniqueInput
+    create: XOR<ContentLikeCreateWithoutUserInput, ContentLikeUncheckedCreateWithoutUserInput>
+  }
+
+  export type ContentLikeCreateManyUserInputEnvelope = {
+    data: ContentLikeCreateManyUserInput | ContentLikeCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ContentCommentCreateWithoutUserInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    content: ContentCreateNestedOneWithoutCommentsInput
+  }
+
+  export type ContentCommentUncheckedCreateWithoutUserInput = {
+    id?: string
+    contentId: string
+    text: string
+    createdAt?: Date | string
+  }
+
+  export type ContentCommentCreateOrConnectWithoutUserInput = {
+    where: ContentCommentWhereUniqueInput
+    create: XOR<ContentCommentCreateWithoutUserInput, ContentCommentUncheckedCreateWithoutUserInput>
+  }
+
+  export type ContentCommentCreateManyUserInputEnvelope = {
+    data: ContentCommentCreateManyUserInput | ContentCommentCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -17431,6 +20496,59 @@ export namespace Prisma {
     data: XOR<SubscriptionUpdateManyMutationInput, SubscriptionUncheckedUpdateManyWithoutCreatorInput>
   }
 
+  export type ContentLikeUpsertWithWhereUniqueWithoutUserInput = {
+    where: ContentLikeWhereUniqueInput
+    update: XOR<ContentLikeUpdateWithoutUserInput, ContentLikeUncheckedUpdateWithoutUserInput>
+    create: XOR<ContentLikeCreateWithoutUserInput, ContentLikeUncheckedCreateWithoutUserInput>
+  }
+
+  export type ContentLikeUpdateWithWhereUniqueWithoutUserInput = {
+    where: ContentLikeWhereUniqueInput
+    data: XOR<ContentLikeUpdateWithoutUserInput, ContentLikeUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ContentLikeUpdateManyWithWhereWithoutUserInput = {
+    where: ContentLikeScalarWhereInput
+    data: XOR<ContentLikeUpdateManyMutationInput, ContentLikeUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ContentLikeScalarWhereInput = {
+    AND?: ContentLikeScalarWhereInput | ContentLikeScalarWhereInput[]
+    OR?: ContentLikeScalarWhereInput[]
+    NOT?: ContentLikeScalarWhereInput | ContentLikeScalarWhereInput[]
+    id?: StringFilter<"ContentLike"> | string
+    contentId?: StringFilter<"ContentLike"> | string
+    userId?: StringFilter<"ContentLike"> | string
+    createdAt?: DateTimeFilter<"ContentLike"> | Date | string
+  }
+
+  export type ContentCommentUpsertWithWhereUniqueWithoutUserInput = {
+    where: ContentCommentWhereUniqueInput
+    update: XOR<ContentCommentUpdateWithoutUserInput, ContentCommentUncheckedUpdateWithoutUserInput>
+    create: XOR<ContentCommentCreateWithoutUserInput, ContentCommentUncheckedCreateWithoutUserInput>
+  }
+
+  export type ContentCommentUpdateWithWhereUniqueWithoutUserInput = {
+    where: ContentCommentWhereUniqueInput
+    data: XOR<ContentCommentUpdateWithoutUserInput, ContentCommentUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ContentCommentUpdateManyWithWhereWithoutUserInput = {
+    where: ContentCommentScalarWhereInput
+    data: XOR<ContentCommentUpdateManyMutationInput, ContentCommentUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ContentCommentScalarWhereInput = {
+    AND?: ContentCommentScalarWhereInput | ContentCommentScalarWhereInput[]
+    OR?: ContentCommentScalarWhereInput[]
+    NOT?: ContentCommentScalarWhereInput | ContentCommentScalarWhereInput[]
+    id?: StringFilter<"ContentComment"> | string
+    contentId?: StringFilter<"ContentComment"> | string
+    userId?: StringFilter<"ContentComment"> | string
+    text?: StringFilter<"ContentComment"> | string
+    createdAt?: DateTimeFilter<"ContentComment"> | Date | string
+  }
+
   export type UserCreateWithoutCreatorProfileInput = {
     id?: string
     name?: string | null
@@ -17450,6 +20568,8 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatorProfileInput = {
@@ -17471,6 +20591,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatorProfileInput = {
@@ -17493,6 +20615,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     creator: UserCreateNestedOneWithoutContentsInput
     premiumPurchases?: PremiumPurchaseCreateNestedManyWithoutContentInput
+    likes?: ContentLikeCreateNestedManyWithoutContentInput
+    comments?: ContentCommentCreateNestedManyWithoutContentInput
   }
 
   export type ContentUncheckedCreateWithoutCreatorProfileInput = {
@@ -17510,6 +20634,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutContentInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutContentInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutContentInput
   }
 
   export type ContentCreateOrConnectWithoutCreatorProfileInput = {
@@ -17552,6 +20678,8 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatorProfileInput = {
@@ -17573,6 +20701,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ContentUpsertWithWhereUniqueWithoutCreatorProfileInput = {
@@ -17610,6 +20740,8 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutContentsInput = {
@@ -17631,6 +20763,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutContentsInput = {
@@ -17701,6 +20835,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ContentLikeCreateWithoutContentInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutLikesInput
+  }
+
+  export type ContentLikeUncheckedCreateWithoutContentInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type ContentLikeCreateOrConnectWithoutContentInput = {
+    where: ContentLikeWhereUniqueInput
+    create: XOR<ContentLikeCreateWithoutContentInput, ContentLikeUncheckedCreateWithoutContentInput>
+  }
+
+  export type ContentLikeCreateManyContentInputEnvelope = {
+    data: ContentLikeCreateManyContentInput | ContentLikeCreateManyContentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ContentCommentCreateWithoutContentInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutCommentsInput
+  }
+
+  export type ContentCommentUncheckedCreateWithoutContentInput = {
+    id?: string
+    userId: string
+    text: string
+    createdAt?: Date | string
+  }
+
+  export type ContentCommentCreateOrConnectWithoutContentInput = {
+    where: ContentCommentWhereUniqueInput
+    create: XOR<ContentCommentCreateWithoutContentInput, ContentCommentUncheckedCreateWithoutContentInput>
+  }
+
+  export type ContentCommentCreateManyContentInputEnvelope = {
+    data: ContentCommentCreateManyContentInput | ContentCommentCreateManyContentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutContentsInput = {
     update: XOR<UserUpdateWithoutContentsInput, UserUncheckedUpdateWithoutContentsInput>
     create: XOR<UserCreateWithoutContentsInput, UserUncheckedCreateWithoutContentsInput>
@@ -17731,6 +20911,8 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutContentsInput = {
@@ -17752,6 +20934,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CreatorProfileUpsertWithoutContentsInput = {
@@ -17815,6 +20999,38 @@ export namespace Prisma {
     data: XOR<PremiumPurchaseUpdateManyMutationInput, PremiumPurchaseUncheckedUpdateManyWithoutContentInput>
   }
 
+  export type ContentLikeUpsertWithWhereUniqueWithoutContentInput = {
+    where: ContentLikeWhereUniqueInput
+    update: XOR<ContentLikeUpdateWithoutContentInput, ContentLikeUncheckedUpdateWithoutContentInput>
+    create: XOR<ContentLikeCreateWithoutContentInput, ContentLikeUncheckedCreateWithoutContentInput>
+  }
+
+  export type ContentLikeUpdateWithWhereUniqueWithoutContentInput = {
+    where: ContentLikeWhereUniqueInput
+    data: XOR<ContentLikeUpdateWithoutContentInput, ContentLikeUncheckedUpdateWithoutContentInput>
+  }
+
+  export type ContentLikeUpdateManyWithWhereWithoutContentInput = {
+    where: ContentLikeScalarWhereInput
+    data: XOR<ContentLikeUpdateManyMutationInput, ContentLikeUncheckedUpdateManyWithoutContentInput>
+  }
+
+  export type ContentCommentUpsertWithWhereUniqueWithoutContentInput = {
+    where: ContentCommentWhereUniqueInput
+    update: XOR<ContentCommentUpdateWithoutContentInput, ContentCommentUncheckedUpdateWithoutContentInput>
+    create: XOR<ContentCommentCreateWithoutContentInput, ContentCommentUncheckedCreateWithoutContentInput>
+  }
+
+  export type ContentCommentUpdateWithWhereUniqueWithoutContentInput = {
+    where: ContentCommentWhereUniqueInput
+    data: XOR<ContentCommentUpdateWithoutContentInput, ContentCommentUncheckedUpdateWithoutContentInput>
+  }
+
+  export type ContentCommentUpdateManyWithWhereWithoutContentInput = {
+    where: ContentCommentScalarWhereInput
+    data: XOR<ContentCommentUpdateManyMutationInput, ContentCommentUncheckedUpdateManyWithoutContentInput>
+  }
+
   export type UserCreateWithoutCampaignsInput = {
     id?: string
     name?: string | null
@@ -17834,6 +21050,8 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCampaignsInput = {
@@ -17855,6 +21073,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCampaignsInput = {
@@ -17920,6 +21140,8 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCampaignsInput = {
@@ -17941,6 +21163,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ApplicationUpsertWithWhereUniqueWithoutCampaignInput = {
@@ -18015,6 +21239,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseCreateNestedManyWithoutUserInput
     subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApplicationsInput = {
@@ -18036,6 +21262,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApplicationsInput = {
@@ -18116,6 +21344,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseUpdateManyWithoutUserNestedInput
     subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApplicationsInput = {
@@ -18137,6 +21367,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPaymentTransactionsInput = {
@@ -18158,6 +21390,8 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPaymentTransactionsInput = {
@@ -18179,6 +21413,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPaymentTransactionsInput = {
@@ -18216,6 +21452,8 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentTransactionsInput = {
@@ -18237,6 +21475,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSentMessagesInput = {
@@ -18258,6 +21498,8 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -18279,6 +21521,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -18305,6 +21549,8 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReceivedMessagesInput = {
@@ -18326,6 +21572,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReceivedMessagesInput = {
@@ -18363,6 +21611,8 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -18384,6 +21634,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReceivedMessagesInput = {
@@ -18416,6 +21668,8 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
@@ -18437,6 +21691,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPremiumPurchasesInput = {
@@ -18458,6 +21714,8 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPremiumPurchasesInput = {
@@ -18479,6 +21737,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
     creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPremiumPurchasesInput = {
@@ -18501,6 +21761,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     creator: UserCreateNestedOneWithoutContentsInput
     creatorProfile?: CreatorProfileCreateNestedOneWithoutContentsInput
+    likes?: ContentLikeCreateNestedManyWithoutContentInput
+    comments?: ContentCommentCreateNestedManyWithoutContentInput
   }
 
   export type ContentUncheckedCreateWithoutPremiumPurchasesInput = {
@@ -18518,6 +21780,8 @@ export namespace Prisma {
     creatorProfileId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutContentInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutContentInput
   }
 
   export type ContentCreateOrConnectWithoutPremiumPurchasesInput = {
@@ -18555,6 +21819,8 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPremiumPurchasesInput = {
@@ -18576,6 +21842,8 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
     creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ContentUpsertWithoutPremiumPurchasesInput = {
@@ -18604,6 +21872,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutContentsNestedInput
     creatorProfile?: CreatorProfileUpdateOneWithoutContentsNestedInput
+    likes?: ContentLikeUpdateManyWithoutContentNestedInput
+    comments?: ContentCommentUpdateManyWithoutContentNestedInput
   }
 
   export type ContentUncheckedUpdateWithoutPremiumPurchasesInput = {
@@ -18621,6 +21891,8 @@ export namespace Prisma {
     creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    likes?: ContentLikeUncheckedUpdateManyWithoutContentNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutContentNestedInput
   }
 
   export type UserCreateWithoutSubscriptionsInput = {
@@ -18642,6 +21914,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseCreateNestedManyWithoutUserInput
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubscriptionsInput = {
@@ -18663,6 +21937,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubscriptionsInput = {
@@ -18689,6 +21965,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseCreateNestedManyWithoutUserInput
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatorSubscriptionsInput = {
@@ -18710,6 +21988,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatorSubscriptionsInput = {
@@ -18747,6 +22027,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseUpdateManyWithoutUserNestedInput
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubscriptionsInput = {
@@ -18768,6 +22050,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatorSubscriptionsInput = {
@@ -18800,6 +22084,8 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseUpdateManyWithoutUserNestedInput
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatorSubscriptionsInput = {
@@ -18821,6 +22107,408 @@ export namespace Prisma {
     premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ContentCreateWithoutLikesInput = {
+    id?: string
+    title: string
+    description?: string | null
+    contentUrl: string
+    thumbnailUrl?: string | null
+    type: $Enums.ContentType
+    visibility: $Enums.ContentVisibility
+    price?: number | null
+    currency?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creator: UserCreateNestedOneWithoutContentsInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutContentsInput
+    premiumPurchases?: PremiumPurchaseCreateNestedManyWithoutContentInput
+    comments?: ContentCommentCreateNestedManyWithoutContentInput
+  }
+
+  export type ContentUncheckedCreateWithoutLikesInput = {
+    id?: string
+    title: string
+    description?: string | null
+    contentUrl: string
+    thumbnailUrl?: string | null
+    type: $Enums.ContentType
+    visibility: $Enums.ContentVisibility
+    price?: number | null
+    currency?: string | null
+    deletedAt?: Date | string | null
+    creatorId: string
+    creatorProfileId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutContentInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutContentInput
+  }
+
+  export type ContentCreateOrConnectWithoutLikesInput = {
+    where: ContentWhereUniqueInput
+    create: XOR<ContentCreateWithoutLikesInput, ContentUncheckedCreateWithoutLikesInput>
+  }
+
+  export type UserCreateWithoutLikesInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    profileImage?: string | null
+    role?: $Enums.Role
+    verificationStatus?: $Enums.VerificationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
+    contents?: ContentCreateNestedManyWithoutCreatorInput
+    campaigns?: CampaignCreateNestedManyWithoutBusinessInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    premiumPurchases?: PremiumPurchaseCreateNestedManyWithoutUserInput
+    applications?: ApplicationCreateNestedManyWithoutCreatorInput
+    subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
+    creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    comments?: ContentCommentCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutLikesInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    profileImage?: string | null
+    role?: $Enums.Role
+    verificationStatus?: $Enums.VerificationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
+    contents?: ContentUncheckedCreateNestedManyWithoutCreatorInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutBusinessInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+    applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
+    subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
+    creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    comments?: ContentCommentUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutLikesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLikesInput, UserUncheckedCreateWithoutLikesInput>
+  }
+
+  export type ContentUpsertWithoutLikesInput = {
+    update: XOR<ContentUpdateWithoutLikesInput, ContentUncheckedUpdateWithoutLikesInput>
+    create: XOR<ContentCreateWithoutLikesInput, ContentUncheckedCreateWithoutLikesInput>
+    where?: ContentWhereInput
+  }
+
+  export type ContentUpdateToOneWithWhereWithoutLikesInput = {
+    where?: ContentWhereInput
+    data: XOR<ContentUpdateWithoutLikesInput, ContentUncheckedUpdateWithoutLikesInput>
+  }
+
+  export type ContentUpdateWithoutLikesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    contentUrl?: StringFieldUpdateOperationsInput | string
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+    visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: UserUpdateOneRequiredWithoutContentsNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutContentsNestedInput
+    premiumPurchases?: PremiumPurchaseUpdateManyWithoutContentNestedInput
+    comments?: ContentCommentUpdateManyWithoutContentNestedInput
+  }
+
+  export type ContentUncheckedUpdateWithoutLikesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    contentUrl?: StringFieldUpdateOperationsInput | string
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+    visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    creatorId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutContentNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutContentNestedInput
+  }
+
+  export type UserUpsertWithoutLikesInput = {
+    update: XOR<UserUpdateWithoutLikesInput, UserUncheckedUpdateWithoutLikesInput>
+    create: XOR<UserCreateWithoutLikesInput, UserUncheckedCreateWithoutLikesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLikesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLikesInput, UserUncheckedUpdateWithoutLikesInput>
+  }
+
+  export type UserUpdateWithoutLikesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
+    contents?: ContentUpdateManyWithoutCreatorNestedInput
+    campaigns?: CampaignUpdateManyWithoutBusinessNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    premiumPurchases?: PremiumPurchaseUpdateManyWithoutUserNestedInput
+    applications?: ApplicationUpdateManyWithoutCreatorNestedInput
+    subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
+    creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    comments?: ContentCommentUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLikesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
+    contents?: ContentUncheckedUpdateManyWithoutCreatorNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutBusinessNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
+    subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
+    creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ContentCreateWithoutCommentsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    contentUrl: string
+    thumbnailUrl?: string | null
+    type: $Enums.ContentType
+    visibility: $Enums.ContentVisibility
+    price?: number | null
+    currency?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creator: UserCreateNestedOneWithoutContentsInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutContentsInput
+    premiumPurchases?: PremiumPurchaseCreateNestedManyWithoutContentInput
+    likes?: ContentLikeCreateNestedManyWithoutContentInput
+  }
+
+  export type ContentUncheckedCreateWithoutCommentsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    contentUrl: string
+    thumbnailUrl?: string | null
+    type: $Enums.ContentType
+    visibility: $Enums.ContentVisibility
+    price?: number | null
+    currency?: string | null
+    deletedAt?: Date | string | null
+    creatorId: string
+    creatorProfileId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutContentInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutContentInput
+  }
+
+  export type ContentCreateOrConnectWithoutCommentsInput = {
+    where: ContentWhereUniqueInput
+    create: XOR<ContentCreateWithoutCommentsInput, ContentUncheckedCreateWithoutCommentsInput>
+  }
+
+  export type UserCreateWithoutCommentsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    profileImage?: string | null
+    role?: $Enums.Role
+    verificationStatus?: $Enums.VerificationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
+    contents?: ContentCreateNestedManyWithoutCreatorInput
+    campaigns?: CampaignCreateNestedManyWithoutBusinessInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    premiumPurchases?: PremiumPurchaseCreateNestedManyWithoutUserInput
+    applications?: ApplicationCreateNestedManyWithoutCreatorInput
+    subscriptions?: SubscriptionCreateNestedManyWithoutSubscriberInput
+    creatorSubscriptions?: SubscriptionCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCommentsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    profileImage?: string | null
+    role?: $Enums.Role
+    verificationStatus?: $Enums.VerificationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
+    contents?: ContentUncheckedCreateNestedManyWithoutCreatorInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutBusinessInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    premiumPurchases?: PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+    applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
+    subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutSubscriberInput
+    creatorSubscriptions?: SubscriptionUncheckedCreateNestedManyWithoutCreatorInput
+    likes?: ContentLikeUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCommentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCommentsInput, UserUncheckedCreateWithoutCommentsInput>
+  }
+
+  export type ContentUpsertWithoutCommentsInput = {
+    update: XOR<ContentUpdateWithoutCommentsInput, ContentUncheckedUpdateWithoutCommentsInput>
+    create: XOR<ContentCreateWithoutCommentsInput, ContentUncheckedCreateWithoutCommentsInput>
+    where?: ContentWhereInput
+  }
+
+  export type ContentUpdateToOneWithWhereWithoutCommentsInput = {
+    where?: ContentWhereInput
+    data: XOR<ContentUpdateWithoutCommentsInput, ContentUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type ContentUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    contentUrl?: StringFieldUpdateOperationsInput | string
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+    visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: UserUpdateOneRequiredWithoutContentsNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutContentsNestedInput
+    premiumPurchases?: PremiumPurchaseUpdateManyWithoutContentNestedInput
+    likes?: ContentLikeUpdateManyWithoutContentNestedInput
+  }
+
+  export type ContentUncheckedUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    contentUrl?: StringFieldUpdateOperationsInput | string
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+    visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    creatorId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutContentNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutContentNestedInput
+  }
+
+  export type UserUpsertWithoutCommentsInput = {
+    update: XOR<UserUpdateWithoutCommentsInput, UserUncheckedUpdateWithoutCommentsInput>
+    create: XOR<UserCreateWithoutCommentsInput, UserUncheckedCreateWithoutCommentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCommentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCommentsInput, UserUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type UserUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
+    contents?: ContentUpdateManyWithoutCreatorNestedInput
+    campaigns?: CampaignUpdateManyWithoutBusinessNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    premiumPurchases?: PremiumPurchaseUpdateManyWithoutUserNestedInput
+    applications?: ApplicationUpdateManyWithoutCreatorNestedInput
+    subscriptions?: SubscriptionUpdateManyWithoutSubscriberNestedInput
+    creatorSubscriptions?: SubscriptionUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
+    contents?: ContentUncheckedUpdateManyWithoutCreatorNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutBusinessNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
+    subscriptions?: SubscriptionUncheckedUpdateManyWithoutSubscriberNestedInput
+    creatorSubscriptions?: SubscriptionUncheckedUpdateManyWithoutCreatorNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ContentCreateManyCreatorInput = {
@@ -18929,6 +22617,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ContentLikeCreateManyUserInput = {
+    id?: string
+    contentId: string
+    createdAt?: Date | string
+  }
+
+  export type ContentCommentCreateManyUserInput = {
+    id?: string
+    contentId: string
+    text: string
+    createdAt?: Date | string
+  }
+
   export type ContentUpdateWithoutCreatorInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -18944,6 +22645,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creatorProfile?: CreatorProfileUpdateOneWithoutContentsNestedInput
     premiumPurchases?: PremiumPurchaseUpdateManyWithoutContentNestedInput
+    likes?: ContentLikeUpdateManyWithoutContentNestedInput
+    comments?: ContentCommentUpdateManyWithoutContentNestedInput
   }
 
   export type ContentUncheckedUpdateWithoutCreatorInput = {
@@ -18961,6 +22664,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutContentNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutContentNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutContentNestedInput
   }
 
   export type ContentUncheckedUpdateManyWithoutCreatorInput = {
@@ -19251,6 +22956,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ContentLikeUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: ContentUpdateOneRequiredWithoutLikesNestedInput
+  }
+
+  export type ContentLikeUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentLikeUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentCommentUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: ContentUpdateOneRequiredWithoutCommentsNestedInput
+  }
+
+  export type ContentCommentUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contentId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentCommentUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contentId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ContentCreateManyCreatorProfileInput = {
     id?: string
     title: string
@@ -19282,6 +23026,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutContentsNestedInput
     premiumPurchases?: PremiumPurchaseUpdateManyWithoutContentNestedInput
+    likes?: ContentLikeUpdateManyWithoutContentNestedInput
+    comments?: ContentCommentUpdateManyWithoutContentNestedInput
   }
 
   export type ContentUncheckedUpdateWithoutCreatorProfileInput = {
@@ -19299,6 +23045,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     premiumPurchases?: PremiumPurchaseUncheckedUpdateManyWithoutContentNestedInput
+    likes?: ContentLikeUncheckedUpdateManyWithoutContentNestedInput
+    comments?: ContentCommentUncheckedUpdateManyWithoutContentNestedInput
   }
 
   export type ContentUncheckedUpdateManyWithoutCreatorProfileInput = {
@@ -19324,6 +23072,19 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type ContentLikeCreateManyContentInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type ContentCommentCreateManyContentInput = {
+    id?: string
+    userId: string
+    text: string
+    createdAt?: Date | string
+  }
+
   export type PremiumPurchaseUpdateWithoutContentInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
@@ -19342,6 +23103,45 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentLikeUpdateWithoutContentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutLikesNestedInput
+  }
+
+  export type ContentLikeUncheckedUpdateWithoutContentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentLikeUncheckedUpdateManyWithoutContentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentCommentUpdateWithoutContentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCommentsNestedInput
+  }
+
+  export type ContentCommentUncheckedUpdateWithoutContentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentCommentUncheckedUpdateManyWithoutContentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

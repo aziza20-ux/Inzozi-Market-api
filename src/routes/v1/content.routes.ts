@@ -12,6 +12,8 @@ import {
   getCreatorProfileContent,
   moderationUpdate,
   patchContent,
+  likeContent,
+  commentOnContent,
 } from "../../controllers/content.controllers.js";
 import { uploadCreatorMedia } from "../../controllers/upload.controllers.js";
 
@@ -145,7 +147,7 @@ router.post(
  *   get:
  *     tags:
  *       - Content
- *     summary: List public content
+ *     summary: List public content with likes and comments
  *     parameters:
  *       - in: query
  *         name: type
@@ -157,9 +159,9 @@ router.post(
  *           type: string
  *     responses:
  *       200:
- *         description: Content list
+ *         description: Content list (each item includes likes count, liked bool, and comments array)
  */
-router.get("/", getContentList);
+router.get("/", authenticate, getContentList);
 
 // GET /v1/content/:id
 /**
@@ -168,7 +170,7 @@ router.get("/", getContentList);
  *   get:
  *     tags:
  *       - Content
- *     summary: Get content by ID
+ *     summary: Get content by ID with likes and comments
  *     parameters:
  *       - in: path
  *         name: id
@@ -178,13 +180,110 @@ router.get("/", getContentList);
  *           format: uuid
  *     responses:
  *       200:
- *         description: Content item
+ *         description: Content item with likes and comments
  *       404:
  *         description: Content not found
  */
-router.get("/:id", getContent);
+router.get("/:id", authenticate, getContent);
 
-// PATCH /v1/content/:id
+// POST /v1/content/:id/like
+/**
+ * @openapi
+ * /content/{id}/like:
+ *   post:
+ *     tags:
+ *       - Content
+ *     summary: Toggle like on a content item
+ *     description: Likes the post if not yet liked, unlikes if already liked. Returns updated like count and liked status.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Updated like state
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 contentId:
+ *                   type: string
+ *                 likes:
+ *                   type: integer
+ *                 liked:
+ *                   type: boolean
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Content not found
+ */
+router.post("/:id/like", authenticate, likeContent);
+
+// POST /v1/content/:id/comment
+/**
+ * @openapi
+ * /content/{id}/comment:
+ *   post:
+ *     tags:
+ *       - Content
+ *     summary: Add a comment to a content item
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [text]
+ *             properties:
+ *               text:
+ *                 type: string
+ *                 example: "Great content!"
+ *     responses:
+ *       201:
+ *         description: Comment created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 contentId:
+ *                   type: string
+ *                 userId:
+ *                   type: string
+ *                 user:
+ *                   type: string
+ *                 text:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: Missing comment text
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Content not found
+ */
+router.post("/:id/comment", authenticate, commentOnContent);
+
+// PUT /v1/content/:id
 /**
  * @openapi
  * /content/{id}:
@@ -258,7 +357,7 @@ router.delete(
   deleteContent,
 );
 
-// PATCH /v1/content/:id/moderation (admin)
+// PATCH /v1/content/:id/moderation (admin — deprecated)
 /**
  * @openapi
  * /content/{id}/moderation:
@@ -286,7 +385,7 @@ router.patch(
   moderationUpdate,
 );
 
-// GET /v1/creator-profiles/:id/content
+// GET /v1/content/creator-profiles/:id/content
 /**
  * @openapi
  * /content/creator-profiles/{id}/content:
@@ -311,8 +410,8 @@ router.patch(
  *           type: string
  *     responses:
  *       200:
- *         description: Filtered content list
+ *         description: Filtered content list with likes and comments
  */
-router.get("/creator-profiles/:id/content", getCreatorProfileContent);
+router.get("/creator-profiles/:id/content", authenticate, getCreatorProfileContent);
 
 export default router;

@@ -7,6 +7,10 @@ import { AuthRequest } from "../middleware/auth.js";
 
 type Visibility = "public" | "paid";
 
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
 async function hasCompletedPremiumPurchase(userId: string, contentId: string) {
   const purchase = await prisma.premiumPurchase.findFirst({
     where: {
@@ -33,9 +37,55 @@ async function resolveContentMedia(req: Request) {
     const uploaded = await uploadToCloudinary(file.buffer, "inzozi/content", resourceType);
     return uploaded.url;
   }
-
   return getMediaUrl(req.body);
 }
+
+/**
+ * Attach likes count, whether the requesting user has liked, and comments
+ * to a content item (or a list of items) fetched from Prisma.
+ */
+async function enrichContent(
+  content: any,
+  requestingUserId?: string,
+): Promise<any> {
+  const [likesCount, commentsRaw] = await Promise.all([
+    prisma.contentLike.count({ where: { contentId: content.id } }),
+    prisma.contentComment.findMany({
+      where: { contentId: content.id },
+      orderBy: { createdAt: "asc" },
+      include: { user: { select: { id: true, name: true } } },
+    }),
+  ]);
+
+  let liked = false;
+  if (requestingUserId) {
+    const existing = await prisma.contentLike.findUnique({
+      where: { contentId_userId: { contentId: content.id, userId: requestingUserId } },
+    });
+    liked = !!existing;
+  }
+
+  const comments = commentsRaw.map((c: any) => ({
+    id: c.id,
+    userId: c.userId,
+    user: c.user?.name ?? "User",
+    text: c.text,
+    createdAt: c.createdAt,
+  }));
+
+  return { ...content, likes: likesCount, liked, comments };
+}
+
+async function enrichContentList(
+  list: any[],
+  requestingUserId?: string,
+): Promise<any[]> {
+  return Promise.all(list.map((item) => enrichContent(item, requestingUserId)));
+}
+
+// ---------------------------------------------------------------------------
+// Upload URL
+// ---------------------------------------------------------------------------
 
 export async function generateContentUploadUrl(req: Request, res: Response) {
   try {
@@ -56,6 +106,10 @@ export async function generateContentUploadUrl(req: Request, res: Response) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Create content
+// ---------------------------------------------------------------------------
+
 export async function createContent(req: AuthRequest, res: Response) {
   try {
     const userId = req.userId;
@@ -72,7 +126,6 @@ export async function createContent(req: AuthRequest, res: Response) {
     const {
       title,
       description,
-      contentUrl,
       thumbnailUrl,
       type,
       visibility,
@@ -90,12 +143,7 @@ export async function createContent(req: AuthRequest, res: Response) {
     }
 
     if (visibility === "paid") {
-      if (
-        price === undefined ||
-        currency === undefined ||
-        currency === null ||
-        currency === ""
-      ) {
+      if (price === undefined || !currency) {
         return res.status(400).json({
           error: "PAID_CONTENT_REQUIRES_PRICE_AND_CURRENCY",
         });
@@ -121,19 +169,23 @@ export async function createContent(req: AuthRequest, res: Response) {
       },
     });
 
-    res.status(201).json(created);
+    // Return enriched (likes: 0, comments: []) for consistency
+    res.status(201).json(await enrichContent(created));
   } catch (e) {
     console.error("createContent error:", e);
     res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
 }
 
+// ---------------------------------------------------------------------------
+// List content
+// ---------------------------------------------------------------------------
+
 export async function getContentList(req: AuthRequest, res: Response) {
   try {
     const { type, visibility } = req.query;
 
     const where: any = { deletedAt: null };
-
     if (typeof type === "string") where.type = type;
     if (typeof visibility === "string") where.visibility = visibility;
 
@@ -142,11 +194,16 @@ export async function getContentList(req: AuthRequest, res: Response) {
       orderBy: { createdAt: "desc" },
     });
 
-    res.json(list);
+    const enriched = await enrichContentList(list, req.userId);
+    res.json(enriched);
   } catch (e) {
     res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
 }
+
+// ---------------------------------------------------------------------------
+// Get single content
+// ---------------------------------------------------------------------------
 
 export async function getContent(req: AuthRequest, res: Response) {
   try {
@@ -163,27 +220,26 @@ export async function getContent(req: AuthRequest, res: Response) {
       return res.status(404).json({ error: "CONTENT_NOT_FOUND" });
     }
 
-    // Public endpoint: no moderation gating configured.
-
     if (isPaidContent(content.visibility)) {
-      // Requires completed premium purchase.
-      const user = await prisma.user.findFirst({where:{id:req.userId}});
-      // If no user, deny.
+      const user = await prisma.user.findFirst({ where: { id: req.userId } });
       if (!user) {
         return res.status(403).json({ error: "CONTENT_ACCESS_DENIED" });
       }
-
       const ok = await hasCompletedPremiumPurchase(user.id, content.id);
       if (!ok) {
         return res.status(403).json({ error: "CONTENT_ACCESS_DENIED" });
       }
     }
 
-    res.json(content);
+    res.json(await enrichContent(content, req.userId));
   } catch (e) {
     res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
 }
+
+// ---------------------------------------------------------------------------
+// Patch content
+// ---------------------------------------------------------------------------
 
 export async function patchContent(req: AuthRequest, res: Response) {
   try {
@@ -207,7 +263,6 @@ export async function patchContent(req: AuthRequest, res: Response) {
     const {
       title,
       description,
-      contentUrl,
       thumbnailUrl,
       type,
       visibility,
@@ -216,20 +271,12 @@ export async function patchContent(req: AuthRequest, res: Response) {
     } = req.body ?? {};
     const mediaUrl = await resolveContentMedia(req);
 
-    if (
-      mediaUrl !== undefined &&
-      !storageService.validatePublicUrl(String(mediaUrl))
-    ) {
+    if (mediaUrl !== undefined && !storageService.validatePublicUrl(String(mediaUrl))) {
       return res.status(400).json({ error: "INVALID_MEDIA_URL" });
     }
 
     if (visibility === "paid") {
-      if (
-        price === undefined ||
-        currency === undefined ||
-        currency === null ||
-        currency === ""
-      ) {
+      if (price === undefined || !currency) {
         return res.status(400).json({
           error: "PAID_CONTENT_REQUIRES_PRICE_AND_CURRENCY",
         });
@@ -240,7 +287,7 @@ export async function patchContent(req: AuthRequest, res: Response) {
       where: { id: String(id) },
       data: {
         ...(title !== undefined ? { title } : {}),
-        ...(description !== undefined ? { description: description } : {}),
+        ...(description !== undefined ? { description } : {}),
         ...(mediaUrl !== undefined ? { contentUrl: String(mediaUrl) } : {}),
         ...(thumbnailUrl !== undefined ? { thumbnailUrl } : {}),
         ...(type !== undefined ? { type } : {}),
@@ -254,19 +301,23 @@ export async function patchContent(req: AuthRequest, res: Response) {
       },
     });
 
-    res.json(updated);
+    res.json(await enrichContent(updated, userId));
   } catch (e) {
     res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
 }
 
+// ---------------------------------------------------------------------------
+// Delete content
+// ---------------------------------------------------------------------------
+
 export async function deleteContent(req: AuthRequest, res: Response) {
   try {
-    const user = await prisma.user.findFirst({where:{id: req.userId}})
+    const user = await prisma.user.findFirst({ where: { id: req.userId } });
     const { id } = req.params;
 
-    if (!user){
-      return res.status(401).json({ error: "UNAUTHORIZED" })
+    if (!user) {
+      return res.status(401).json({ error: "UNAUTHORIZED" });
     }
 
     const content = await prisma.content.findFirst({
@@ -283,24 +334,29 @@ export async function deleteContent(req: AuthRequest, res: Response) {
       data: { deletedAt: new Date() },
     });
 
-    res.status(204).json({message:"deleted successfully", id:id});
+    res.status(204).json({ message: "deleted successfully", id });
   } catch (e) {
     res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
 }
 
+// ---------------------------------------------------------------------------
+// Moderation (deprecated)
+// ---------------------------------------------------------------------------
+
 export async function moderationUpdate(req: AuthRequest, res: Response) {
-  // Moderation endpoint removed
   return res.status(404).json({ error: "NOT_FOUND" });
 }
+
+// ---------------------------------------------------------------------------
+// Creator profile content
+// ---------------------------------------------------------------------------
 
 export async function getCreatorProfileContent(req: AuthRequest, res: Response) {
   try {
     const { id } = req.params;
-
     const { visibility, type } = req.query;
 
-    // Only list by creator.
     const creatorProfile = await prisma.creatorProfile.findFirst({
       where: { id: String(id) },
     });
@@ -310,31 +366,128 @@ export async function getCreatorProfileContent(req: AuthRequest, res: Response) 
     }
 
     const where: any = { deletedAt: null, creatorId: creatorProfile.userId };
-
     if (type) where.type = String(type);
     if (visibility) where.visibility = String(visibility);
 
-    // Paid gate if requested visibility=paid and user exists.
     const list = await prisma.content.findMany({
       where,
       orderBy: { createdAt: "desc" },
     });
 
-    // Apply paid access gate to paid items.
     const user = req.user;
-    const filtered: typeof list = [];
+    const accessible: typeof list = [];
     for (const c of list) {
       if (c.visibility === "paid") {
         if (!user) continue;
         const ok = await hasCompletedPremiumPurchase(user.id, c.id);
         if (!ok) continue;
       }
-      filtered.push(c);
+      accessible.push(c);
     }
 
-    res.json(filtered);
+    res.json(await enrichContentList(accessible, req.userId));
   } catch (e) {
     res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Like / unlike content  (POST /content/:id/like)
+// ---------------------------------------------------------------------------
+
+export async function likeContent(req: AuthRequest, res: Response) {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      return res.status(401).json({ error: "UNAUTHORIZED" });
+    }
+
+    const { id: contentId } = req.params;
+
+    const content = await prisma.content.findFirst({
+      where: { id: String(contentId), deletedAt: null },
+    });
+    if (!content) {
+      return res.status(404).json({ error: "CONTENT_NOT_FOUND" });
+    }
+
+    // Toggle: if already liked → remove; otherwise → create
+    const existing = await prisma.contentLike.findUnique({
+      where: { contentId_userId: { contentId: String(contentId), userId } },
+    });
+
+    if (existing) {
+      await prisma.contentLike.delete({
+        where: { contentId_userId: { contentId: String(contentId), userId } },
+      });
+    } else {
+      await prisma.contentLike.create({
+        data: { contentId: String(contentId), userId },
+      });
+    }
+
+    const likes = await prisma.contentLike.count({
+      where: { contentId: String(contentId) },
+    });
+
+    return res.json({
+      contentId,
+      likes,
+      liked: !existing, // true if we just added, false if we just removed
+    });
+  } catch (e) {
+    console.error("likeContent error:", e);
+    return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Comment on content  (POST /content/:id/comment)
+// ---------------------------------------------------------------------------
+
+export async function commentOnContent(req: AuthRequest, res: Response) {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      return res.status(401).json({ error: "UNAUTHORIZED" });
+    }
+
+    const { id: contentId } = req.params;
+    const { text } = req.body ?? {};
+
+    if (!text || !String(text).trim()) {
+      return res.status(400).json({ error: "COMMENT_TEXT_REQUIRED" });
+    }
+
+    const content = await prisma.content.findFirst({
+      where: { id: String(contentId), deletedAt: null },
+    });
+    if (!content) {
+      return res.status(404).json({ error: "CONTENT_NOT_FOUND" });
+    }
+
+    const comment = await prisma.contentComment.create({
+      data: {
+        contentId: String(contentId),
+        userId,
+        text: String(text).trim(),
+      },
+      include: {
+        user: { select: { id: true, name: true } },
+      },
+    });
+
+    return res.status(201).json({
+      id: comment.id,
+      contentId: comment.contentId,
+      userId: comment.userId,
+      user: comment.user?.name ?? "User",
+      text: comment.text,
+      createdAt: comment.createdAt,
+    });
+  } catch (e) {
+    console.error("commentOnContent error:", e);
+    return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
 }
 
@@ -346,4 +499,6 @@ export default {
   patchContent,
   deleteContent,
   getCreatorProfileContent,
+  likeContent,
+  commentOnContent,
 };

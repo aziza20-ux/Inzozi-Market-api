@@ -1,14 +1,14 @@
 import { Router } from "express";
 import {
-	createCampaign,
-	deleteCampaign,
-	getCampaignById,
-	getCampaigns,
-	updateCampaign,
-	updateCampaignStatus,
-	createApplication,
-	updateApplicationStatus,
-	getApplications,
+  createCampaign,
+  deleteCampaign,
+  getCampaignById,
+  getCampaigns,
+  updateCampaign,
+  updateCampaignStatus,
+  createApplication,
+  updateApplicationStatus,
+  getApplications,
 } from "../../controllers/campaign.controller.js";
 import { disburseCampaign } from "../../controllers/payment.controllers.js";
 import { authenticate } from "../../middleware/auth.js";
@@ -92,6 +92,13 @@ router.post("/", authenticate, createCampaign);
  *         description: Campaign list
  */
 router.get("/", getCampaigns);
+
+/**
+ * IMPORTANT:
+ * Put the static /my/applications route before /:id
+ * so Express does not treat "my" as a campaign id.
+ */
+router.get("/my/applications", authenticate, getApplications);
 
 /**
  * @openapi
@@ -234,7 +241,6 @@ router.post("/:id/disburse", authenticate, disburseCampaign);
  */
 router.delete("/:id", authenticate, deleteCampaign);
 
-router.get("/my/applications", authenticate, getApplications);
 router.post("/:id/applications", authenticate, createApplication);
 router.patch("/:id/applications", authenticate, updateApplicationStatus);
 

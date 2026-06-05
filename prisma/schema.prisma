@@ -89,6 +89,9 @@ model User {
   applications         Application[]
   subscriptions        Subscription[]     @relation("SubscriberSubscriptions")
   creatorSubscriptions Subscription[]     @relation("CreatorSubscriptions")
+
+  likes    ContentLike[]
+comments ContentComment[]
 }
 
 model CreatorProfile {
@@ -130,6 +133,9 @@ model Content {
   creator          User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   creatorProfile   CreatorProfile?  @relation(fields: [creatorProfileId], references: [id])
   premiumPurchases PremiumPurchase[]
+
+  likes    ContentLike[]
+comments ContentComment[]
 }
 
 model Campaign {
@@ -234,4 +240,25 @@ model Subscription {
   @@unique([subscriberId, creatorId])
   @@index([creatorId])
   @@index([subscriberId])
+}
+
+model ContentLike {
+  id        String   @id @default(uuid())
+  contentId String
+  userId    String
+  createdAt DateTime @default(now())
+  content   Content  @relation(fields: [contentId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([contentId, userId])
+}
+
+model ContentComment {
+  id        String   @id @default(uuid())
+  contentId String
+  userId    String
+  text      String
+  createdAt DateTime @default(now())
+  content   Content  @relation(fields: [contentId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }

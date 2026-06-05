@@ -239,6 +239,21 @@ exports.Prisma.SubscriptionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ContentLikeScalarFieldEnum = {
+  id: 'id',
+  contentId: 'contentId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ContentCommentScalarFieldEnum = {
+  id: 'id',
+  contentId: 'contentId',
+  userId: 'userId',
+  text: 'text',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -323,7 +338,9 @@ exports.Prisma.ModelName = {
   PaymentTransaction: 'PaymentTransaction',
   Message: 'Message',
   PremiumPurchase: 'PremiumPurchase',
-  Subscription: 'Subscription'
+  Subscription: 'Subscription',
+  ContentLike: 'ContentLike',
+  ContentComment: 'ContentComment'
 };
 
 /**
