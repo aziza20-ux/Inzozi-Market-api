@@ -5,10 +5,17 @@ import { AuthRequest } from '../middleware/auth';
 export const subscribeToCreator = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const subscriberId = req.userId;
-    const { creatorId } = req.params;
+    const creatorId = Array.isArray(req.params.creatorId)
+      ? req.params.creatorId[0]
+      : req.params.creatorId;
 
     if (!subscriberId) {
       res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    if (!creatorId) {
+      res.status(400).json({ error: 'Creator ID is required' });
       return;
     }
 
@@ -19,7 +26,7 @@ export const subscribeToCreator = async (req: AuthRequest, res: Response): Promi
 
     // Check if creator exists and get fee
     const creatorProfile = await prisma.creatorProfile.findUnique({
-      where: { userId: creatorId }
+      where: { userId: creatorId },
     });
 
     if (!creatorProfile) {
@@ -36,8 +43,8 @@ export const subscribeToCreator = async (req: AuthRequest, res: Response): Promi
         amount,
         paymentType: 'SUBSCRIPTION',
         paymentStatus: 'SUCCESS',
-        transactionRef: `SUB_${Date.now()}_${Math.floor(Math.random() * 1000)}`
-      }
+        transactionRef: `SUB_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      },
     });
 
     // Calculate dates (1 month duration)
@@ -50,13 +57,13 @@ export const subscribeToCreator = async (req: AuthRequest, res: Response): Promi
       where: {
         subscriberId_creatorId: {
           subscriberId,
-          creatorId
-        }
+          creatorId,
+        },
       },
       update: {
         amount,
         status: 'ACTIVE',
-        endDate
+        endDate,
       },
       create: {
         subscriberId,
@@ -64,8 +71,8 @@ export const subscribeToCreator = async (req: AuthRequest, res: Response): Promi
         amount,
         status: 'ACTIVE',
         startDate,
-        endDate
-      }
+        endDate,
+      },
     });
 
     res.status(200).json({ subscription, transaction });
@@ -87,9 +94,9 @@ export const getMySubscriptions = async (req: AuthRequest, res: Response): Promi
       where: { subscriberId },
       include: {
         creator: {
-          select: { id: true, name: true, profileImage: true }
-        }
-      }
+          select: { id: true, name: true, profileImage: true },
+        },
+      },
     });
 
     res.status(200).json(subscriptions);
@@ -111,9 +118,9 @@ export const getCreatorSubscribers = async (req: AuthRequest, res: Response): Pr
       where: { creatorId },
       include: {
         subscriber: {
-          select: { id: true, name: true, profileImage: true, email: true }
-        }
-      }
+          select: { id: true, name: true, profileImage: true, email: true },
+        },
+      },
     });
 
     res.status(200).json(subscribers);

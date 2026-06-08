@@ -48,6 +48,12 @@ enum PaymentType {
   CAMPAIGN_DISBURSEMENT
 }
 
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
 enum PaymentStatus {
   PENDING
   SUCCESS
@@ -83,6 +89,10 @@ model User {
 
   // Campaign applications made by this creator
   applications Application[]
+
+  // Subscriptions
+  subscriptions        Subscription[] @relation("SubscriberSubscriptions")
+  creatorSubscriptions Subscription[] @relation("CreatorSubscriptions")
 }
 
 //
@@ -93,14 +103,15 @@ model CreatorProfile {
   id     String @id @default(uuid())
   userId String @unique
 
-  bio            String?
-  specialization String?
-  socialLinks    String?
-  payout_account String?
-  earnings       Float   @default(0)
-  followers      Int     @default(0)
-  location       String?
-  payout_network String?
+  bio             String?
+  specialization  String?
+  socialLinks     String?
+  payout_account  String?
+  earnings        Float   @default(0)
+  followers       Int     @default(0)
+  location        String?
+  payout_network  String?
+  subscriptionFee Float   @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -275,4 +286,32 @@ model PremiumPurchase {
   content Content @relation(fields: [contentId], references: [id])
 
   createdAt DateTime @default(now())
+}
+
+//
+// SUBSCRIPTION MODEL
+//
+
+model Subscription {
+  id String @id @default(uuid())
+
+  subscriberId String
+  creatorId    String
+
+  amount Float
+  status SubscriptionStatus @default(ACTIVE)
+
+  startDate DateTime @default(now())
+  endDate   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // RELATIONS
+  subscriber User @relation("SubscriberSubscriptions", fields: [subscriberId], references: [id], onDelete: Cascade)
+  creator    User @relation("CreatorSubscriptions", fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@unique([subscriberId, creatorId])
+  @@index([creatorId])
+  @@index([subscriberId])
 }

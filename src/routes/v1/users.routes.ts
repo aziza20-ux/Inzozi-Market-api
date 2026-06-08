@@ -1,20 +1,19 @@
-import { Router } from "express";
-import upload from "../../config/multer.js";
+import { Router } from 'express';
+import upload from '../../config/multer';
 import {
-	getUsers,
-	getUserById,
-	createUser,
-	updateUser,
-	deleteUser,
-	getUserContents,
-	getUserCampaigns,
-	getUserMessages,
-	usersStats,
-	uploadMyProfileImage,
-} from "../../controllers/users.controller";
-import upload from "../../config/multer";
-import { authenticate } from "../../middleware/auth";
-import { uploadProfilePicture } from "../../controllers/upload.controllers.js";
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+  getUserContents,
+  getUserCampaigns,
+  getUserMessages,
+  usersStats,
+  uploadMyProfileImage,
+} from '../../controllers/users.controller';
+import { authenticate } from '../../middleware/auth';
+import { uploadProfilePicture } from '../../controllers/upload.controllers.js';
 
 const userRoutes = Router();
 
@@ -47,10 +46,10 @@ const userRoutes = Router();
  *         description: Unauthorized
  */
 userRoutes.post(
-	"/profile-picture",
-	authenticate,
-	upload.single("profilePicture"),
-	uploadProfilePicture,
+  '/profile-picture',
+  authenticate,
+  upload.single('profilePicture'),
+  uploadProfilePicture,
 );
 
 /**
@@ -75,7 +74,7 @@ userRoutes.post(
  *       200:
  *         description: Paginated users
  */
-userRoutes.get("/", getUsers);//test done
+userRoutes.get('/', getUsers); //test done
 
 /**
  * @openapi
@@ -88,7 +87,7 @@ userRoutes.get("/", getUsers);//test done
  *       200:
  *         description: User statistics grouped by role
  */
-userRoutes.get("/stats", usersStats); //test done
+userRoutes.get('/stats', usersStats); //test done
 
 /**
  * @openapi
@@ -115,10 +114,10 @@ userRoutes.get("/stats", usersStats); //test done
  *         description: Profile image uploaded
  */
 userRoutes.put(
-	"/me/profile-image",
-	authenticate,
-	upload.single("profileImage"),
-	uploadMyProfileImage,
+  '/me/profile-image',
+  authenticate,
+  upload.single('profileImage'),
+  uploadMyProfileImage,
 );
 
 /**
@@ -157,7 +156,7 @@ userRoutes.put(
  *       409:
  *         description: User already exists
  */
-userRoutes.post("/", createUser); //test done
+userRoutes.post('/', createUser); //test done
 
 /**
  * @openapi
@@ -179,7 +178,7 @@ userRoutes.post("/", createUser); //test done
  *       404:
  *         description: User not found
  */
-userRoutes.get("/:id", getUserById);//test done
+userRoutes.get('/:id', getUserById); //test done
 
 /**
  * @openapi
@@ -220,7 +219,7 @@ userRoutes.get("/:id", getUserById);//test done
  *       404:
  *         description: User not found
  */
-userRoutes.put("/:id", updateUser);//test done
+userRoutes.put('/:id', updateUser); //test done
 
 /**
  * @openapi
@@ -242,7 +241,7 @@ userRoutes.put("/:id", updateUser);//test done
  *       404:
  *         description: User not found
  */
-userRoutes.delete("/:id", deleteUser);// test done
+userRoutes.delete('/:id', deleteUser); // test done
 
 /**
  * @openapi
@@ -270,7 +269,7 @@ userRoutes.delete("/:id", deleteUser);// test done
  *       200:
  *         description: User content list
  */
-userRoutes.get("/:id/contents", getUserContents);//test done
+userRoutes.get('/:id/contents', getUserContents); //test done
 
 /**
  * @openapi
@@ -290,7 +289,7 @@ userRoutes.get("/:id/contents", getUserContents);//test done
  *       200:
  *         description: User campaigns
  */
-userRoutes.get("/:id/campaigns", getUserCampaigns); //test done
+userRoutes.get('/:id/campaigns', getUserCampaigns); //test done
 
 /**
  * @openapi
@@ -310,6 +309,6 @@ userRoutes.get("/:id/campaigns", getUserCampaigns); //test done
  *       200:
  *         description: User messages
  */
-userRoutes.get("/:id/messages", getUserMessages);//test done
+userRoutes.get('/:id/messages', getUserMessages); //test done
 
 export default userRoutes;

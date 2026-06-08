@@ -29,11 +29,22 @@ export const authenticate = async (
   }
   const token = header.split(' ')[1];
   try {
-    const decoded = jwt.verify(token!, JWT_SECRET) as { userId: string; role: string };
-    req.userId = decoded.userId;
+    const decoded = jwt.verify(token!, JWT_SECRET) as {
+      id?: string;
+      userId?: string;
+      role: string;
+      verificationStatus?: string;
+      verification_status?: string;
+    };
+    const userId = decoded.userId || decoded.id;
+    req.userId = userId;
     if (isAuthRole(decoded.role)) {
       req.role = decoded.role;
-      req.user = { id: decoded.userId, role: decoded.role };
+      req.user = {
+        ...(decoded as any),
+        id: userId,
+        role: decoded.role,
+      } as AuthUser;
     }
     next();
   } catch {

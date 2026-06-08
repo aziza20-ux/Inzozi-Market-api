@@ -144,6 +144,7 @@ exports.Prisma.CreatorProfileScalarFieldEnum = {
   followers: 'followers',
   location: 'location',
   payout_network: 'payout_network',
+  subscriptionFee: 'subscriptionFee',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -225,6 +226,18 @@ exports.Prisma.PremiumPurchaseScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.SubscriptionScalarFieldEnum = {
+  id: 'id',
+  subscriberId: 'subscriberId',
+  creatorId: 'creatorId',
+  amount: 'amount',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -288,6 +301,12 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   COMPLETED: 'COMPLETED'
 };
 
+exports.SubscriptionStatus = exports.$Enums.SubscriptionStatus = {
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   CreatorProfile: 'CreatorProfile',
@@ -296,7 +315,8 @@ exports.Prisma.ModelName = {
   Application: 'Application',
   PaymentTransaction: 'PaymentTransaction',
   Message: 'Message',
-  PremiumPurchase: 'PremiumPurchase'
+  PremiumPurchase: 'PremiumPurchase',
+  Subscription: 'Subscription'
 };
 
 /**
