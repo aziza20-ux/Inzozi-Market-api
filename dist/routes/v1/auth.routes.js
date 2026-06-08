@@ -104,26 +104,16 @@ router.post('/login', auth_controller_1.login); //done
 router.post('/verify', auth_controller_1.verify);
 /**
  * @openapi
-<<<<<<< HEAD
  * /auth/resend-otp:
  *   post:
  *     tags:
  *       - Auth
  *     summary: Resend an OTP to a registered user
-=======
- * /auth/forgot-password:
- *   post:
- *     tags:
- *       - Auth
- *     summary: Send a password reset code to a user's email
->>>>>>> origin/espy
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
-<<<<<<< HEAD
  *             properties:
  *               userId:
  *                 type: string
@@ -144,6 +134,87 @@ router.post('/verify', auth_controller_1.verify);
  *         description: User not found
  */
 router.post('/resend-otp', auth_controller_1.resendOtp);
+/**
+ * @openapi
+ * /auth/forgot-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Send a password reset code to a user's email
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required: [email]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *     responses:
+ *       200:
+ *         description: Reset code sent
+ *       400:
+ *         description: Invalid request body
+ *       404:
+ *         description: User not found
+ */
+router.post('/forgot-password', auth_controller_1.forgotPassword);
+/**
+ * @openapi
+ * /auth/reset-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Reset a password using a verification code
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, otp, password]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               otp:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *                 minLength: 8
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *       400:
+ *         description: Invalid or expired OTP
+ *       404:
+ *         description: User not found
+ */
+router.post('/reset-password', auth_controller_1.resetPassword);
+/**
+ * @openapi
+ * /auth/refresh:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Exchange a refresh token for a new token pair
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [refreshToken]
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Rotated access and refresh tokens
+ *       401:
+ *         description: Invalid or expired refresh token
+ */
 router.post('/refresh', auth_controller_1.refresh);
 /**
  * @openapi

@@ -3,9 +3,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createContent = void 0;
+exports.generateContentUploadUrl = generateContentUploadUrl;
 const prisma_js_1 = __importDefault(require("../config/prisma.js"));
-const createContent = async (req, res) => {
+const cloudinary_js_1 = require("../config/cloudinary.js");
+async function hasCompletedPremiumPurchase(userId, contentId) {
+    const purchase = await prisma_js_1.default.premiumPurchase.findFirst({
+        where: {
+            userId,
+            contentId,
+            status: { in: ["SUCCESS", "COMPLETED", "paid", "completed"] },
+        },
+    });
+    return !!purchase;
+}
+function isPaidContent(contentVisibility) {
+    return contentVisibility === "paid";
+}
+function getMediaUrl(body) {
+    return body?.media_url ?? body?.mediaUrl ?? body?.contentUrl;
+}
+async function resolveContentMedia(req) {
+    const file = req.file;
+    if (file) {
+        const resourceType = file.mimetype.startsWith("video/") ? "video" : "auto";
+        const uploaded = await (0, cloudinary_js_1.uploadToCloudinary)(file.buffer, "inzozi/content", resourceType);
+        return uploaded.url;
+    }
+    return getMediaUrl(req.body);
+}
+async function generateContentUploadUrl(req, res) {
     try {
         const user = req.user;
         // check logged in user
@@ -47,5 +73,5 @@ const createContent = async (req, res) => {
     catch (error) {
         res.status(500).json({ error });
     }
-};
-exports.createContent = createContent;
+}
+;

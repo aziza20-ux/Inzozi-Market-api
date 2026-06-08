@@ -1,10 +1,12 @@
 import request from 'supertest';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
+import { redis } from '../services/redis.service.js';
 
 const mockPrisma = {
   user: {
     findUnique: jest.fn(),
+    findFirst: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
   },
@@ -47,12 +49,14 @@ jest.mock('../services/mockMobileMoneyProvider.js', () => ({
   })),
 }));
 
-import app from '../index.js';
-
 process.env.JWT_SECRET = 'integration-secret';
+const app = require('../index.js').default;
 
 function token(payload: Record<string, unknown>) {
-  return jwt.sign(payload, process.env.JWT_SECRET as string);
+  return jwt.sign(
+    { ...payload, userId: payload.id ?? payload.userId },
+    process.env.JWT_SECRET as string,
+  );
 }
 
 const businessToken = token({
@@ -106,6 +110,14 @@ describe('Core integration rules', () => {
         role: 'CREATOR',
         verificationStatus: 'VERIFIED',
       });
+    mockPrisma.user.findFirst.mockResolvedValueOnce({
+      id: 'auth-user-1',
+      name: 'Auth User',
+      email: 'auth@example.com',
+      password: hashedPassword,
+      role: 'CREATOR',
+      verificationStatus: 'VERIFIED',
+    });
     mockPrisma.user.create.mockResolvedValue({
       id: 'auth-user-1',
       name: 'Auth User',
@@ -133,7 +145,13 @@ describe('Core integration rules', () => {
       })
       .expect(201);
 
-    await request(app).patch('/api/v1/auth/verify').send({ email: 'auth@example.com' }).expect(200);
+    const otp = await redis.get('otp:auth-user-1');
+    expect(otp).toBeTruthy();
+
+    await request(app)
+      .post('/api/v1/auth/verify')
+      .send({ email: 'auth@example.com', otp })
+      .expect(200);
 
     const login = await request(app)
       .post('/api/v1/auth/login')

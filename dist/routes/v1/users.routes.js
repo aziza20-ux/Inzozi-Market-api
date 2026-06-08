@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const multer_js_1 = __importDefault(require("../../config/multer.js"));
+const multer_1 = __importDefault(require("../../config/multer"));
 const users_controller_1 = require("../../controllers/users.controller");
 const auth_1 = require("../../middleware/auth");
 const upload_controllers_js_1 = require("../../controllers/upload.controllers.js");
@@ -37,7 +37,7 @@ const userRoutes = (0, express_1.Router)();
  *       401:
  *         description: Unauthorized
  */
-userRoutes.post("/profile-picture", auth_1.authenticate, multer_js_1.default.single("profilePicture"), upload_controllers_js_1.uploadProfilePicture);
+userRoutes.post("/profile-picture", auth_1.authenticate, multer_1.default.single("profilePicture"), upload_controllers_js_1.uploadProfilePicture);
 /**
  * @openapi
  * /users:
@@ -97,7 +97,7 @@ userRoutes.get("/stats", users_controller_1.usersStats); //test done
  *       200:
  *         description: Profile image uploaded
  */
-userRoutes.put("/me/profile-image", auth_1.authenticate, multer_js_1.default.single("profileImage"), users_controller_1.uploadMyProfileImage);
+userRoutes.put("/me/profile-image", auth_1.authenticate, multer_1.default.single("profileImage"), users_controller_1.uploadMyProfileImage);
 /**
  * @openapi
  * /users:

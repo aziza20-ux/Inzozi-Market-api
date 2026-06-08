@@ -67,35 +67,45 @@ async function initRedis() {
     return;
   }
 
-  const client = new Redis(url);
+  const client = new Redis(url, {
+    lazyConnect: true,
+    connectTimeout: 2000,
+    retryStrategy: () => null,
+    maxRetriesPerRequest: 1,
+    enableOfflineQueue: false,
+  });
 
   let connected = false;
+
+  // Log errors but rate-limit repeated logs. This must be attached before
+  // connecting so startup failures do not print raw ioredis stack traces.
+  let lastLog = 0;
+  client.on('error', (err: Error) => {
+    if (!connected) return;
+    const now = Date.now();
+    if (now - lastLog > 5000) {
+      console.warn('Redis connection error:', err.message);
+      lastLog = now;
+    }
+  });
+
   try {
     // Try a quick ping with timeout
     await Promise.race([
-      client.ping(),
+      client.connect().then(() => client.ping()),
       new Promise((_, reject) => setTimeout(() => reject(new Error('ping timeout')), 2000)),
     ]);
     connected = true;
   } catch (err: any) {
-    console.error('Redis not available, falling back to in-memory store:', err.message || err);
+    const reason = err.message || err;
+    console.warn(`Using in-memory Redis fallback; Redis not available: ${reason}`);
   }
 
   if (connected) {
-    // Log errors but rate-limit repeated logs
-    let lastLog = 0;
-    client.on('error', (err: Error) => {
-      const now = Date.now();
-      if (now - lastLog > 5000) {
-        console.error('Redis connection error:', err);
-        lastLog = now;
-      }
-    });
     redis = client as unknown as RedisLike;
     console.log('Connected to Redis at', url);
   } else {
     redis = new InMemoryRedis();
-    console.log('Using in-memory Redis fallback');
     // Ensure the client is closed to avoid background reconnect attempts
     try {
       client.disconnect();

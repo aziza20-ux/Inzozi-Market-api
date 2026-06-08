@@ -19,10 +19,15 @@ const authenticate = async (req, res, next) => {
     const token = header.split(' ')[1];
     try {
         const decoded = jsonwebtoken_1.default.verify(token, JWT_SECRET);
-        req.userId = decoded.userId;
+        const userId = decoded.userId || decoded.id;
+        req.userId = userId;
         if (isAuthRole(decoded.role)) {
             req.role = decoded.role;
-            req.user = { id: decoded.userId, role: decoded.role };
+            req.user = {
+                ...decoded,
+                id: userId,
+                role: decoded.role,
+            };
         }
         next();
     }

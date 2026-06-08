@@ -6,9 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const argon2_1 = __importDefault(require("argon2"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const redis_service_js_1 = require("../services/redis.service.js");
 const mockPrisma = {
     user: {
         findUnique: jest.fn(),
+        findFirst: jest.fn(),
         create: jest.fn(),
         update: jest.fn(),
     },
@@ -48,10 +50,10 @@ jest.mock('../services/mockMobileMoneyProvider.js', () => ({
         status: 'pending',
     })),
 }));
-const index_js_1 = __importDefault(require("../index.js"));
 process.env.JWT_SECRET = 'integration-secret';
+const app = require('../index.js').default;
 function token(payload) {
-    return jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET);
+    return jsonwebtoken_1.default.sign({ ...payload, userId: payload.id ?? payload.userId }, process.env.JWT_SECRET);
 }
 const businessToken = token({
     id: 'business-1',
@@ -101,6 +103,14 @@ describe('Core integration rules', () => {
             role: 'CREATOR',
             verificationStatus: 'VERIFIED',
         });
+        mockPrisma.user.findFirst.mockResolvedValueOnce({
+            id: 'auth-user-1',
+            name: 'Auth User',
+            email: 'auth@example.com',
+            password: hashedPassword,
+            role: 'CREATOR',
+            verificationStatus: 'VERIFIED',
+        });
         mockPrisma.user.create.mockResolvedValue({
             id: 'auth-user-1',
             name: 'Auth User',
@@ -117,7 +127,7 @@ describe('Core integration rules', () => {
             role: 'CREATOR',
             verificationStatus: 'VERIFIED',
         });
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .post('/api/v1/auth/register')
             .send({
             name: 'Auth User',
@@ -126,42 +136,47 @@ describe('Core integration rules', () => {
             role: 'CREATOR',
         })
             .expect(201);
-        await (0, supertest_1.default)(index_js_1.default).patch('/api/v1/auth/verify').send({ email: 'auth@example.com' }).expect(200);
-        const login = await (0, supertest_1.default)(index_js_1.default)
+        const otp = await redis_service_js_1.redis.get('otp:auth-user-1');
+        expect(otp).toBeTruthy();
+        await (0, supertest_1.default)(app)
+            .post('/api/v1/auth/verify')
+            .send({ email: 'auth@example.com', otp })
+            .expect(200);
+        const login = await (0, supertest_1.default)(app)
             .post('/api/v1/auth/login')
             .send({ email: 'auth@example.com', password: 'password123' })
             .expect(200);
         expect(login.body.accessToken).toBeTruthy();
         expect(login.body.refreshToken).toBeTruthy();
-        const refreshed = await (0, supertest_1.default)(index_js_1.default)
+        const refreshed = await (0, supertest_1.default)(app)
             .post('/api/v1/auth/refresh')
             .send({ refreshToken: login.body.refreshToken })
             .expect(200);
         expect(refreshed.body.accessToken).toBeTruthy();
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .post('/api/v1/auth/logout')
             .send({ refreshToken: refreshed.body.refreshToken })
             .expect(204);
     });
     it('enforces roles on protected route categories', async () => {
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .post('/api/v1/content')
             .set('Authorization', `Bearer ${businessToken}`)
             .send({})
             .expect(403);
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .post('/api/v1/campaigns')
             .set('Authorization', `Bearer ${creatorToken}`)
             .send({})
             .expect(403);
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .post('/api/v1/payments/withdraw')
             .set('Authorization', `Bearer ${businessToken}`)
             .send({ amount: 100 })
             .expect(403);
     });
     it('enforces campaign budget integrity and status transition guards', async () => {
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .post('/api/v1/campaigns')
             .set('Authorization', `Bearer ${businessToken}`)
             .send({
@@ -192,7 +207,7 @@ describe('Core integration rules', () => {
             id: 'campaign-1',
             status: 'ACTIVE',
         });
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .patch('/api/v1/campaigns/campaign-1/status')
             .set('Authorization', `Bearer ${businessToken}`)
             .send({ status: 'COMPLETED' })
@@ -200,7 +215,7 @@ describe('Core integration rules', () => {
             .expect(({ body }) => {
             expect(body.error).toBe('INVALID_CAMPAIGN_STATUS_TRANSITION');
         });
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .patch('/api/v1/campaigns/campaign-1/status')
             .set('Authorization', `Bearer ${businessToken}`)
             .send({ status: 'ACTIVE' })
@@ -234,13 +249,13 @@ describe('Core integration rules', () => {
                 idempotencyKey: 'same-key',
             },
         ]);
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .post('/api/v1/campaigns/campaign-1/disburse')
             .set('Authorization', `Bearer ${businessToken}`)
             .set('idempotency-key', 'same-key')
             .send({})
             .expect(202);
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .post('/api/v1/campaigns/campaign-1/disburse')
             .set('Authorization', `Bearer ${businessToken}`)
             .set('idempotency-key', 'same-key')
@@ -252,7 +267,7 @@ describe('Core integration rules', () => {
             userId: 'creator-1',
             payout_account: null,
         });
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .post('/api/v1/payments/withdraw')
             .set('Authorization', `Bearer ${creatorToken}`)
             .send({ amount: 1000 })
@@ -262,7 +277,7 @@ describe('Core integration rules', () => {
         });
     });
     it('blocks consumers from initiating messages', async () => {
-        await (0, supertest_1.default)(index_js_1.default)
+        await (0, supertest_1.default)(app)
             .post('/api/v1/messages')
             .set('Authorization', `Bearer ${consumerToken}`)
             .send({ recipientId: 'creator-1', message: 'Hello' })

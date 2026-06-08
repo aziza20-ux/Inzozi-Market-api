@@ -1,11 +1,11 @@
 import 'dotenv/config';
-import express from 'express';
+import express, { type Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import v1Routes from './routes/v1/index.js';
-import { setupSwagger } from '../src/config/swagger';
+import { setupSwagger } from './config/swagger.js';
 
-const app = express();
+const app: Application = express();
 
 app.use(helmet());
 app.use(cors());
@@ -23,11 +23,12 @@ app.get('/health', (_req, res) => {
 app.use('/api/v1', v1Routes);
 setupSwagger(app);
 
-const PORT = Number(process.env.PORT) || 4000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port http://localhost:${PORT}`);
-});
-
 export default app;
 
+if (require.main === module) {
+  const PORT = Number(process.env.PORT) || 4000;
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port http://localhost:${PORT}`);
+  });
+}

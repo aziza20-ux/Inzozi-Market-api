@@ -8,7 +8,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const index_js_1 = __importDefault(require("./routes/v1/index.js"));
-const swagger_1 = require("../src/config/swagger");
+const swagger_js_1 = require("./config/swagger.js");
 const app = (0, express_1.default)();
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)());
@@ -21,8 +21,11 @@ app.get('/health', (_req, res) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 app.use('/api/v1', index_js_1.default);
-(0, swagger_1.setupSwagger)(app);
+(0, swagger_js_1.setupSwagger)(app);
 exports.default = app;
-app.listen(3000, () => {
-    console.log(`Server is running on port http://localhost:3000`);
-});
+if (require.main === module) {
+    const PORT = Number(process.env.PORT) || 4000;
+    app.listen(PORT, () => {
+        console.log(`Server running on port http://localhost:${PORT}`);
+    });
+}
