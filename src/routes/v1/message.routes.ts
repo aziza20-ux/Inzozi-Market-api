@@ -9,7 +9,7 @@ import {
   markMessageRead,
 } from '../../controllers/message.controller.js';
 
-const router = express.Router();
+const messageRouter = express.Router();
 
 // POST /v1/messages
 /**
@@ -41,7 +41,7 @@ const router = express.Router();
  *       201:
  *         description: Message created
  */
-router.post('/', authenticate, createMessage);
+ messageRouter .post('/', authenticate, createMessage);
 
 // GET /v1/messages
 /**
@@ -68,7 +68,7 @@ router.post('/', authenticate, createMessage);
  *       200:
  *         description: Message list
  */
-router.get('/', authenticate, getMessages);
+ messageRouter .get('/', authenticate, getMessages);
 
 // GET /v1/messages/conversations
 /**
@@ -84,7 +84,7 @@ router.get('/', authenticate, getMessages);
  *       200:
  *         description: Conversation list
  */
-router.get('/conversations', authenticate, listConversations);
+ messageRouter .get('/conversations', authenticate, listConversations);
 
 // GET /v1/messages/conversations/:convId
 /**
@@ -106,7 +106,7 @@ router.get('/conversations', authenticate, listConversations);
  *       200:
  *         description: Conversation thread
  */
-router.get('/conversations/:convId', authenticate, getConversationThread);
+ messageRouter .get('/conversations/:convId', authenticate, getConversationThread);
 
 // PATCH /v1/messages/:id/read
 /**
@@ -129,7 +129,7 @@ router.get('/conversations/:convId', authenticate, getConversationThread);
  *       200:
  *         description: Updated message
  */
-router.patch('/:id/read', authenticate, markMessageRead);
+ messageRouter .patch('/:id/read', authenticate, markMessageRead);
 
 // DELETE /v1/messages/:id
 /**
@@ -152,6 +152,6 @@ router.patch('/:id/read', authenticate, markMessageRead);
  *       200:
  *         description: Updated message
  */
-router.delete('/:id', authenticate, deleteMessage);
+ messageRouter .delete('/:id', authenticate, deleteMessage);
 
-export default router;
+export default messageRouter;

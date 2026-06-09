@@ -5,6 +5,7 @@ import campaignRoutes from './campaign.routes.js';
 import creatorProfileRoutes from './creator-profile.routes.js';
 import paymentRoutes from './payment.routes.js';
 import contentRoutes from './content.routes.js';
+import messageRouter from './message.routes.js';
 import subscriptionRoutes from './subscription.routes.js';
 import messageRoutes from './message.routes.js';
 import applicationRoutes from './application.routes.js';
@@ -16,6 +17,7 @@ v1Routes.use('/campaigns', campaignRoutes);
 v1Routes.use('/creator-profile', creatorProfileRoutes);
 v1Routes.use('/payments', paymentRoutes);
 v1Routes.use('/content', contentRoutes);
+v1Routes.use('/messages', messageRouter)
 v1Routes.use('/subscriptions', subscriptionRoutes);
 v1Routes.use('/messages', messageRoutes);
 v1Routes.use('/applications', applicationRoutes);

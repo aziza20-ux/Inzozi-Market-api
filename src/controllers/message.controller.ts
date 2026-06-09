@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { createHash } from 'crypto';
 import prisma from '../config/prisma.js';
 import type { AuthUser } from '../types/express.js';
+import { AuthRequest } from '../middleware/auth.js';
 
 const DEFAULT_PAGE_SIZE = 25;
 const MAX_PAGE_SIZE = 100;
@@ -44,7 +45,7 @@ const userSelect = {
   profileImage: true,
 };
 
-export async function createMessage(req: Request, res: Response) {
+export async function createMessage(req: AuthRequest, res: Response) {
   try {
     const user = getAuthenticatedUser(req);
     if (!user) return res.status(401).json({ error: 'UNAUTHORIZED' });
@@ -108,7 +109,7 @@ export async function createMessage(req: Request, res: Response) {
   }
 }
 
-export async function listConversations(req: Request, res: Response) {
+export async function listConversations(req: AuthRequest, res: Response) {
   try {
     const user = getAuthenticatedUser(req);
     if (!user) return res.status(401).json({ error: 'UNAUTHORIZED' });
@@ -116,7 +117,7 @@ export async function listConversations(req: Request, res: Response) {
     const messages = await prisma.message.findMany({
       where: {
         deletedAt: null,
-        OR: [{ senderId: user.id }, { receiverId: user.id }],
+        OR: [{ senderId: req.userId }, { receiverId: req.userId }],
       },
       orderBy: { createdAt: 'desc' },
       include: {
@@ -178,7 +179,7 @@ export async function getMessages(req: Request, res: Response) {
   }
 }
 
-export async function getConversationThread(req: Request, res: Response) {
+export async function getConversationThread(req: AuthRequest, res: Response) {
   try {
     const user = getAuthenticatedUser(req);
     if (!user) return res.status(401).json({ error: 'UNAUTHORIZED' });
@@ -191,7 +192,7 @@ export async function getConversationThread(req: Request, res: Response) {
     const participantMessage = await prisma.message.findFirst({
       where: {
         conversationId: convId,
-        OR: [{ senderId: user.id }, { receiverId: user.id }],
+        OR: [{ senderId: req.userId }, { receiverId: req.userId }],
       },
       select: { id: true },
     });
@@ -222,7 +223,7 @@ export async function getConversationThread(req: Request, res: Response) {
   }
 }
 
-export async function markMessageRead(req: Request, res: Response) {
+export async function markMessageRead(req: AuthRequest, res: Response) {
   try {
     const user = getAuthenticatedUser(req);
     if (!user) return res.status(401).json({ error: 'UNAUTHORIZED' });
@@ -249,7 +250,7 @@ export async function markMessageRead(req: Request, res: Response) {
   }
 }
 
-export async function deleteMessage(req: Request, res: Response) {
+export async function deleteMessage(req: AuthRequest, res: Response) {
   try {
     const user = getAuthenticatedUser(req);
     if (!user) return res.status(401).json({ error: 'UNAUTHORIZED' });
