@@ -29,9 +29,18 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
         profileImage: true,
         role: true,
         verificationStatus: true,
+        creatorProfile: true,
         createdAt: true,
         updatedAt: true,
-        _count: { select: { contents: true, campaigns: true } },
+        _count: {
+          select: {
+            contents: true,
+            campaigns: true,
+            creatorSubscriptions: {
+              where: { status: "ACTIVE", endDate: { gt: new Date() } },
+            },
+          },
+        },
       },
       orderBy: { createdAt: "desc" },
     }),

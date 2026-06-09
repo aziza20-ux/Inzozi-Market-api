@@ -38,6 +38,14 @@ const dateStringToDate = zod_1.z.preprocess((arg) => {
         return new Date(arg);
     return arg;
 }, zod_1.z.date());
+// Optional date — same as dateStringToDate but allows undefined/null
+const optionalDate = zod_1.z.preprocess((arg) => {
+    if (!arg)
+        return undefined;
+    if (typeof arg === "string" || arg instanceof Date)
+        return new Date(arg);
+    return arg;
+}, zod_1.z.date().optional());
 exports.userCreateSchema = zod_1.z.object({
     name: zod_1.z.string().min(1, "Name is required"),
     email: zod_1.z.email({ message: "Invalid email address" }),
@@ -52,19 +60,23 @@ exports.registerSchema = zod_1.z
     email: zod_1.z.string().email().optional(),
     phone: zod_1.z.string().optional(),
     password: zod_1.z.string().min(8),
-    role: exports.roleEnum
+    role: exports.roleEnum,
 })
-    .refine((data) => data.email || data.phone, { message: "Either email or phone is required" });
+    .refine((data) => data.email || data.phone, {
+    message: "Either email or phone is required",
+});
 exports.loginSchema = zod_1.z.object({
     email: zod_1.z.string().email().optional(),
     phone: zod_1.z.string().optional(),
     password: zod_1.z.string(),
 });
-exports.verifySchema = zod_1.z.object({
+exports.verifySchema = zod_1.z
+    .object({
     otp: zod_1.z.string().length(6),
     email: zod_1.z.string().email().optional(),
     userId: zod_1.z.uuid().optional(),
-}).refine((data) => data.email || data.userId, {
+})
+    .refine((data) => data.email || data.userId, {
     message: "Either email or userId is required",
 });
 exports.forgotPasswordSchema = zod_1.z.object({
@@ -82,11 +94,11 @@ exports.campaignCreateSchema = zod_1.z.object({
     title: zod_1.z.string().min(1, "Title is required"),
     description: zod_1.z.string().optional(),
     budget: zod_1.z.number().nonnegative("Budget must be >= 0"),
-    startDate: dateStringToDate,
-    endDate: dateStringToDate,
-    niche_filter: zod_1.z.string().min(1, "niche_filter is required"),
-    min_audience_size: zod_1.z.number().int().nonnegative(),
-    max_creators: zod_1.z.number().int().positive(),
+    startDate: optionalDate, // ← now optional
+    endDate: optionalDate, // ← now optional
+    niche_filter: zod_1.z.string().optional(), // ← now optional
+    min_audience_size: zod_1.z.number().int().nonnegative().optional(),
+    max_creators: zod_1.z.number().int().positive().optional(),
 });
 exports.campaignUpdateSchema = exports.campaignCreateSchema.partial();
 exports.campaignStatusUpdateSchema = zod_1.z.object({
@@ -149,11 +161,11 @@ exports.campaignSchema = zod_1.z.object({
     description: zod_1.z.string().optional(),
     budget: zod_1.z.number().nonnegative("Budget must be >= 0"),
     status: exports.campaignStatusEnum.optional(),
-    niche_filter: zod_1.z.string(),
-    min_audience_size: zod_1.z.number().int().nonnegative(),
-    max_creators: zod_1.z.number().int().positive(),
-    startDate: dateStringToDate,
-    endDate: dateStringToDate,
+    niche_filter: zod_1.z.string().optional(), // ← also optional here
+    min_audience_size: zod_1.z.number().int().nonnegative().optional(),
+    max_creators: zod_1.z.number().int().positive().optional(),
+    startDate: optionalDate,
+    endDate: optionalDate,
 });
 exports.paymentTransactionSchema = zod_1.z.object({
     userId: uuidString(),

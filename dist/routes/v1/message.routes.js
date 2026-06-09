@@ -37,7 +37,33 @@ const router = express_1.default.Router();
  *       201:
  *         description: Message created
  */
-router.post("/", auth_js_1.authenticate, message_controller_js_1.createMessage);
+router.post('/', auth_js_1.authenticate, message_controller_js_1.createMessage);
+// GET /v1/messages
+/**
+ * @openapi
+ * /messages:
+ *   get:
+ *     tags:
+ *       - Messages
+ *     summary: List messages for the authenticated user
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 25
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *     responses:
+ *       200:
+ *         description: Message list
+ */
+router.get('/', auth_js_1.authenticate, message_controller_js_1.getMessages);
 // GET /v1/messages/conversations
 /**
  * @openapi
@@ -52,7 +78,7 @@ router.post("/", auth_js_1.authenticate, message_controller_js_1.createMessage);
  *       200:
  *         description: Conversation list
  */
-router.get("/conversations", auth_js_1.authenticate, message_controller_js_1.listConversations);
+router.get('/conversations', auth_js_1.authenticate, message_controller_js_1.listConversations);
 // GET /v1/messages/conversations/:convId
 /**
  * @openapi
@@ -73,7 +99,7 @@ router.get("/conversations", auth_js_1.authenticate, message_controller_js_1.lis
  *       200:
  *         description: Conversation thread
  */
-router.get("/conversations/:convId", auth_js_1.authenticate, message_controller_js_1.getConversationThread);
+router.get('/conversations/:convId', auth_js_1.authenticate, message_controller_js_1.getConversationThread);
 // PATCH /v1/messages/:id/read
 /**
  * @openapi
@@ -95,7 +121,7 @@ router.get("/conversations/:convId", auth_js_1.authenticate, message_controller_
  *       200:
  *         description: Updated message
  */
-router.patch("/:id/read", auth_js_1.authenticate, message_controller_js_1.markMessageRead);
+router.patch('/:id/read', auth_js_1.authenticate, message_controller_js_1.markMessageRead);
 // DELETE /v1/messages/:id
 /**
  * @openapi
@@ -117,5 +143,5 @@ router.patch("/:id/read", auth_js_1.authenticate, message_controller_js_1.markMe
  *       200:
  *         description: Updated message
  */
-router.delete("/:id", auth_js_1.authenticate, message_controller_js_1.deleteMessage);
+router.delete('/:id', auth_js_1.authenticate, message_controller_js_1.deleteMessage);
 exports.default = router;

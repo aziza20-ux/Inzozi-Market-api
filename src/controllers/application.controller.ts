@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { AuthRequest } from '../../middleware/auth.js';
+import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../config/prisma';
 
 export const respondToApplication = async (req: AuthRequest, res: Response): Promise<void> => {

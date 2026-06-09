@@ -11,9 +11,14 @@ exports.patchContent = patchContent;
 exports.deleteContent = deleteContent;
 exports.moderationUpdate = moderationUpdate;
 exports.getCreatorProfileContent = getCreatorProfileContent;
+exports.likeContent = likeContent;
+exports.commentOnContent = commentOnContent;
 const prisma_js_1 = __importDefault(require("../config/prisma.js"));
 const storage_service_js_1 = require("../services/storage.service.js");
 const cloudinary_js_1 = require("../config/cloudinary.js");
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 async function hasCompletedPremiumPurchase(userId, contentId) {
     const purchase = await prisma_js_1.default.premiumPurchase.findFirst({
         where: {
@@ -39,6 +44,41 @@ async function resolveContentMedia(req) {
     }
     return getMediaUrl(req.body);
 }
+/**
+ * Attach likes count, whether the requesting user has liked, and comments
+ * to a content item (or a list of items) fetched from Prisma.
+ */
+async function enrichContent(content, requestingUserId) {
+    const [likesCount, commentsRaw] = await Promise.all([
+        prisma_js_1.default.contentLike.count({ where: { contentId: content.id } }),
+        prisma_js_1.default.contentComment.findMany({
+            where: { contentId: content.id },
+            orderBy: { createdAt: "asc" },
+            include: { user: { select: { id: true, name: true } } },
+        }),
+    ]);
+    let liked = false;
+    if (requestingUserId) {
+        const existing = await prisma_js_1.default.contentLike.findUnique({
+            where: { contentId_userId: { contentId: content.id, userId: requestingUserId } },
+        });
+        liked = !!existing;
+    }
+    const comments = commentsRaw.map((c) => ({
+        id: c.id,
+        userId: c.userId,
+        user: c.user?.name ?? "User",
+        text: c.text,
+        createdAt: c.createdAt,
+    }));
+    return { ...content, likes: likesCount, liked, comments };
+}
+async function enrichContentList(list, requestingUserId) {
+    return Promise.all(list.map((item) => enrichContent(item, requestingUserId)));
+}
+// ---------------------------------------------------------------------------
+// Upload URL
+// ---------------------------------------------------------------------------
 async function generateContentUploadUrl(req, res) {
     try {
         const { filename, mimeType } = req.body ?? {};
@@ -52,6 +92,9 @@ async function generateContentUploadUrl(req, res) {
         return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
     }
 }
+// ---------------------------------------------------------------------------
+// Create content
+// ---------------------------------------------------------------------------
 async function createContent(req, res) {
     try {
         const userId = req.userId;
@@ -62,7 +105,7 @@ async function createContent(req, res) {
         if (role !== "CREATOR") {
             return res.status(403).json({ error: "CREATOR_ONLY" });
         }
-        const { title, description, contentUrl, thumbnailUrl, type, visibility, price, currency, } = req.body ?? {};
+        const { title, description, thumbnailUrl, type, visibility, price, currency, } = req.body ?? {};
         const mediaUrl = await resolveContentMedia(req);
         if (!title || !mediaUrl || !type || !visibility) {
             return res.status(400).json({ error: "MISSING_REQUIRED_FIELDS" });
@@ -71,10 +114,7 @@ async function createContent(req, res) {
             return res.status(400).json({ error: "INVALID_MEDIA_URL" });
         }
         if (visibility === "paid") {
-            if (price === undefined ||
-                currency === undefined ||
-                currency === null ||
-                currency === "") {
+            if (price === undefined || !currency) {
                 return res.status(400).json({
                     error: "PAID_CONTENT_REQUIRES_PRICE_AND_CURRENCY",
                 });
@@ -97,13 +137,17 @@ async function createContent(req, res) {
                 ...(creatorProfile ? { creatorProfileId: creatorProfile.id } : {}),
             },
         });
-        res.status(201).json(created);
+        // Return enriched (likes: 0, comments: []) for consistency
+        res.status(201).json(await enrichContent(created));
     }
     catch (e) {
         console.error("createContent error:", e);
         res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
     }
 }
+// ---------------------------------------------------------------------------
+// List content
+// ---------------------------------------------------------------------------
 async function getContentList(req, res) {
     try {
         const { type, visibility } = req.query;
@@ -116,12 +160,16 @@ async function getContentList(req, res) {
             where,
             orderBy: { createdAt: "desc" },
         });
-        res.json(list);
+        const enriched = await enrichContentList(list, req.userId);
+        res.json(enriched);
     }
     catch (e) {
         res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
     }
 }
+// ---------------------------------------------------------------------------
+// Get single content
+// ---------------------------------------------------------------------------
 async function getContent(req, res) {
     try {
         const { id } = req.params;
@@ -134,11 +182,8 @@ async function getContent(req, res) {
         if (!content) {
             return res.status(404).json({ error: "CONTENT_NOT_FOUND" });
         }
-        // Public endpoint: no moderation gating configured.
         if (isPaidContent(content.visibility)) {
-            // Requires completed premium purchase.
             const user = await prisma_js_1.default.user.findFirst({ where: { id: req.userId } });
-            // If no user, deny.
             if (!user) {
                 return res.status(403).json({ error: "CONTENT_ACCESS_DENIED" });
             }
@@ -147,12 +192,15 @@ async function getContent(req, res) {
                 return res.status(403).json({ error: "CONTENT_ACCESS_DENIED" });
             }
         }
-        res.json(content);
+        res.json(await enrichContent(content, req.userId));
     }
     catch (e) {
         res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
     }
 }
+// ---------------------------------------------------------------------------
+// Patch content
+// ---------------------------------------------------------------------------
 async function patchContent(req, res) {
     try {
         const userId = req.userId;
@@ -169,17 +217,13 @@ async function patchContent(req, res) {
         if (content.creatorId !== userId && role !== "ADMIN") {
             return res.status(403).json({ error: "CONTENT_UPDATE_DENIED" });
         }
-        const { title, description, contentUrl, thumbnailUrl, type, visibility, price, currency, } = req.body ?? {};
+        const { title, description, thumbnailUrl, type, visibility, price, currency, } = req.body ?? {};
         const mediaUrl = await resolveContentMedia(req);
-        if (mediaUrl !== undefined &&
-            !storage_service_js_1.storageService.validatePublicUrl(String(mediaUrl))) {
+        if (mediaUrl !== undefined && !storage_service_js_1.storageService.validatePublicUrl(String(mediaUrl))) {
             return res.status(400).json({ error: "INVALID_MEDIA_URL" });
         }
         if (visibility === "paid") {
-            if (price === undefined ||
-                currency === undefined ||
-                currency === null ||
-                currency === "") {
+            if (price === undefined || !currency) {
                 return res.status(400).json({
                     error: "PAID_CONTENT_REQUIRES_PRICE_AND_CURRENCY",
                 });
@@ -189,7 +233,7 @@ async function patchContent(req, res) {
             where: { id: String(id) },
             data: {
                 ...(title !== undefined ? { title } : {}),
-                ...(description !== undefined ? { description: description } : {}),
+                ...(description !== undefined ? { description } : {}),
                 ...(mediaUrl !== undefined ? { contentUrl: String(mediaUrl) } : {}),
                 ...(thumbnailUrl !== undefined ? { thumbnailUrl } : {}),
                 ...(type !== undefined ? { type } : {}),
@@ -202,12 +246,15 @@ async function patchContent(req, res) {
                     : {}),
             },
         });
-        res.json(updated);
+        res.json(await enrichContent(updated, userId));
     }
     catch (e) {
         res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
     }
 }
+// ---------------------------------------------------------------------------
+// Delete content
+// ---------------------------------------------------------------------------
 async function deleteContent(req, res) {
     try {
         const user = await prisma_js_1.default.user.findFirst({ where: { id: req.userId } });
@@ -227,21 +274,25 @@ async function deleteContent(req, res) {
             where: { id: String(id) },
             data: { deletedAt: new Date() },
         });
-        res.status(204).json({ message: "deleted successfully", id: id });
+        res.status(204).json({ message: "deleted successfully", id });
     }
     catch (e) {
         res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
     }
 }
+// ---------------------------------------------------------------------------
+// Moderation (deprecated)
+// ---------------------------------------------------------------------------
 async function moderationUpdate(req, res) {
-    // Moderation endpoint removed
     return res.status(404).json({ error: "NOT_FOUND" });
 }
+// ---------------------------------------------------------------------------
+// Creator profile content
+// ---------------------------------------------------------------------------
 async function getCreatorProfileContent(req, res) {
     try {
         const { id } = req.params;
         const { visibility, type } = req.query;
-        // Only list by creator.
         const creatorProfile = await prisma_js_1.default.creatorProfile.findFirst({
             where: { id: String(id) },
         });
@@ -253,14 +304,12 @@ async function getCreatorProfileContent(req, res) {
             where.type = String(type);
         if (visibility)
             where.visibility = String(visibility);
-        // Paid gate if requested visibility=paid and user exists.
         const list = await prisma_js_1.default.content.findMany({
             where,
             orderBy: { createdAt: "desc" },
         });
-        // Apply paid access gate to paid items.
         const user = req.user;
-        const filtered = [];
+        const accessible = [];
         for (const c of list) {
             if (c.visibility === "paid") {
                 if (!user)
@@ -269,12 +318,100 @@ async function getCreatorProfileContent(req, res) {
                 if (!ok)
                     continue;
             }
-            filtered.push(c);
+            accessible.push(c);
         }
-        res.json(filtered);
+        res.json(await enrichContentList(accessible, req.userId));
     }
     catch (e) {
         res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+    }
+}
+// ---------------------------------------------------------------------------
+// Like / unlike content  (POST /content/:id/like)
+// ---------------------------------------------------------------------------
+async function likeContent(req, res) {
+    try {
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(401).json({ error: "UNAUTHORIZED" });
+        }
+        const { id: contentId } = req.params;
+        const content = await prisma_js_1.default.content.findFirst({
+            where: { id: String(contentId), deletedAt: null },
+        });
+        if (!content) {
+            return res.status(404).json({ error: "CONTENT_NOT_FOUND" });
+        }
+        // Toggle: if already liked → remove; otherwise → create
+        const existing = await prisma_js_1.default.contentLike.findUnique({
+            where: { contentId_userId: { contentId: String(contentId), userId } },
+        });
+        if (existing) {
+            await prisma_js_1.default.contentLike.delete({
+                where: { contentId_userId: { contentId: String(contentId), userId } },
+            });
+        }
+        else {
+            await prisma_js_1.default.contentLike.create({
+                data: { contentId: String(contentId), userId },
+            });
+        }
+        const likes = await prisma_js_1.default.contentLike.count({
+            where: { contentId: String(contentId) },
+        });
+        return res.json({
+            contentId,
+            likes,
+            liked: !existing, // true if we just added, false if we just removed
+        });
+    }
+    catch (e) {
+        console.error("likeContent error:", e);
+        return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+    }
+}
+// ---------------------------------------------------------------------------
+// Comment on content  (POST /content/:id/comment)
+// ---------------------------------------------------------------------------
+async function commentOnContent(req, res) {
+    try {
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(401).json({ error: "UNAUTHORIZED" });
+        }
+        const { id: contentId } = req.params;
+        const { text } = req.body ?? {};
+        if (!text || !String(text).trim()) {
+            return res.status(400).json({ error: "COMMENT_TEXT_REQUIRED" });
+        }
+        const content = await prisma_js_1.default.content.findFirst({
+            where: { id: String(contentId), deletedAt: null },
+        });
+        if (!content) {
+            return res.status(404).json({ error: "CONTENT_NOT_FOUND" });
+        }
+        const comment = await prisma_js_1.default.contentComment.create({
+            data: {
+                contentId: String(contentId),
+                userId,
+                text: String(text).trim(),
+            },
+            include: {
+                user: { select: { id: true, name: true } },
+            },
+        });
+        return res.status(201).json({
+            id: comment.id,
+            contentId: comment.contentId,
+            userId: comment.userId,
+            user: comment.user?.name ?? "User",
+            text: comment.text,
+            createdAt: comment.createdAt,
+        });
+    }
+    catch (e) {
+        console.error("commentOnContent error:", e);
+        return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
     }
 }
 exports.default = {
@@ -285,4 +422,6 @@ exports.default = {
     patchContent,
     deleteContent,
     getCreatorProfileContent,
+    likeContent,
+    commentOnContent,
 };

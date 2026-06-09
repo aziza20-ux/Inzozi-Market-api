@@ -82,6 +82,12 @@ router.post("/", auth_js_1.authenticate, campaign_controller_js_1.createCampaign
  */
 router.get("/", campaign_controller_js_1.getCampaigns);
 /**
+ * IMPORTANT:
+ * Put the static /my/applications route before /:id
+ * so Express does not treat "my" as a campaign id.
+ */
+router.get("/my/applications", auth_js_1.authenticate, campaign_controller_js_1.getApplications);
+/**
  * @openapi
  * /campaigns/{id}:
  *   get:
@@ -217,4 +223,6 @@ router.post("/:id/disburse", auth_js_1.authenticate, payment_controllers_js_1.di
  *         description: Campaign deleted
  */
 router.delete("/:id", auth_js_1.authenticate, campaign_controller_js_1.deleteCampaign);
+router.post("/:id/applications", auth_js_1.authenticate, campaign_controller_js_1.createApplication);
+router.patch("/:id/applications", auth_js_1.authenticate, campaign_controller_js_1.updateApplicationStatus);
 exports.default = router;

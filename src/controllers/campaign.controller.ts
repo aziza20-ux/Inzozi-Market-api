@@ -260,29 +260,51 @@ export const createApplication = async (req: AuthRequest, res: Response): Promis
 
 export const updateApplicationStatus = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const campaignId = String(req.params.id);              // cast: same fix as above
-    const { status, creatorId } = req.body;
-
-    const finalCreatorId: string | undefined =
-      req.role === 'CREATOR' ? req.userId : String(creatorId ?? '');
-    if (!finalCreatorId) {
-      res.status(400).json({ error: 'Creator ID is required' });
-      return;
-    }
+    const id = String(req.params.id);
+    const { status, creatorId, applicationId } = req.body;
 
     if (!['PENDING', 'ACCEPTED', 'DECLINED'].includes(status)) {
       res.status(400).json({ error: 'Invalid status value' });
       return;
     }
 
-    const application = await prisma.application.update({
+    const existing = await prisma.application.findFirst({
       where: {
-        campaignId_creatorId: {
-          campaignId,
-          creatorId: finalCreatorId,
+        OR: [
+          { id: String(applicationId ?? id) },
+          {
+            campaignId: id,
+            creatorId: req.role === 'CREATOR' ? req.userId : String(creatorId ?? ''),
+          },
+        ],
+      },
+      include: { campaign: true },
+    });
+
+    if (!existing) {
+      res.status(404).json({ error: 'Application not found' });
+      return;
+    }
+
+    if (req.role === 'CREATOR' && existing.creatorId !== req.userId) {
+      res.status(403).json({ error: 'Forbidden' });
+      return;
+    }
+
+    if (req.role === 'BUSINESS' && existing.campaign.businessId !== req.userId) {
+      res.status(403).json({ error: 'Forbidden' });
+      return;
+    }
+
+    const application = await prisma.application.update({
+      where: { id: existing.id },
+      data: { status },
+      include: {
+        campaign: true,
+        creator: {
+          select: { id: true, name: true, email: true, role: true, profileImage: true },
         },
       },
-      data: { status },
     });
 
     res.status(200).json(application);

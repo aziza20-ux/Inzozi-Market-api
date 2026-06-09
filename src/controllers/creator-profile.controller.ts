@@ -3,6 +3,17 @@ import prisma from '../config/prisma';
 import { AuthRequest } from '../middleware/auth';
 import { creatorProfileCreateSchema, creatorProfileUpdateSchema, creatorProfileStatusSchema } from '../validators/schema.validators';
 
+const withSubscriberCount = async (profile: any) => {
+  const subscribersCount = await prisma.subscription.count({
+    where: { creatorId: profile.userId, status: 'ACTIVE', endDate: { gt: new Date() } }
+  });
+  return { ...profile, subscribersCount };
+};
+
+const withSubscriberCounts = async (profiles: any[]) => {
+  return Promise.all(profiles.map(withSubscriberCount));
+};
+
 export const createProfile = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     if (req.role !== 'CREATOR') {
@@ -52,7 +63,7 @@ export const createProfile = async (req: AuthRequest, res: Response): Promise<vo
       }
     });
 
-    res.status(201).json(profile);
+    res.status(201).json(await withSubscriberCount(profile));
   } catch (err: any) {
     res.status(400).json({ error: err.message || err.errors });
   }
@@ -74,7 +85,7 @@ export const getProfiles = async (req: Request, res: Response): Promise<void> =>
       orderBy: { followers: 'desc' }
     });
 
-    res.status(200).json(profiles);
+    res.status(200).json(await withSubscriberCounts(profiles));
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -83,12 +94,14 @@ export const getProfiles = async (req: Request, res: Response): Promise<void> =>
 export const getProfileById = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const profile = await prisma.creatorProfile.findUnique({ where: { id: String(id) } });
+    const profile = await prisma.creatorProfile.findFirst({
+      where: { OR: [{ id: String(id) }, { userId: String(id) }] }
+    });
     if (!profile) {
       res.status(404).json({ error: 'Profile not found' });
       return;
     }
-    res.status(200).json(profile);
+    res.status(200).json(await withSubscriberCount(profile));
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -146,7 +159,7 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
       }
     });
 
-    res.status(200).json(updated);
+    res.status(200).json(await withSubscriberCount(updated));
   } catch (err: any) {
     res.status(400).json({ error: err.message || err.errors });
   }
@@ -183,8 +196,50 @@ export const updateProfileStatus = async (req: Request, res: Response): Promise<
       data: { socialLinks: JSON.stringify({ ...existingSocialLinks, profile_status }) }
     });
 
-    res.status(200).json(updated);
+    res.status(200).json(await withSubscriberCount(updated));
   } catch (err: any) {
     res.status(400).json({ error: err.message || err.errors });
+  }
+};
+
+export const setFollowState = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const followerId = req.userId;
+    const creatorId = String(req.params.userId);
+    const isFollowing = Boolean((req.body as { following?: boolean })?.following);
+
+    if (!followerId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    if (followerId === creatorId) {
+      res.status(400).json({ error: 'Cannot follow yourself' });
+      return;
+    }
+
+    const profile = await prisma.creatorProfile.findUnique({ where: { userId: creatorId } });
+    if (!profile) {
+      res.status(404).json({ error: 'Creator profile not found' });
+      return;
+    }
+
+    const updated = await prisma.creatorProfile.update({
+      where: { userId: creatorId },
+      data: { followers: { increment: isFollowing ? 1 : -1 } }
+    });
+
+    if (updated.followers < 0) {
+      const clamped = await prisma.creatorProfile.update({
+        where: { userId: creatorId },
+        data: { followers: 0 }
+      });
+      res.status(200).json(await withSubscriberCount(clamped));
+      return;
+    }
+
+    res.status(200).json(await withSubscriberCount(updated));
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
   }
 };

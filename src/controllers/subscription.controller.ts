@@ -69,7 +69,11 @@ export const subscribeToCreator = async (req: AuthRequest, res: Response): Promi
       }
     });
 
-    res.status(200).json({ subscription, transaction });
+    const subscribersCount = await prisma.subscription.count({
+      where: { creatorId, status: 'ACTIVE', endDate: { gt: new Date() } }
+    });
+
+    res.status(200).json({ subscription, transaction, subscribersCount });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

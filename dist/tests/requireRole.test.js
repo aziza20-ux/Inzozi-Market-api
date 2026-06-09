@@ -9,7 +9,7 @@ function createResponse() {
 }
 describe("requireRole", () => {
     it("allows users with an accepted role", () => {
-        const req = { user: { role: "CREATOR" } };
+        const req = { userId: "creator-1", role: "CREATOR" };
         const res = createResponse();
         const next = jest.fn();
         (0, requireRole_js_1.requireRole)("CREATOR")(req, res, next);
@@ -17,7 +17,7 @@ describe("requireRole", () => {
         expect(res.status).not.toHaveBeenCalled();
     });
     it("rejects users without an accepted role", () => {
-        const req = { user: { role: "CONSUMER" } };
+        const req = { userId: "consumer-1", role: "CONSUMER" };
         const res = createResponse();
         const next = jest.fn();
         (0, requireRole_js_1.requireRole)("BUSINESS")(req, res, next);

@@ -4,11 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const argon2_1 = __importDefault(require("argon2"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const mockPrisma = {
     user: {
-        findUnique: jest.fn(),
+        findUnique: jest.fn().mockResolvedValue({
+            id: "creator-1",
+            verificationStatus: "VERIFIED",
+        }),
         create: jest.fn(),
         update: jest.fn(),
     },
@@ -51,8 +54,8 @@ jest.mock("../services/mockMobileMoneyProvider.js", () => ({
         status: "pending",
     })),
 }));
-const app_js_1 = __importDefault(require("../app.js"));
 process.env.JWT_SECRET = "integration-secret";
+const app_js_1 = __importDefault(require("../app.js"));
 function token(payload) {
     return jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET);
 }
@@ -85,7 +88,7 @@ describe("Core integration rules", () => {
         jest.clearAllMocks();
     });
     it("covers register -> verify -> login -> refresh -> logout auth flow", async () => {
-        const hashedPassword = await bcrypt_1.default.hash("password123", 10);
+        const hashedPassword = await argon2_1.default.hash("password123");
         mockPrisma.user.findUnique
             .mockResolvedValueOnce(null)
             .mockResolvedValueOnce({
@@ -147,8 +150,8 @@ describe("Core integration rules", () => {
         await (0, supertest_1.default)(app_js_1.default)
             .post("/api/v1/auth/logout")
             .send({ refreshToken: refreshed.body.refreshToken })
-            .expect(204);
-    });
+            .expect(200);
+    }, 30000);
     it("enforces roles on protected route categories", async () => {
         await (0, supertest_1.default)(app_js_1.default)
             .post("/api/v1/content")

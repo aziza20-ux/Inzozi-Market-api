@@ -116,7 +116,7 @@ router.post("/", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (
  *   get:
  *     tags:
  *       - Content
- *     summary: List public content
+ *     summary: List public content with likes and comments
  *     parameters:
  *       - in: query
  *         name: type
@@ -128,9 +128,9 @@ router.post("/", auth_js_1.authenticate, requireVerified_js_1.requireVerified, (
  *           type: string
  *     responses:
  *       200:
- *         description: Content list
+ *         description: Content list (each item includes likes count, liked bool, and comments array)
  */
-router.get("/", content_controllers_js_1.getContentList);
+router.get("/", auth_js_1.authenticate, content_controllers_js_1.getContentList);
 // GET /v1/content/:id
 /**
  * @openapi
@@ -138,7 +138,7 @@ router.get("/", content_controllers_js_1.getContentList);
  *   get:
  *     tags:
  *       - Content
- *     summary: Get content by ID
+ *     summary: Get content by ID with likes and comments
  *     parameters:
  *       - in: path
  *         name: id
@@ -148,12 +148,107 @@ router.get("/", content_controllers_js_1.getContentList);
  *           format: uuid
  *     responses:
  *       200:
- *         description: Content item
+ *         description: Content item with likes and comments
  *       404:
  *         description: Content not found
  */
-router.get("/:id", content_controllers_js_1.getContent);
-// PATCH /v1/content/:id
+router.get("/:id", auth_js_1.authenticate, content_controllers_js_1.getContent);
+// POST /v1/content/:id/like
+/**
+ * @openapi
+ * /content/{id}/like:
+ *   post:
+ *     tags:
+ *       - Content
+ *     summary: Toggle like on a content item
+ *     description: Likes the post if not yet liked, unlikes if already liked. Returns updated like count and liked status.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Updated like state
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 contentId:
+ *                   type: string
+ *                 likes:
+ *                   type: integer
+ *                 liked:
+ *                   type: boolean
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Content not found
+ */
+router.post("/:id/like", auth_js_1.authenticate, content_controllers_js_1.likeContent);
+// POST /v1/content/:id/comment
+/**
+ * @openapi
+ * /content/{id}/comment:
+ *   post:
+ *     tags:
+ *       - Content
+ *     summary: Add a comment to a content item
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [text]
+ *             properties:
+ *               text:
+ *                 type: string
+ *                 example: "Great content!"
+ *     responses:
+ *       201:
+ *         description: Comment created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 contentId:
+ *                   type: string
+ *                 userId:
+ *                   type: string
+ *                 user:
+ *                   type: string
+ *                 text:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: Missing comment text
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Content not found
+ */
+router.post("/:id/comment", auth_js_1.authenticate, content_controllers_js_1.commentOnContent);
+// PUT /v1/content/:id
 /**
  * @openapi
  * /content/{id}:
@@ -220,7 +315,7 @@ router.put("/:id", auth_js_1.authenticate, (0, requireRole_js_1.requireRole)("CR
  *         description: Content deleted
  */
 router.delete("/:id", auth_js_1.authenticate, (0, requireRole_js_1.requireRole)("CREATOR", "ADMIN"), content_controllers_js_1.deleteContent);
-// PATCH /v1/content/:id/moderation (admin)
+// PATCH /v1/content/:id/moderation (admin — deprecated)
 /**
  * @openapi
  * /content/{id}/moderation:
@@ -242,7 +337,7 @@ router.delete("/:id", auth_js_1.authenticate, (0, requireRole_js_1.requireRole)(
  *         description: Not found
  */
 router.patch("/:id/moderation", auth_js_1.authenticate, (0, requireRole_js_1.requireRole)("ADMIN"), content_controllers_js_1.moderationUpdate);
-// GET /v1/creator-profiles/:id/content
+// GET /v1/content/creator-profiles/:id/content
 /**
  * @openapi
  * /content/creator-profiles/{id}/content:
@@ -267,7 +362,7 @@ router.patch("/:id/moderation", auth_js_1.authenticate, (0, requireRole_js_1.req
  *           type: string
  *     responses:
  *       200:
- *         description: Filtered content list
+ *         description: Filtered content list with likes and comments
  */
-router.get("/creator-profiles/:id/content", content_controllers_js_1.getCreatorProfileContent);
+router.get("/creator-profiles/:id/content", auth_js_1.authenticate, content_controllers_js_1.getCreatorProfileContent);
 exports.default = router;

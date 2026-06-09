@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProfile, getProfiles, getProfileById, updateProfile, updateProfileStatus } from '../../controllers/creator-profile.controller';
+import { createProfile, getProfiles, getProfileById, updateProfile, updateProfileStatus, setFollowState } from '../../controllers/creator-profile.controller';
 import {authenticate} from "../../middleware/auth"
 
 const router = Router();
@@ -77,6 +77,8 @@ router.post('/', authenticate, createProfile);
  *         description: Creator profiles list
  */
 router.get('/', getProfiles);
+
+router.patch('/users/:userId/follow', authenticate, setFollowState);
 
 /**
  * @openapi
