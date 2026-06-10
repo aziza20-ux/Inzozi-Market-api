@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/aziza20-ux/Inzozi-Market-api#readme",
   "dependencies": {
+    "@getbrevo/brevo": "^5.0.4",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@types/nodemailer": "^8.0.0",
