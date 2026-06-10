@@ -1,22 +1,17 @@
-import nodemailer from "nodemailer";
+import { BrevoClient } from "@getbrevo/brevo";
 
-const transporter = nodemailer.createTransport({
-  host: process.env["EMAIL_HOST"],
-  port: Number(process.env["EMAIL_PORT"] ?? 587),
-  secure: false,
-  auth: {
-    user: process.env["EMAIL_USER"],
-    pass: process.env["EMAIL_PASS"],
-  },
-});
+const client = new BrevoClient({ apiKey: process.env["BREVO_API_KEY"] ?? "" });
 
 export async function sendEmail(to: string, subject: string, html: string) {
-  await transporter.sendMail({
-    from: process.env["EMAIL_FROM"],
-    to,
+  await client.transactionalEmails.sendTransacEmail({
+    sender: {
+      name: "INZOZI MARKET",
+      email: process.env["EMAIL_USER"] ?? "",
+    },
+    to: [{ email: to }],
     subject,
-    html,
+    htmlContent: html,
   });
 }
 
-export default transporter;
+export default client;
